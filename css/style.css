@@ -1,0 +1,187 @@
+/* styles */
+/* called by your view template */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  margin: 2em;
+}
+
+h3 {
+  font-style: bold;
+  padding-top: 4px;
+  padding-left: 10px;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+form {
+ 
+}
+
+input {
+  display: block;
+  margin-bottom: 10px;
+  padding: 5px;
+  width: 100%;
+  border: 1px solid lightgrey;
+  border-radius: 3px;
+  font-size: 16px;
+}
+
+li {
+  margin-bottom: 5px;
+}
+
+footer {
+  margin-top: 50px;
+  padding-top: 25px;
+  border-top: 1px solid lightgrey;
+}
+
+#qBox{
+  margin: 50px 10px;
+  padding: 10px;
+  background-color: #d6d5d5;
+  border-radius: 10px;
+}
+
+#qCodeBox{
+  background-color: #28a745;
+  padding: 5px;
+  width: 10%;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+#qCodeText{
+  margin: 0;
+  text-align: center;
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+}
+
+#qText{
+  font-family: 'Montserrat', sans-serif;
+}
+
+#cBox{
+  margin: 50px 10px;
+  padding: 10px;
+  background-color: #d6d5d5;
+  border-radius: 10px;
+}
+
+.form-check{
+  font-weight: 300;
+  
+}
+
+[type=radio]:checked, [type=radio]:not(:checked) {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.form-check-input[type=radio]:checked+label, .form-check-input[type=radio]:not(:checked)+label, label.btn input[type=radio]:checked+label, label.btn input[type=radio]:not(:checked)+label {
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+    display: inline-block;
+    height: 1.5625rem;
+    line-height: 1.5625rem;
+    -webkit-transition: .28s ease;
+    -o-transition: .28s ease;
+    transition: .28s ease;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    font-size: 15px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.form-check-input[type=radio]:not(:checked)+label:after, .form-check-input[type=radio]:not(:checked)+label:before, label.btn input[type=radio]:not(:checked)+label:after, label.btn input[type=radio]:not(:checked)+label:before {
+    border: 2px solid #5a5a5a;
+}
+
+.form-check-input[type=radio].with-gap:checked+label:after, .form-check-input[type=radio].with-gap:checked+label:before, .form-check-input[type=radio]:checked+label:after, .form-check-input[type=radio]:checked+label:before, .form-check-input[type=radio]:not(:checked)+label:after, .form-check-input[type=radio]:not(:checked)+label:before, label.btn input[type=radio].with-gap:checked+label:after, label.btn input[type=radio].with-gap:checked+label:before, label.btn input[type=radio]:checked+label:after, label.btn input[type=radio]:checked+label:before, label.btn input[type=radio]:not(:checked)+label:after, label.btn input[type=radio]:not(:checked)+label:before {
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+}
+
+.form-check-input[type=radio]+label:after, .form-check-input[type=radio]+label:before, label.btn input[type=radio]+label:after, label.btn input[type=radio]+label:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 5px;
+    width: 16px;
+    height: 16px;
+    z-index: 0;
+    -webkit-transition: .28s ease;
+    -o-transition: .28s ease;
+    transition: .28s ease;
+}
+
+.form-check-input[type=radio]:not(:checked)+label:after, label.btn input[type=radio]:not(:checked)+label:after {
+    -webkit-transform: scale(0);
+    -ms-transform: scale(0);
+    transform: scale(0);
+}
+
+.form-check-input[type=radio]:checked+label:after, label.btn input[type=radio]:checked+label:after {
+    -webkit-transform: scale(1.02);
+    -ms-transform: scale(1.02);
+    transform: scale(1.02);
+}
+
+.form-check-input[type=radio].with-gap:checked+label:after, .form-check-input[type=radio]:checked+label:after, label.btn input[type=radio].with-gap:checked+label:after, label.btn input[type=radio]:checked+label:after {
+    background-color: #4285f4;
+}
+
+.form-check-input[type=radio].with-gap:checked+label:after, .form-check-input[type=radio].with-gap:checked+label:before, .form-check-input[type=radio]:checked+label:after, label.btn input[type=radio].with-gap:checked+label:after, label.btn input[type=radio].with-gap:checked+label:before, label.btn input[type=radio]:checked+label:after {
+    border: 2px solid #4285f4;
+}
+
+#navBtnCon{
+  display: flex;
+  justify-content: center;
+  margin: 50px 10px;
+  padding: 10px;
+}
+
+#btnForm{
+  margin: 10px;
+}
+
+#prevBtn{
+  margin: 30px;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-right: 50px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+#passBtn{
+  margin: 30px;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-right: 50px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+#nextBtn{
+  margin: 30px;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-right: 50px;
+  font-family: 'Montserrat', sans-serif;
+}
