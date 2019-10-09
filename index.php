@@ -40,7 +40,7 @@
         <div name="questionCodeBox" id="qCodeBox">
           <p name="questionCodeText" id="qCodeText">A3</p>
         </div>
-        <p name="questionText" id="qText">Are you the best?
+        <p name="questionText" id="qText">Have you been to DLSU Laguna Campus' Canteen?
         </p>
       </div>
       

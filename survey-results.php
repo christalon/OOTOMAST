@@ -37,12 +37,11 @@
     <body>
 		<header>
 		<div style="margin: 15px 10px ; display: flex;">
-			<h3 style="font-size: 25px"> Results </h3>
+			<h1 style="font-size: 25px"> Results </h1>
 		</div>
 		</header>
 	
         <script src="http://d3js.org/d3.v3.min.js"></script> 
-        <!-- <script src="d3.min.js?v=3.2.8"></script> -->
 
         <script type="text/javascript"charset="utf-8">
             d3.text("http://localhost/OOTOMAST/data.csv", function(data) {
