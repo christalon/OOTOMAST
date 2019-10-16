@@ -30,7 +30,7 @@
   <body>
     <header>
       <div style="margin: 15px 10px ; display: flex;">
-        <input type="checkbox" data-toggle="toggle" data-onstyle="success">
+        <input type="checkbox" data-toggle="toggle" id="translateTgl">
         <h3 style="font-size: 25px"> Translate </h3>
       </div>
     </header>
@@ -47,9 +47,9 @@
       <div name="choicesBox" id="cBox">
         <div class="form-check" style="display:flex; flex-direction: column; ">
           <input type="radio" class="form-check-input" id="materialUnchecked" name="materialExampleRadios">
-          <label class="form-check-label" for="materialUnchecked">Yes</label>
+          <label class="form-check-label" for="materialUnchecked" id="qChoice1">Yes</label>
           <input type="radio" class="form-check-input" id="material2" name="materialExampleRadios">
-          <label class="form-check-label" for="material2">Yes</label>
+          <label class="form-check-label" for="material2" id="qChoice2">Yes</label>
         </div>
       </div>
       
@@ -90,7 +90,9 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="js/jquery.cookie.js"></script>
     <script type="text/javascript">
-    	function parse()
+      var translated = false
+
+      function parse()
     	{
     		var url = document.getElementById('url').value;
     		//alert(url);
@@ -103,13 +105,42 @@
 					//store("results", results, 1);
 					localStorage.results = JSON.stringify(results);
 				}
-			});
+			 });
     	}
 
     	function test(){
-    		var res = JSON.parse(localStorage.results)
-    		alert(res.data[0][2])
+    		var res = JSON.parse(localStorage.results);
+    		//alert(res.data[0][2]);
+        document.getElementById('qText').innerHTML = ""+res.data[0][2];
+        document.getElementById('qChoice1').innerHTML = ""+res.data[1][2];
+        document.getElementById('qChoice2').innerHTML = ""+res.data[2][2];
+        document.getElementById('qCodeText').innerHTML = ""+res.data[0][1];
     	}
-    </script>>
+
+      function translate(){
+        var survey = JSON.parse(localStorage.results);
+        if (translated == false){
+          translated = true;
+          document.getElementById('qText').innerHTML = ""+survey.data[0][(2+1)];
+          document.getElementById('qChoice1').innerHTML = ""+survey.data[1][3];
+          document.getElementById('qChoice2').innerHTML = ""+survey.data[2][3];
+        }
+        else{
+          translated = false;
+          document.getElementById('qText').innerHTML = ""+survey.data[0][2];
+          document.getElementById('qChoice1').innerHTML = ""+survey.data[1][2];
+          document.getElementById('qChoice2').innerHTML = ""+survey.data[2][2];
+        }
+      }
+
+      document.getElementById('translateTgl').onchange = function(e){
+
+        if(e.target.checked) {
+            translate()
+        } else {
+            translate()
+        }
+      };
+    </script>
   </body>
 </html>
