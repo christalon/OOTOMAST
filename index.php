@@ -55,9 +55,9 @@
       
       <div name="navButtons" id="navBtnCon">
         <form id="btnForm">
-          <button class="btn btn-primary btn-lg" type="button" id="prevBtn" value="back" onclick="test()">Back</button>
-          <button class="btn btn-primary btn-lg"  type="submit" id="passBtn" value="pass">Pass</button>
-          <button class="btn btn-primary btn-lg"  type="submit" id="nextBtn" value="next">Next</button>
+          <button class="btn btn-primary btn-lg" type="button" id="prevBtn" value="back" onclick="prev()">Back</button>
+          <button class="btn btn-primary btn-lg"  type="button" id="passBtn" value="pass">Pass</button>
+          <button class="btn btn-primary btn-lg"  type="button" id="nextBtn" value="next" onclick="next()">Next</button>
         </form>
       </div>
       <div>
@@ -90,7 +90,11 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="js/jquery.cookie.js"></script>
     <script type="text/javascript">
+
+    //Parse and Navigation
       var translated = false
+      var qIndex = 0;
+      var qidIndex = 1;
 
       function parse()
     	{
@@ -121,17 +125,83 @@
         var survey = JSON.parse(localStorage.results);
         if (translated == false){
           translated = true;
-          document.getElementById('qText').innerHTML = ""+survey.data[0][(2+1)];
+          document.getElementById('qText').innerHTML = ""+survey.data[qIndex][(2+1)];
           document.getElementById('qChoice1').innerHTML = ""+survey.data[1][3];
           document.getElementById('qChoice2').innerHTML = ""+survey.data[2][3];
         }
         else{
           translated = false;
-          document.getElementById('qText').innerHTML = ""+survey.data[0][2];
+          document.getElementById('qText').innerHTML = ""+survey.data[qIndex][2];
           document.getElementById('qChoice1').innerHTML = ""+survey.data[1][2];
           document.getElementById('qChoice2').innerHTML = ""+survey.data[2][2];
         }
       }
+
+      function next(){
+        // Find next question
+        var survey = JSON.parse(localStorage.results);
+        var found = false;
+        var iterate = qIndex+1;
+        while(found != true){
+          if(survey.data[iterate][0] == "^"){
+            //alert("found");
+            found = true;
+            qIndex = iterate;
+          }
+          else{
+            iterate = iterate + 1;
+          }
+        }
+
+        // Change Question Text
+        if(found == true){
+          //alert(qIndex);
+          if(translated == true){
+            document.getElementById('qText').innerHTML = ""+survey.data[qIndex][(2+1)];
+            //document.getElementById('qText').innerHTML = ""+survey.data[qIndex][(2+1)];
+          }
+          else{
+            document.getElementById('qText').innerHTML = ""+survey.data[qIndex][2];
+          }
+          document.getElementById('qCodeText').innerHTML = ""+survey.data[qIndex][1];
+        }
+      
+      }
+
+      function prev(){
+        // Find previous question
+        var survey = JSON.parse(localStorage.results);
+        var found = false;
+        var iterate = qIndex-1;
+        while(found != true){
+          if(survey.data[iterate][0] == "^"){
+            //alert("found");
+            found = true;
+            qIndex = iterate;
+          }
+          else{
+            iterate = iterate - 1;
+          }
+        }
+
+        // Change Question Text
+        if(found == true){
+          //alert(qIndex);
+          if(translated == true){
+            document.getElementById('qText').innerHTML = ""+survey.data[qIndex][(2+1)];
+            //document.getElementById('qText').innerHTML = ""+survey.data[qIndex][(2+1)];
+          }
+          else{
+            document.getElementById('qText').innerHTML = ""+survey.data[qIndex][2];
+          }
+          document.getElementById('qCodeText').innerHTML = ""+survey.data[qIndex][1];
+        }
+      }
+
+      function pass(){
+
+      }
+
 
       document.getElementById('translateTgl').onchange = function(e){
 
