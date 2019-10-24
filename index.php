@@ -40,7 +40,7 @@
         <div name="questionCodeBox" id="qCodeBox">
           <p name="questionCodeText" id="qCodeText">A3</p>
         </div>
-        <p name="questionText" id="qText">Are you the best?
+        <p name="questionText" id="qText">
         </p>
       </div>
       
@@ -50,6 +50,7 @@
           <label class="form-check-label" for="materialUnchecked" id="qChoice1">Yes</label>
           <input type="radio" class="form-check-input" id="material2" name="materialExampleRadios">
           <label class="form-check-label" for="material2" id="qChoice2">Yes</label>
+          
         </div>
       </div>
       
