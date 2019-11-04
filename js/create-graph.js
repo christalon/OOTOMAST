@@ -2,7 +2,7 @@
  * Parse the data and create a graph with the data.
  */
 function parseData(createGraph) {
-	Papa.parse("http://localhost/OOTOMAST/csv/spanish-silver.csv", {
+	Papa.parse("http://localhost/OOTOMAST/csv/1-sample_questionnaire.csv", {
 		complete: function(results)	{
 			console.log(results);
 		}
