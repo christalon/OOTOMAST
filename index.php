@@ -44,12 +44,8 @@
         </p>
       </div>
       
-      <div name="choicesBox" id="cBox">
-        <div class="form-check" style="display:flex; flex-direction: column; ">
-          <input type="radio" class="form-check-input" id="materialUnchecked" name="materialExampleRadios">
-          <label class="form-check-label" for="materialUnchecked" id="qChoice1">Yes</label>
-          <input type="radio" class="form-check-input" id="material2" name="materialExampleRadios">
-          <label class="form-check-label" for="material2" id="qChoice2">Yes</label>
+      <div name="choicesBox">
+        <div class="form-check" style="display:flex; flex-direction: column; " id="cBox">
           
         </div>
       </div>
@@ -96,7 +92,10 @@
     //Parse and Navigation
       var translated = false
       var qIndex = 0;
+      var cIndex = 0;
       var qidIndex = 1;
+      var noOfSelectable = 0;
+      var cIndexes = [];
 
       function parse()
     	{
@@ -128,15 +127,23 @@
         var survey = JSON.parse(localStorage.results);
         if (translated == false){
           translated = true;
-          document.getElementById('qText').innerHTML = ""+survey.data[qIndex][(2+1)];
-          document.getElementById('qChoice1').innerHTML = ""+survey.data[1][3];
-          document.getElementById('qChoice2').innerHTML = ""+survey.data[2][3];
+          document.getElementById('qText').innerHTML = ""+survey.data[qIndex][(3+1)];
+
+          // Translate choices
+          for (var i = 0; i < cIndexes.length; i++) {
+            var choiceTextId = "qChoice"+cIndexes[i];
+            document.getElementById(choiceTextId).innerHTML = ""+survey.data[cIndexes[i]][4];
+          }
         }
         else{
           translated = false;
-          document.getElementById('qText').innerHTML = ""+survey.data[qIndex][2];
-          document.getElementById('qChoice1').innerHTML = ""+survey.data[1][2];
-          document.getElementById('qChoice2').innerHTML = ""+survey.data[2][2];
+          document.getElementById('qText').innerHTML = ""+survey.data[qIndex][3];
+
+          // Translate choices
+          for (var i = 0; i < cIndexes.length; i++) {
+            var choiceTextId = "qChoice"+cIndexes[i];
+            document.getElementById(choiceTextId).innerHTML = ""+survey.data[cIndexes[i]][3];
+          }
         }
       }
 
@@ -145,6 +152,8 @@
         var survey = JSON.parse(localStorage.results);
         var found = false;
         var iterate = qIndex+1;
+        var choicesContainer = document.getElementById("cBox");
+
         while(found != true){
           if(survey.data[iterate][0] == "^"){
             //alert("found");
@@ -159,16 +168,21 @@
         // Change Question Text
         if(found == true){
           //alert(qIndex);
+          noOfSelectable = survey.data[qIndex][1];
           if(translated == true){
-            document.getElementById('qText').innerHTML = ""+survey.data[qIndex][(2+1)];
+            document.getElementById('qText').innerHTML = ""+survey.data[qIndex][(3+1)];
             //document.getElementById('qText').innerHTML = ""+survey.data[qIndex][(2+1)];
           }
           else{
-            document.getElementById('qText').innerHTML = ""+survey.data[qIndex][2];
+            document.getElementById('qText').innerHTML = ""+survey.data[qIndex][3];
           }
-          document.getElementById('qCodeText').innerHTML = ""+survey.data[qIndex][1];
+          document.getElementById('qCodeText').innerHTML = ""+survey.data[qIndex][2];
         }
-      
+
+        // Do choice generation
+        cIndexes = []
+        choicesContainer.innerHTML = "";
+        choicesContainer.innerHTML += findChoices();
       }
 
       function prev(){
@@ -176,6 +190,8 @@
         var survey = JSON.parse(localStorage.results);
         var found = false;
         var iterate = qIndex-1;
+        var choicesContainer = document.getElementById("cBox");
+
         while(found != true){
           if(survey.data[iterate][0] == "^"){
             //alert("found");
@@ -190,19 +206,58 @@
         // Change Question Text
         if(found == true){
           //alert(qIndex);
+          noOfSelectable = survey.data[qIndex][1];
           if(translated == true){
-            document.getElementById('qText').innerHTML = ""+survey.data[qIndex][(2+1)];
+            document.getElementById('qText').innerHTML = ""+survey.data[qIndex][(3+1)];
             //document.getElementById('qText').innerHTML = ""+survey.data[qIndex][(2+1)];
           }
           else{
-            document.getElementById('qText').innerHTML = ""+survey.data[qIndex][2];
+            document.getElementById('qText').innerHTML = ""+survey.data[qIndex][3];
           }
-          document.getElementById('qCodeText').innerHTML = ""+survey.data[qIndex][1];
+          document.getElementById('qCodeText').innerHTML = ""+survey.data[qIndex][2];
         }
+
+        // Do choice generation
+        cIndexes = []
+        choicesContainer.innerHTML = "";
+        choicesContainer.innerHTML += findChoices();
       }
 
       function pass(){
 
+      }
+
+      function findChoices(){
+        var survey = JSON.parse(localStorage.results);
+        cIndex = qIndex+1;
+        var cTextIndex = 3;
+        var eof = 0;
+        var output = "";
+
+        //Find each choices
+        while(eof == 0){
+          if(survey.data[cIndex][0] == "^"){
+            eof = 1;
+          }
+          else{
+            // Generate radio button if only 1 is selectable
+            cIndexes.push(cIndex);
+            if(noOfSelectable == 1){
+              output+= '<input type="radio" class="form-check-input" id="'+ cIndex +'" name="choice1" value='+ cIndex +'>';
+              if(translated == true){
+                 output+= '<label class="form-check-label" for="'+ cIndex +'" id="qChoice'+ cIndex +'">'+ survey.data[cIndex][4] +'</label>';
+              }
+              else{
+                output+= '<label class="form-check-label" for="'+ cIndex +'" id="qChoice'+ cIndex +'">'+ survey.data[cIndex][3] +'</label>';
+              }
+
+            // Set choices that are already checked
+            
+            }
+          }
+          cIndex = cIndex+1;
+        }
+        return output;
       }
 
 
