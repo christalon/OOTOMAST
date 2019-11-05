@@ -2,16 +2,30 @@
 <html lang="en">
     <head>
         <title>OOTOMAST</title>
+        <meta name="description" content="A cool thing made with Glitch">
+        <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- import the webpage's stylesheet -->
+        <link rel="stylesheet" href="css/style.css">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+        <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
+
+        <!-- import the webpage's client-side javascript file -->
+        <script src="/client.js" defer></script>
 
         <!-- Load c3.css -->
-        <link rel="http://localhost/OOTOMAST/css/c3.css" rel="stylesheet" type="text/css">
+        <link rel="css/c3.css" rel="stylesheet" type="text/css">
 
         <!-- Load d3.js and c3.js -->
-        <script src="http://localhost/OOTOMAST/js/d3.min.js" charset="utf-8"></script>
-		<script src="http://localhost/OOTOMAST/js/c3.min.js"></script>
+        <script src="js/d3.min.js"></script>
+        <script src="js/c3.min.js"></script>
 
 		<!-- Load papaparse.js -->
-		<script src="http://localhost/OOTOMAST/js/papaparse.js"></script>
+		<script src="js/papaparse.js"></script>
 
         <style>
             table {
@@ -41,9 +55,27 @@
         </div>
 
         <div id="Visualization" style="margin: 15px 10px">
+            Enter csv URL: <input type="text" id="url"><br>
+            <input type="button" value="Submit" onclick="parse()">
+            
+            <script type="text/javascript">
 
-        <script src="http://localhost/OOTOMAST/js/create-graph.js"></script>
+                function parse()    {
+                    var url = document.getElementById('url').value;
+                    console.log(url)
+
+                    Papa.parse(url, {
+                        download: true,
+                        complete: function(results) {
+                            console.log(results);
+                            //alert(results.data[0][2]);
+                            //store("results", results, 1);
+                            localStorage.results = JSON.stringify(results);
+                        }
+                    });
+                }
+                
+            </script>
         
         </div>
-
     </body>
