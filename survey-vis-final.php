@@ -26,7 +26,6 @@
 
 		<!-- Load papaparse.js -->
 		<script src="js/papaparse.js"></script>
-
         <style>
             table {
                 border-collapse: collapse;
@@ -57,7 +56,7 @@
         <div id="Visualization" style="margin: 15px 10px">
             Enter csv URL: <input type="text" id="url"><br>
             <input type="button" value="Submit" onclick="parse()">
-            
+
             <script type="text/javascript">
 
                 function parse()    {
@@ -72,29 +71,35 @@
                             createGraph(results.data);
                         }
                     });
+
                 }
 
                 function createGraph(data)  {
                     var id = [];
                     var results = [];
 
+                    //Store survey question id to a separate array
                     for(var i = 0; i < data.length; i++)    {
                         //console.log(data[i]);
                         id.push(data[i][0]);                     
                     }
 
+                    // Initialize 2D Array survey results.
                     for(var i = 0; i < data.length; i++)    {
+                        results[i] = new Array(7);
+                    }
+
+                    // Store each question results to an array.
+                    for(var i = 0; i < data.length; i++)    {
+                        
                         var j = 1;
+                        var k = 0;
 
                         do{
-                            results.push(data[i][j]);
+                            results[i][k]= data[i][j];
                             j++;
+                            k++;
                         }while(j < data.length)
-                        /*
-                        while(j < data.length)  {
-                            results.push(data[i][j]);
-                            j++;
-                        }*/
                     }
 
                     //Checkers
