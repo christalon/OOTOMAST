@@ -86,10 +86,15 @@
                     for(var i = 0; i < data.length; i++)    {
                         var j = 1;
 
+                        do{
+                            results.push(data[i][j]);
+                            j++;
+                        }while(j < data.length)
+                        /*
                         while(j < data.length)  {
                             results.push(data[i][j]);
                             j++;
-                        }
+                        }*/
                     }
 
                     //Checkers
