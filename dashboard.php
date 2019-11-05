@@ -228,7 +228,7 @@
   <!-- Modal content -->
 	 <div class="modal-content">
 	   	<span class="close">&times;</span>
-	  	<h1>Add Survey</h1>
+	  	<h1>Add survey</h1>
 	  	<p> Add survey via link</p>
 	  	<input type="text" id="url"><br>
 	  	<input type="button" value="Submit" onclick="parse()">

@@ -68,11 +68,38 @@
                         download: true,
                         complete: function(results) {
                             console.log(results);
-                            //alert(results.data[0][2]);
-                            //store("results", results, 1);
-                            localStorage.results = JSON.stringify(results);
+                            //localStorage.results = JSON.stringify(results);
+                            createGraph(results.data);
                         }
                     });
+                }
+
+                function createGraph(data)  {
+                    var id = [];
+                    var results = [];
+
+                    for(var i = 0; i < data.length; i++)    {
+                        //console.log(data[i]);
+                        id.push(data[i][0]);                     
+                    }
+
+                    for(var i = 0; i < data.length; i++)    {
+                        var j = 1;
+
+                        while(j < data.length)  {
+                            results.push(data[i][j]);
+                            j++;
+                        }
+                    }
+
+                    //Checkers
+                    console.log(id);
+                    console.log(results);
+                    
+                    /*
+                    var chart = c3.generate({
+
+                    }); */
                 }
                 
             </script>
