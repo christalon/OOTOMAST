@@ -230,11 +230,14 @@
 	   	<span class="close">&times;</span>
 	  	<h1>Add survey</h1>
 	  	<p> Add survey via link</p>
-	  	<input type="text" id="url"><br>
-	  	<input type="button" value="Submit" onclick="parse()">
+	  	<input type="text" id="url" placeholder="Enter URL"><br>
+	  	<input type="text" id="surveyNameURL" placeholder="Enter survey name">
+	  	<input type="button" value="Submit" onclick="parseURL()">
 	  	<br><br>
-	  	<p> Add survey via file upload </p>
-	  	<input type="button" value="Upload">
+		<p> Add survey via file upload </p>
+		<input type="file" value="Upload" id="files">
+		<input type="text" id="surveyNameFile" placeholder="Enter survey name">
+		<input type="button" value="Upload" onclick="parseUpload()">
 	 </div>
 	</div>
 
@@ -278,9 +281,12 @@
 		 }
 	}
 
-	function parse(){
+	function parseURL(){
     var url = document.getElementById('url').value;
-    //alert(url);
+    var name = document.getElementById('surveyNameURL').value;
+
+    if(name != ""){
+    	//alert(url);
     console.log(url)
     Papa.parse(url, {
 		download: true,
@@ -294,21 +300,56 @@
 				}
 			});
     location.reload();
+    }
+    else{
+    	// error no survey name entered
+    }
   }
 
-  function updateSurveyList(){
+  function parseUpload(){
+  	var file = document.getElementById("files").files[0];
+  	var name = document.getElementById('surveyNameFile').value;
+
+  	if(name != ""){
+  		Papa.parse(file, {
+		download: true,
+		complete: function(results) {
+			console.log(results);
+				//alert(results.data[0][2]);
+				//store("results", results, 1);
+				//alert(name);
+				var surveyId = updateSurveyList(name);
+				//localStorage.results = JSON.stringify(results);
+				localStorage.setItem(surveyId+'', JSON.stringify(results));
+				}
+			});
+    	location.reload();
+  	}
+  	else{
+  		//error no survey name
+  	}
+  	
+  }
+
+  function deleteSurvey(){
+
+  }
+
+  function updateSurveyList(surveyName){
   	var id = Math.random();
   	if(!localStorage.getItem('surveyList')) {
-		  var surveyList = [];
-		  surveyList.push(id);
+  		  var surveyList = [];
+		  surveyList.push([id, surveyName]);
+
 		  localStorage.surveyList = JSON.stringify(surveyList);
 		} else {
 		  var surveyList = [];
 		  surveyList = JSON.parse(localStorage.getItem('surveyList'));
-		  surveyList.push(id);
+		  surveyList.push([id, surveyName]);
+
 		  localStorage.surveyList = JSON.stringify(surveyList);
 		}
-		return id;
+	return id;
   }
 
 	function generateSurveyList(){
@@ -319,7 +360,7 @@
 			var surveyList = []
 		  surveyList = JSON.parse(localStorage.getItem('surveyList'));
 		  for(var i = 0; i < surveyList.length ; i++){
-		  	output+= '<div class="card"><a href="#">'+ surveyList[i] +'</a></div>';
+		  	output+= '<div class="card"><a href="#" value="'+ surveyList[i] +'">'+ surveyList[i][1] +'</a></div>';
 		  }
 		}
 		return output;
