@@ -205,7 +205,7 @@
             <a href="#" class="nav-links">Surveys</a>
         </li>
         <li>
-          	<a href="#" class="nav-links">Results</a>
+          	<a href="visualization.php" class="nav-links">Results</a>
         </li>
         <li>
           	<a href="#" class="nav-links">About Us</a>

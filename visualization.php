@@ -16,9 +16,114 @@
     <!--<link rel="stylesheet" href="/mdb.min.css">
     <!-- import the webpage's client-side javascript file -->
     <script src="/client.js" defer></script>
+    <style>
+  * {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
+  body {
+      font-family: 'Josefin Sans', sans-serif;
+  }
+  .navbar {
+      font-size: 18px;
+      background: linear-gradient(to right, rgba(78,126,78,1) 0%, rgba(9,58,8,1) 100%);
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      padding-bottom: 10px;
+  }
+  .main-nav {
+      list-style-type: none;
+  }
+  .nav-links,
+  .logo {
+      text-decoration: none;
+      color: rgba(255, 255, 255, 0.7);
+  }
+  .main-nav li {
+    text-align: center;
+    margin: 15px auto;
+  }
+  .logo {
+      display: inline-block;
+      font-size: 22px;
+      margin-top: 10px;
+      margin-left: 20px;
+  }
 
+  .navbar-toggle {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer; 
+    color: rgba(255,255,255,0.8);
+    font-size: 24px;
+  }
+
+  .main-nav {
+    list-style-type: none;
+    display: none;
+  }
+
+  .active {
+    display: block;
+  }
+
+  @media screen and (min-width: 768px) {
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 0;
+        height: 70px;
+        align-items: center;
+    }
+    .main-nav {
+        display: flex;
+        margin-right: 30px;
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+    .main-nav li {
+        margin: 0;
+    }
+    .nav-links {
+        margin-left: 40px;
+    }
+    .logo {
+        margin-top: 0;
+    }
+   .navbar-toggle {
+       display: none;
+    }
+    .logo:hover,
+    .nav-links:hover {
+        color: rgba(255, 255, 255, 1);
+    }
+
+    /* Grid item css */
+
+  </style>
   </head>
   <body>
+      <nav class="navbar">
+        <span class="navbar-toggle" id="js-navbar-toggle">
+            <i class="fas fa-bars"></i>
+        </span>
+        <a href="#" class="logo">logo</a>
+          <ul class="main-nav" id="js-menu">
+            <li>
+                <a href="index.php" class="nav-links">Surveys</a>
+            </li>
+            <li>
+                <a href="visualization.php" class="nav-links">Results</a>
+            </li>
+            <li>
+                <a href="#" class="nav-links">About Us</a>
+            </li>
+            <li>
+                <a href="#" class="nav-links">Logout</a>
+            </li>
+      </nav>
+
       <header>
           <div style="margin: 15px 10px ; display: flex;">
               <h3 style="font-size: 25px"> Results </h3>
