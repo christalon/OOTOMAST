@@ -129,11 +129,11 @@
             //alert("found");
             found = true;
             qIndex = iterate;
-          }
+        }
         else{
             iterate = iterate + 1;
-          }
         }
+      }
       
 
         // Change Question Text
