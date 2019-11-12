@@ -102,6 +102,8 @@
     /* Grid item css */
 
   </style>
+  <script src="https://kit.fontawesome.com/637ce47f6a.js" crossorigin="anonymous"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" /> 
   </head>
   <body>
       <nav class="navbar">
@@ -165,10 +167,6 @@
         setSurvey();
         initializeSurvey();
 
-        window.onbeforeunload = function(event){
-            event.returnValue = "Your custom message.";
-        }
-
         function setSurvey(){
             surveyData = JSON.parse(localStorage.getItem(surveyID));
         }
@@ -176,62 +174,74 @@
         function initializeSurvey(){
             var survey = surveyData;
             var found = false;
-            var iterate = qIndex+1;
+            var iterate = qidIndex+1;
             var choicesContainer = document.getElementById("cBox");
         
             while(found != true){
                 if(survey.data[iterate][0] == "^"){
                 //alert("found");
                 found = true;
-                qIndex = iterate;
-            }
-            else{
-                iterate = iterate + 1;
+                qidIndex = iterate;
+                }
+                else{
+                    iterate = iterate + 1;
             }
 
             // Change Question Text
             if(found == true){
-            //alert(qIndex);
-            noOfSelectable = survey.data[qIndex][1];
-            if(translated == true){
-                document.getElementById('qText').innerHTML = ""+survey.data[qIndex][(3+1)];
-                //document.getElementById('qText').innerHTML = ""+survey.data[qIndex][(2+1)];
+              document.getElementById('qText').innerHTML = ""+survey.data[qidIndex][3];
             }
-            else{
-                document.getElementById('qText').innerHTML = ""+survey.data[qIndex][3];
-            }
+          }
         }
 
         function next() {
             //Find next question
             var survey = surveyData;
             var found = false;
-            var iterate = qIndex+1;
+            var iterate = qidIndex+1;
             var choicesContainer = document.getElementById("cBox");
-            var qCode = survey.data[qIndex][2];
+            var qCode = survey.data[qidIndex][2];
+
+            while(found != true){
+                if(survey.data[iterate][0] == "^"){
+                //alert("found");
+                found = true;
+                qidIndex = iterate;
+                }
+                else{
+                    iterate = iterate + 1;
+                }
+            }
 
             // Change Question Text
             if(found == true){
-                //alert(qIndex);
-                noOfSelectable = survey.data[qIndex][1];
-                if(translated == true){
-                    document.getElementById('qText').innerHTML = ""+survey.data[qIndex][(3+1)];
-                    //document.getElementById('qText').innerHTML = ""+survey.data[qIndex][(2+1)];
-                }
-                else{
-                    document.getElementById('qText').innerHTML = ""+survey.data[qIndex][3];
-                }
-
+                document.getElementById('qText').innerHTML = ""+survey.data[qidIndex][3];
             }
+        }
 
             function prev() {
                 //Find previous question
                 var survey = surveyData;
                 var found = false;
-                var iterate = qIndex-1;
+                var iterate = qidIndex-1;
                 var choicesContainer = document.getElementById("cBox");
+
+                while(found != true){
+                  if(survey.data[iterate][0] == "^"){
+                    //alert("found");
+                    found = true;
+                    qidIndex = iterate;
+                  }
+                  else{
+                    iterate = iterate - 1;
+                  }
+                }
+
+                if(found == true){
+                  document.getElementById('qText').innerHTML = ""+survey.data[qidIndex][3];
+                }
             }
-        }
+        
       </script>
 
   </body>

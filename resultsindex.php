@@ -202,10 +202,10 @@
     <a href="#" class="logo">logo</a>
       <ul class="main-nav" id="js-menu">
         <li>
-            <a href="#" class="nav-links">Surveys</a>
+            <a href="index.php" class="nav-links">Surveys</a>
         </li>
         <li>
-          	<a href="resultsindex.php" class="nav-links">Results</a>
+          	<a href="#" class="nav-links">Results</a>
         </li>
         <li>
           	<a href="#" class="nav-links">About Us</a>
@@ -215,36 +215,21 @@
         </li>
 	</nav>
 
+	<header>
+          <div style="margin: 15px 10px ; display: flex;">
+              <h3 style="font-size: 25px"> List of Results </h3>
+          </div>
+    </header>
+
 	<div>
-    <form id="form-id" method="post" action="survey.php">
+    <form id="form-id" method="post" action="visualization.php">
   		<div class="cards" id="gridItemHolder">
 
   		</div>
     </form>
 	</div>
 
-	<a href="#" class="float" id="modalBtn">
-		<i class="fas fa-plus"></i>
-	</a>
 
-	<div id="addSurveyModal" class="modal">
-  <!-- Modal content -->
-	 <div class="modal-content">
-	   	<span class="close">&times;</span>
-	  	<h1>Add survey</h1>
-	  	<p> Add survey via link</p>
-	  	<input type="text" id="url" placeholder="Enter URL"><br>
-	  	<input type="text" id="surveyNameURL" placeholder="Enter survey name">
-	  	<input type="button" value="Submit" onclick="parseURL()">
-	  	<br><br>
-		<p> Add survey via file upload </p>
-		<input type="file" value="Upload" id="files">
-		<input type="text" id="surveyNameFile" placeholder="Enter survey name">
-		<input type="button" value="Upload" onclick="parseUpload()">
-	 </div>
-	</div>
-
-<script src="js/papaparse.js"></script>
 <script type="text/javascript">
 	// Generate survey list elements
 	var itemHolder = document.getElementById("gridItemHolder");
@@ -257,82 +242,6 @@
 	    
 	    mainNav.classList.toggle('active');
 	});
-
-	// Get the modal
-	var modal = document.getElementById("addSurveyModal");
-
-	// Get the button that opens the modal
-	var btn = document.getElementById("modalBtn");
-
-	// Get the <span> element that closes the modal
-	var span = document.getElementsByClassName("close")[0];
-
-	// When the user clicks on the button, open the modal
-	btn.onclick = function() {
-		 modal.style.display = "block";
-	}
-
-	// When the user clicks on <span> (x), close the modal
-	span.onclick = function() {
-		 modal.style.display = "none";
-	}
-
-	// When the user clicks anywhere outside of the modal, close it
-	window.onclick = function(event) {
-		 if (event.target == modal) {
-		   modal.style.display = "none";
-		 }
-	}
-
-	function parseURL(){
-    var url = document.getElementById('url').value;
-    var name = document.getElementById('surveyNameURL').value;
-
-    if(name != ""){
-    	//alert(url);
-    console.log(url)
-    Papa.parse(url, {
-		download: true,
-		complete: function(results) {
-			console.log(results);
-				//alert(results.data[0][2]);
-				//store("results", results, 1);
-				var surveyId = updateSurveyList();
-				//localStorage.results = JSON.stringify(results);
-				localStorage.setItem(surveyId+'', JSON.stringify(results));
-				}
-			});
-    location.reload();
-    }
-    else{
-    	// error no survey name entered
-    }
-  }
-
-  function parseUpload(){
-  	var file = document.getElementById("files").files[0];
-  	var name = document.getElementById('surveyNameFile').value;
-
-  	if(name != ""){
-  		Papa.parse(file, {
-		download: true,
-		complete: function(results) {
-			console.log(results);
-				//alert(results.data[0][2]);
-				//store("results", results, 1);
-				//alert(name);
-				var surveyId = updateSurveyList(name);
-				//localStorage.results = JSON.stringify(results);
-				localStorage.setItem(surveyId+'', JSON.stringify(results));
-				}
-			});
-    	location.reload();
-  	}
-  	else{
-  		//error no survey name
-  	}
-  	
-  }
 
   function deleteSurvey(){
 
