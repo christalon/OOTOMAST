@@ -50,7 +50,7 @@
       <div name="navButtons" id="navBtnCon">
         <form id="btnForm">
           <button class="btn btn-primary btn-lg" type="button" id="prevBtn" value="back" onclick="prev()">Back</button>
-          <button class="btn btn-primary btn-lg"  type="button" id="passBtn" value="pass">Pass</button>
+          <button class="btn btn-primary btn-lg"  type="button" id="passBtn" value="pass" onclick="pass()">Pass</button>
           <button class="btn btn-primary btn-lg"  type="button" id="nextBtn" value="next" onclick="next()">Next</button>
         </form>
       </div>
@@ -91,6 +91,8 @@
       var surveyData;
       var resultsArray;
       var selectedAnswer = [];
+      var resultsIndex;
+      var respondentIndex;
 
       <?php $sId = $_POST["survey"]; ?>
 
@@ -109,35 +111,40 @@
       }
 
       function initializeResultsArray(){
-        var results = []
-        results.push(surveyID, [93423]); 
-        //results[1].push({"a2a":1}); add new answer
-        //results[1].a2a = 2; replace answer
-        //results.push([91231]);  add new respondent
-        resultsArray = results;
+      // should be stored in local storage
+        var found = false;
+        var results = {};
+
+        if(!localStorage.getItem('results')){
+          results.push([surveyID, [93423]]);
+          resultsArray = results;
+          localStorage.results = JSON.stringify(results);
+          respondentIndex = 1;
+        }
+        else{
+          results = JSON.parse(localStorage.results);
+
+          for(var i =0; i < results.length; i++){
+            if(results[i][0] == surveyID){
+              resultsIndex = i;
+              found = true;
+            }
+          }
+
+          results[resultsIndex].push([91253]);
+          respondentIndex = results[resultsIndex].length - 1
+          resultsArray = results;
+        }
 
       }
 
     	function initializeSurvey(){
     		var survey = surveyData;
         var found = false;
-        var iterate = qIndex+1;
+        var iterate = qIndex;
         var choicesContainer = document.getElementById("cBox");
-        
-        while(found != true){
-          if(survey.data[iterate][0] == "^"){
-            //alert("found");
-            found = true;
-            qIndex = iterate;
-        }
-        else{
-            iterate = iterate + 1;
-        }
-      }
       
-
         // Change Question Text
-        if(found == true){
           //alert(qIndex);
           noOfSelectable = survey.data[qIndex][1];
           if(translated == true){
@@ -146,13 +153,15 @@
           }
           else{
             document.getElementById('qText').innerHTML = ""+survey.data[qIndex][3];
-          }
         }
 
         // Do choice generation
         cIndexes = []
         choicesContainer.innerHTML = "";
         choicesContainer.innerHTML += findChoices();
+
+        // disable next button
+        document.getElementById("nextBtn").disabled = true;
     	}
 
       function translate(){
@@ -177,6 +186,8 @@
             document.getElementById(choiceTextId).innerHTML = ""+survey.data[cIndexes[i]][3];
           }
         }
+
+        
       }
 
       function next(){
@@ -188,16 +199,16 @@
         var qCode = survey.data[qIndex][2];
 
          // Record answer
-        if(resultsArray[1].qCode == null){
+        if(resultsArray[resultsIndex][respondentIndex][qCode] == null){
           if(selectedAnswer.length > 1){
 
           }
           else if(selectedAnswer.length == 1){
-            resultsArray[1].push({[qCode]:selectedAnswer[0]});
+            resultsArray[resultsIndex][respondentIndex][qCode] = selectedAnswer[0];
           }
-          else{
-            resultsArray[1].push({[qCode]:99});
-          }
+        }
+        else if(selectedAnswer.length == 1){
+          resultsArray[resultsIndex][respondentIndex][qCode] = selectedAnswer[0];
         }
 
         while(found != true){
@@ -228,6 +239,17 @@
         cIndexes = []
         choicesContainer.innerHTML = "";
         choicesContainer.innerHTML += findChoices();
+
+        //clear selected answers
+        selectedAnswer = [];
+
+        //disable next button
+        if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null){
+          document.getElementById("nextBtn").disabled = false;
+        }
+        else{
+          document.getElementById("nextBtn").disabled = true;
+        }
       }
 
       function prev(){
@@ -265,10 +287,63 @@
         cIndexes = []
         choicesContainer.innerHTML = "";
         choicesContainer.innerHTML += findChoices();
+
+        //
+        if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null){
+          document.getElementById("nextBtn").disabled = false;
+        }
       }
 
       function pass(){
+        // Find next question
+        var survey = surveyData;
+        var found = false;
+        var iterate = qIndex+1;
+        var choicesContainer = document.getElementById("cBox");
+        var qCode = survey.data[qIndex][2];
 
+        // Record answer
+        resultsArray[resultsIndex][respondentIndex][qCode] = 99;
+
+        while(found != true){
+          if(survey.data[iterate][0] == "^"){
+            //alert("found");
+            found = true;
+            qIndex = iterate;
+          }
+          else{
+            iterate = iterate + 1;
+          }
+        }
+
+        // Change Question Text
+        if(found == true){
+          //alert(qIndex);
+          noOfSelectable = survey.data[qIndex][1];
+          if(translated == true){
+            document.getElementById('qText').innerHTML = ""+survey.data[qIndex][(3+1)];
+            //document.getElementById('qText').innerHTML = ""+survey.data[qIndex][(2+1)];
+          }
+          else{
+            document.getElementById('qText').innerHTML = ""+survey.data[qIndex][3];
+          }
+        }
+
+        // Do choice generation
+        cIndexes = []
+        choicesContainer.innerHTML = "";
+        choicesContainer.innerHTML += findChoices();
+
+        //clear selected answers
+        selectedAnswer = [];
+
+        //disable next button
+        if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null){
+          document.getElementById("nextBtn").disabled = false;
+        }
+        else{
+          document.getElementById("nextBtn").disabled = true;
+        }
       }
 
       function findChoices(){
@@ -287,7 +362,18 @@
             // Generate radio button if only 1 is selectable
             cIndexes.push(cIndex);
             if(noOfSelectable == 1){
-              output+= '<input type="radio" onclick="setAnswer('+ survey.data[cIndex][2] +')" class="form-check-input" id="'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
+              if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null){
+                if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] == survey.data[cIndex][2]){
+                  output+= '<input type="radio" onclick="setAnswer('+ survey.data[cIndex][2] +')" class="form-check-input" id="'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'" checked>';
+                }
+                else{
+                  output+= '<input type="radio" onclick="setAnswer('+ survey.data[cIndex][2] +')" class="form-check-input" id="'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
+                }
+              }
+              else{
+                output+= '<input type="radio" onclick="setAnswer('+ survey.data[cIndex][2] +')" class="form-check-input" id="'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
+              }
+              
               if(translated == true){
                  output+= '<label class="form-check-label" for="'+ cIndex +'" id="qChoice'+ cIndex +'">'+ survey.data[cIndex][4] +'</label>';
               }
@@ -308,6 +394,7 @@
         if(noOfSelectable == 1){
           selectedAnswer = [];
           selectedAnswer.push(num);
+          document.getElementById("nextBtn").disabled = false;
         }
       }
 
