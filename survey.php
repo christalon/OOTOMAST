@@ -134,9 +134,18 @@
             }
           }
 
-          results[resultsIndex].push([91253]);
-          respondentIndex = results[resultsIndex].length - 1
-          resultsArray = results;
+          if(found == true){
+            results[resultsIndex].push([91253]);
+            respondentIndex = results[resultsIndex].length - 1
+            resultsArray = results;
+          }
+          else{
+            results.push([surveyID, [93423]]);
+            resultsIndex = results.length - 1;
+            resultsArray = results;
+            respondentIndex = 1;
+            localStorage.results = JSON.stringify(results);
+          }
 
         }
 
