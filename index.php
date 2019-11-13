@@ -302,7 +302,9 @@
 				localStorage.setItem(surveyId+'', JSON.stringify(results));
 				}
 			});
-    location.reload();
+      setTimeout(function(){
+        window.location.reload();
+      },100);  
     }
     else{
     	// error no survey name entered
@@ -326,7 +328,9 @@
 				localStorage.setItem(surveyId+'', JSON.stringify(results));
 				}
 			});
-    	location.reload();
+    	setTimeout(function(){
+        window.location.reload();
+      },100);   
   	}
   	else{
   		//error no survey name

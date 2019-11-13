@@ -24,7 +24,7 @@
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
     <!--<link rel="stylesheet" href="/mdb.min.css">
     <!-- import the webpage's client-side javascript file -->
-    <script src="/client.js" defer></script>
+
 
   </head>
   <body>
@@ -68,15 +68,13 @@
     <!-- include the Glitch button to show what the webpage is about and
           to make it easier for folks to view source and remix -->
     <!-- <div class="glitchButton" style="position:fixed;top:20px;right:20px;"></div> -->
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
     <script src="https://button.glitch.me/button.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
-    
     <script src="js/mdb.min.js"></script>
     <script src="js/papaparse.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="js/jquery.cookie.js"></script>
     <script type="text/javascript">
 
@@ -108,18 +106,23 @@
 
       function setSurvey(){
         surveyData = JSON.parse(localStorage.getItem(surveyID));
+
       }
 
       function initializeResultsArray(){
       // should be stored in local storage
         var found = false;
-        var results = {};
+        var results = [];
+
+
 
         if(!localStorage.getItem('results')){
           results.push([surveyID, [93423]]);
+          resultsIndex = results.length - 1;
           resultsArray = results;
-          localStorage.results = JSON.stringify(results);
           respondentIndex = 1;
+          localStorage.results = JSON.stringify(results);
+
         }
         else{
           results = JSON.parse(localStorage.results);
@@ -134,6 +137,7 @@
           results[resultsIndex].push([91253]);
           respondentIndex = results[resultsIndex].length - 1
           resultsArray = results;
+
         }
 
       }
