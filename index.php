@@ -186,6 +186,10 @@
 		.fa-plus{
 			margin-top:22px;
 		}
+		.trashbutton
+		{
+		
+		}
 
     /* Grid item css */
 
@@ -284,6 +288,7 @@
 		 }
 	}
 
+
 	function parseURL(){
     var url = document.getElementById('url').value;
     var name = document.getElementById('surveyNameURL').value;
@@ -338,7 +343,20 @@
   	
   }
 
-  function deleteSurvey(){
+  function deleteSurvey(surveyId)
+  {
+  	var surveyListGetter = [];
+  	surveyListGetter = JSON.parse(localStorage.surveyList);
+
+  	for (var i = 0; i < surveyListGetter.length; i++)
+  	{
+  		if (surveyListGetter[i][0] == surveyId)
+  			surveyListGetter.splice(i);
+  	}
+
+  	localStorage.setItem("surveyList", JSON.stringify(surveyListGetter));
+
+  	localStorage.removeItem(JSON.stringify(surveyId));
 
   }
 
@@ -367,7 +385,9 @@
 			var surveyList = []
 		  surveyList = JSON.parse(localStorage.getItem('surveyList'));
 		  for(var i = 0; i < surveyList.length ; i++){
-		  	output+= '<button type="submit" class="card" name="survey" value="'+ surveyList[i][0] +'"> '+ surveyList[i][1] +'</button>';
+		  	output+= '<button type="submit" class="card" name="survey" value="'+ surveyList[i][0] +'"> '+ surveyList[i][1] + 
+
+		  	'</button> <div id ="trashbutton"> <button type = "button" onclick="deleteSurvey('+ surveyList[i][0] +')"> trash </div> </button>';
 		  }
 		}
 		return output;
