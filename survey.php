@@ -91,6 +91,9 @@
       var selectedAnswer = [];
       var resultsIndex;
       var respondentIndex;
+      var routingTrail = [];
+      var routeNext = "";
+      var routesTable = [];
 
       <?php $sId = $_POST["survey"]; ?>
 
@@ -113,11 +116,13 @@
       // should be stored in local storage
         var found = false;
         var results = [];
-
+        var max = 10;
+        var min = 5;
+        var respondentID = (Math.random() * ((max - min) + 1)) + min;
 
 
         if(!localStorage.getItem('results')){
-          results.push([surveyID, [93423]]);
+          results.push([surveyID, [respondentID]]);
           resultsIndex = results.length - 1;
           resultsArray = results;
           respondentIndex = 1;
@@ -135,12 +140,12 @@
           }
 
           if(found == true){
-            results[resultsIndex].push([91253]);
+            results[resultsIndex].push([respondentID]);
             respondentIndex = results[resultsIndex].length - 1
             resultsArray = results;
           }
           else{
-            results.push([surveyID, [93423]]);
+            results.push([surveyID, [respondentID]]);
             resultsIndex = results.length - 1;
             resultsArray = results;
             respondentIndex = 1;
@@ -169,12 +174,14 @@
         }
 
         // Do choice generation
-        cIndexes = []
-        choicesContainer.innerHTML = "";
-        choicesContainer.innerHTML += findChoices();
+        if(survey.data[qIndex][1] > 0){
+          cIndexes = []
+          choicesContainer.innerHTML = "";
+          choicesContainer.innerHTML += findChoices();
+        }
 
         // disable next button
-        document.getElementById("nextBtn").disabled = true;
+        //document.getElementById("nextBtn").disabled = true;
     	}
 
       function translate(){
@@ -199,8 +206,6 @@
             document.getElementById(choiceTextId).innerHTML = ""+survey.data[cIndexes[i]][3];
           }
         }
-
-        
       }
 
       function next(){
@@ -224,16 +229,39 @@
           resultsArray[resultsIndex][respondentIndex][qCode] = selectedAnswer[0];
         }
 
-        while(found != true){
-          if(survey.data[iterate][0] == "^"){
-            //alert("found");
-            found = true;
-            qIndex = iterate;
-          }
-          else{
-            iterate = iterate + 1;
+        if(routeNext == ""){
+          if(routeTable[])
+            while(found != true){
+              if(survey.data[iterate][0] == "^"){
+                //alert("found");
+                found = true;
+                qIndex = iterate;
+              }
+              else{
+                iterate = iterate + 1;
+              }
+            }
+        }
+        else{
+          routesTable[routeNext] = qCode; 
+          while(found != true){
+            if(survey.data[iterate][0] == "^"){
+              //alert("found");
+              resultsArray[resultsIndex][respondentIndex][survey.data[iterate][2]] = 98;
+              if(survey.data[iterate][2] == routeNext){
+                found = true;
+                qIndex = iterate;
+              }
+              else{
+                iterate = iterate + 1;
+              }
+            }
+            else{
+              iterate = iterate + 1;
+            }
           }
         }
+        
 
         // Change Question Text
         if(found == true){
@@ -249,15 +277,18 @@
         }
 
         // Do choice generation
-        cIndexes = []
-        choicesContainer.innerHTML = "";
-        choicesContainer.innerHTML += findChoices();
+        if(survey.data[qIndex][1] > 0){
+          cIndexes = []
+          choicesContainer.innerHTML = "";
+          choicesContainer.innerHTML += findChoices();
+        }
+        
 
         //clear selected answers
         selectedAnswer = [];
 
         //disable next button
-        if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null){
+        if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null || survey.data[qIndex][1] == 0){
           document.getElementById("nextBtn").disabled = false;
         }
         else{
@@ -271,17 +302,38 @@
         var found = false;
         var iterate = qIndex-1;
         var choicesContainer = document.getElementById("cBox");
+        var qCode = survey.data[qIndex][2];
 
-        while(found != true){
-          if(survey.data[iterate][0] == "^"){
-            //alert("found");
-            found = true;
-            qIndex = iterate;
-          }
-          else{
-            iterate = iterate - 1;
+        if(routesTable[qCode] != null){
+          while(found != true){
+            if(survey.data[iterate][0] == "^"){
+              //alert("found");
+              if(survey.data[iterate][2] == routesTable[qCode]){
+                found = true;
+                qIndex = iterate;
+              }
+              else{
+                iterate = iterate - 1;
+              }
+            }
+            else{
+              iterate = iterate - 1;
+            }
           }
         }
+        else{
+            while(found != true){
+              if(survey.data[iterate][0] == "^"){
+                //alert("found");
+                found = true;
+                qIndex = iterate;
+              }
+              else{
+                iterate = iterate - 1;
+              }
+            }
+        }
+        
 
         // Change Question Text
         if(found == true){
@@ -302,7 +354,7 @@
         choicesContainer.innerHTML += findChoices();
 
         //
-        if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null){
+        if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null || survey.data[qIndex][1] == 0){
           document.getElementById("nextBtn").disabled = false;
         }
       }
@@ -377,14 +429,14 @@
             if(noOfSelectable == 1){
               if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null){
                 if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] == survey.data[cIndex][2]){
-                  output+= '<input type="radio" onclick="setAnswer('+ survey.data[cIndex][2] +')" class="form-check-input" id="'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'" checked>';
+                  output+= '<input type="radio" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +')" class="form-check-input" id="'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'" checked>';
                 }
                 else{
-                  output+= '<input type="radio" onclick="setAnswer('+ survey.data[cIndex][2] +')" class="form-check-input" id="'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
+                  output+= '<input type="radio" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +')" class="form-check-input" id="'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
                 }
               }
               else{
-                output+= '<input type="radio" onclick="setAnswer('+ survey.data[cIndex][2] +')" class="form-check-input" id="'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
+                output+= '<input type="radio" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +')" class="form-check-input" id="'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
               }
               
               if(translated == true){
@@ -393,9 +445,6 @@
               else{
                 output+= '<label class="form-check-label" for="'+ cIndex +'" id="qChoice'+ cIndex +'">'+ survey.data[cIndex][3] +'</label>';
               }
-
-            // Set choices that are already checked
-            
             }
           }
           cIndex = cIndex+1;
@@ -403,16 +452,13 @@
         return output;
       }
 
-      function setAnswer(num){
+      function setAnswer(num, choiceIndex){
         if(noOfSelectable == 1){
           selectedAnswer = [];
           selectedAnswer.push(num);
+          routeNext = surveyData.data[choiceIndex][1];
           document.getElementById("nextBtn").disabled = false;
         }
-      }
-
-      function checkAnswerButton(){
-        // When user pressed previous, check the past answer
       }
 
       document.getElementById('translateTgl').onchange = function(e){
