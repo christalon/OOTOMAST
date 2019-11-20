@@ -141,6 +141,8 @@
             <form id="btnForm">
                 <button class="btn btn-primary btn-lg" type="button" id="prevBtn" value="back" onclick="prev()">Back</button>
                 <button class="btn btn-primary btn-lg"  type="button" id="nextBtn" value="next" onclick="next()">Next</button>
+            </form>
+          </div>
       </main>
 
       <script src="https://button.glitch.me/button.js"></script>
@@ -219,28 +221,28 @@
             }
         }
 
-            function prev() {
-                //Find previous question
-                var survey = surveyData;
-                var found = false;
-                var iterate = qidIndex-1;
-                var choicesContainer = document.getElementById("cBox");
+        function prev() {
+            //Find previous question
+            var survey = surveyData;
+            var found = false;
+            var iterate = qidIndex-1;
+            var choicesContainer = document.getElementById("cBox");
 
-                while(found != true){
-                  if(survey.data[iterate][0] == "^"){
-                    //alert("found");
-                    found = true;
-                    qidIndex = iterate;
-                  }
-                  else{
-                    iterate = iterate - 1;
-                  }
+            while(found != true){
+                if(survey.data[iterate][0] == "^"){
+                //alert("found");
+                found = true;
+                qidIndex = iterate;
                 }
-
-                if(found == true){
-                  document.getElementById('qText').innerHTML = ""+survey.data[qidIndex][3];
+                else{
+                iterate = iterate - 1;
                 }
             }
+
+            if(found == true){
+                document.getElementById('qText').innerHTML = ""+survey.data[qidIndex][3];
+            }
+        }
         
       </script>
 
