@@ -335,6 +335,7 @@
 
         //clear selected answers
         selectedAnswer = [];
+        routeNext = ""
 
         //disable next button
         if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null || survey.data[qIndex][1] == 0){
@@ -409,9 +410,12 @@
         choicesContainer.innerHTML = "";
         choicesContainer.innerHTML += findChoices();
 
-        //
+        // 
         if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null || survey.data[qIndex][1] == 0){
           document.getElementById("nextBtn").disabled = false;
+        }
+        else{
+          document.getElementById("nextBtn").disabled = true;
         }
       }
 
@@ -467,12 +471,13 @@
         }
       }
 
+      // Still needs fixing
       function deleteRoute(qCode){
-        for(var i = 0; i < routesTable.length; i++){
-          if(routesTable[i] == qCode){
-            routesTable.splice(i);
+        routesTable.forEach(function(item, index, object){
+          if(item == qCode){
+            object.splice(index, 1);
           }
-        }
+        });
       }
 
       function findChoices(){
@@ -510,6 +515,26 @@
                 output+= '<label class="form-check-label" for="'+ cIndex +'" id="qChoice'+ cIndex +'">'+ survey.data[cIndex][3] +'</label>';
               }
             }
+            else{
+              if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null){
+                if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] == survey.data[cIndex][2]){
+                  output+= '<input type="checkbox" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +')" class="form-check-input" id="'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'" checked>';
+                }
+                else{
+                  output+= '<input type="checkbox" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +')" class="form-check-input" id="'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
+                }
+              }
+              else{
+                output+= '<input type="checkbox" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +')" class="form-check-input" id="'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
+              }
+              
+              if(translated == true){
+                 output+= '<label class="form-check-label" for="'+ cIndex +'" id="qChoice'+ cIndex +'">'+ survey.data[cIndex][4] +'</label>';
+              }
+              else{
+                output+= '<label class="form-check-label" for="'+ cIndex +'" id="qChoice'+ cIndex +'">'+ survey.data[cIndex][3] +'</label>';
+              }
+            }
           }
           cIndex = cIndex+1;
         }
@@ -522,6 +547,13 @@
           selectedAnswer.push(num);
           routeNext = surveyData.data[choiceIndex][1];
           document.getElementById("nextBtn").disabled = false;
+        }
+        else{
+          //check first if answer exists in array, if it exists, remove
+          selectedAnswer.push(num);
+          if(selectedAnswer.length == noOfSelectable){
+            document.getElementById("nextBtn").disabled = false;
+          }
         }
       }
 
