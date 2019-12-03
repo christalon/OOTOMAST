@@ -143,6 +143,7 @@
             results[resultsIndex].push([respondentID]);
             respondentIndex = results[resultsIndex].length - 1
             resultsArray = results;
+            localStorage.results = JSON.stringify(results);
           }
           else{
             results.push([surveyID, [respondentID]]);
@@ -230,19 +231,37 @@
         }
 
         if(routeNext == ""){
-          if(routeTable[])
+          var existingRoute = Object.keys(routesTable)[Object.values(routesTable).indexOf(qCode)];
+          if(existingRoute != null){
             while(found != true){
               if(survey.data[iterate][0] == "^"){
-                //alert("found");
-                found = true;
-                qIndex = iterate;
+                if(survey.data[iterate][2] == existingRoute){
+                  found = true;
+                  qIndex = iterate;
+                }
+                else{
+                  iterate = iterate + 1;
+                }
               }
               else{
                 iterate = iterate + 1;
               }
             }
+          }
+          else{
+            while(found != true){
+              if(survey.data[iterate][0] == "^"){
+                  found = true;
+                  qIndex = iterate;              
+              }
+              else{
+                iterate = iterate + 1;
+              }
+            }
+          }
         }
         else{
+          deleteRoute(qCode);
           routesTable[routeNext] = qCode; 
           while(found != true){
             if(survey.data[iterate][0] == "^"){
@@ -408,6 +427,14 @@
         }
         else{
           document.getElementById("nextBtn").disabled = true;
+        }
+      }
+
+      function deleteRoute(qCode){
+        for(var i = 0; i < routesTable.length; i++){
+          if(routesTable[i] == qCode){
+            routesTable.splice(i);
+          }
         }
       }
 
