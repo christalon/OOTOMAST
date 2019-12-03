@@ -67,6 +67,7 @@ footer {
 }
 
 #qText{
+  font-size: 20px;
   font-family: 'Montserrat', sans-serif;
 }
 
@@ -152,36 +153,29 @@ footer {
 }
 
 #navBtnCon{
-  display: flex;
-  justify-content: center;
-  margin: 50px 10px;
-  padding: 10px;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  position: fixed;
+  width: 100%;
+    /* max-width: 640px; */
+  z-index: 1;
+  text-align: center;
+  display: inline-flex;
 }
 
-#btnForm{
-  margin: 10px;
-}
 
 #prevBtn{
-  margin: 30px;
-  padding-left: 50px;
-  padding-right: 50px;
-  padding-right: 50px;
+  margin: 5px;
   font-family: 'Montserrat', sans-serif;
 }
 
 #passBtn{
-  margin: 30px;
-  padding-left: 50px;
-  padding-right: 50px;
-  padding-right: 50px;
+  margin: 5px;
   font-family: 'Montserrat', sans-serif;
 }
 
 #nextBtn{
-  margin: 30px;
-  padding-left: 50px;
-  padding-right: 50px;
-  padding-right: 50px;
+  margin: 5px;
   font-family: 'Montserrat', sans-serif;
 }

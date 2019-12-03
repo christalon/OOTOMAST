@@ -19,9 +19,9 @@
 
     <!-- import the webpage's stylesheet -->
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:600&display=swap" rel="stylesheet">
     <!--<link rel="stylesheet" href="/mdb.min.css">
     <!-- import the webpage's client-side javascript file -->
 
@@ -47,12 +47,18 @@
         </form>
       </div>
       
-      <div name="navButtons" id="navBtnCon">
-        <form id="btnForm">
-          <button class="btn btn-primary btn-lg" type="button" id="prevBtn" value="back" onclick="prev()">Back</button>
-          <button class="btn btn-primary btn-lg"  type="button" id="passBtn" value="pass" onclick="pass()">Pass</button>
-          <button class="btn btn-primary btn-lg"  type="button" id="nextBtn" value="next" onclick="next()">Next</button>
-        </form>
+      <div id="navContainer">
+        <div name="navButtons" id="navBtnCon" class="btn-group btn-group-justified">
+          <div class="btn-group" style="width: 100%;">
+            <button class="btn btn-primary btn-block" type="button" id="prevBtn" value="back" onclick="prev()">Back</button>
+          </div>
+          <div class="btn-group" style="width: 100%;">
+            <button class="btn btn-primary btn-block" type="button" id="passBtn" value="pass" onclick="pass()">Pass</button>
+          </div>
+          <div class="btn-group" style="width: 100%;">
+            <button class="btn btn-primary btn-block" type="button" id="nextBtn" value="next" onclick="next()">Next</button>
+          </div>
+        </div>
       </div>
     </main>
     <!-- 
@@ -165,13 +171,19 @@
       
         // Change Question Text
           //alert(qIndex);
-          noOfSelectable = survey.data[qIndex][1];
-          if(translated == true){
-            document.getElementById('qText').innerHTML = ""+survey.data[qIndex][(3+1)];
-            //document.getElementById('qText').innerHTML = ""+survey.data[qIndex][(2+1)];
-          }
-          else{
-            document.getElementById('qText').innerHTML = ""+survey.data[qIndex][3];
+        noOfSelectable = survey.data[qIndex][1];
+
+        //if the first question is a transition, disable pass button
+        if(noOfSelectable == 0){
+          generateTransitionScreen(true);
+        }
+
+        if(translated == true){
+          document.getElementById('qText').innerHTML = ""+survey.data[qIndex][(3+1)];
+          //document.getElementById('qText').innerHTML = ""+survey.data[qIndex][(2+1)];
+        }
+        else{
+          document.getElementById('qText').innerHTML = ""+survey.data[qIndex][3];
         }
 
         // Do choice generation
@@ -184,6 +196,16 @@
         // disable next button
         //document.getElementById("nextBtn").disabled = true;
     	}
+
+      function generateTransitionScreen(state){
+        //hide items if true, otherwise return to normal
+        if(state == true){
+          document.getElementById("passBtn").parentElement.style.display = "none";
+        }
+        else{
+          document.getElementById("passBtn").parentElement.style.display = "inline-flex";
+        }
+      }
 
       function translate(){
         var survey = surveyData;
@@ -295,6 +317,14 @@
           }
         }
 
+        // Check if transition question
+        if(noOfSelectable == 0){
+          generateTransitionScreen(true);
+        }
+        else{
+          generateTransitionScreen(false);
+        }
+
         // Do choice generation
         if(survey.data[qIndex][1] > 0){
           cIndexes = []
@@ -353,7 +383,6 @@
             }
         }
         
-
         // Change Question Text
         if(found == true){
           //alert(qIndex);
@@ -365,6 +394,14 @@
           else{
             document.getElementById('qText').innerHTML = ""+survey.data[qIndex][3];
           }
+        }
+
+        // Check if transition question
+        if(noOfSelectable == 0){
+          generateTransitionScreen(true);
+        }
+        else{
+          generateTransitionScreen(false);
         }
 
         // Do choice generation
