@@ -52,7 +52,7 @@
           <div class="btn-group" style="width: 100%;">
             <button class="btn btn-primary btn-block" type="button" id="prevBtn" value="back" onclick="prev()">Back</button>
           </div>
-          <div class="btn-group" style="width: 100%;">
+          <div class="btn-group" style="width: 20%;">
             <button class="btn btn-primary btn-block" type="button" id="passBtn" value="pass" onclick="pass()">Pass</button>
           </div>
           <div class="btn-group" style="width: 100%;">
