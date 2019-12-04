@@ -318,7 +318,6 @@
           }
         }
         
-        alert(JSON.stringify(resultsArray));
         // Change Question Text
         if(found == true){
           //alert(qIndex);
