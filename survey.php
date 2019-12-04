@@ -93,8 +93,8 @@
       var cIndexes = [];
       var surveyID;
       var surveyData;
-      var resultsArray;
-      var selectedAnswer = [];
+      var resultsArray = {};
+      var selectedAnswer = {};
       var resultsIndex;
       var respondentIndex;
       var routingTrail = [];
@@ -121,14 +121,14 @@
       function initializeResultsArray(){
       // should be stored in local storage
         var found = false;
-        var results = [];
+        var results = {};
         var max = 10;
         var min = 5;
         var respondentID = (Math.random() * ((max - min) + 1)) + min;
 
 
         if(!localStorage.getItem('results')){
-          results.push([surveyID, [respondentID]]);
+          results.push([surveyID, {respondentID}]);
           resultsIndex = results.length - 1;
           resultsArray = results;
           respondentIndex = 1;
@@ -146,13 +146,13 @@
           }
 
           if(found == true){
-            results[resultsIndex].push([respondentID]);
+            results[resultsIndex].push({respondentID});
             respondentIndex = results[resultsIndex].length - 1
             resultsArray = results;
             localStorage.results = JSON.stringify(results);
           }
           else{
-            results.push([surveyID, [respondentID]]);
+            results.push([surveyID, {respondentID}]);
             resultsIndex = results.length - 1;
             resultsArray = results;
             respondentIndex = 1;
@@ -243,16 +243,16 @@
         if(resultsArray[resultsIndex][respondentIndex][qCode] == null){
           if(selectedAnswer.length > 1){
             resultsArray[resultsIndex][respondentIndex][qCode] = selectedAnswer;
-            localStorage.results = JSON.stringify(resultsArray);
+            localStorage["results"] = JSON.stringify(resultsArray);
           }
           else if(selectedAnswer.length == 1){
             resultsArray[resultsIndex][respondentIndex][qCode] = selectedAnswer[0];
-            localStorage.results = JSON.stringify(resultsArray);
+            localStorage["results"] = JSON.stringify(resultsArray);
           }
         }
         else if(selectedAnswer.length == 1){
           resultsArray[resultsIndex][respondentIndex][qCode] = selectedAnswer[0];
-          localStorage.results = JSON.stringify(resultsArray);
+          localStorage["results"] = JSON.stringify(resultsArray);
         }
 
         if(routeNext == ""){
@@ -294,7 +294,7 @@
               if(survey.data[iterate][2] == routeNext){
                 if(resultsArray[resultsIndex][respondentIndex][survey.data[iterate][2]] == 98){
                   resultsArray[resultsIndex][respondentIndex][survey.data[iterate][2]] = null;
-                  localStorage.results = JSON.stringify(resultsArray);
+                  localStorage["results"] = JSON.stringify(resultsArray);
                 }
 
                 found = true;
@@ -303,11 +303,11 @@
               else{
                 if(resultsArray[resultsIndex][respondentIndex][survey.data[iterate][2]] == 98){
                   resultsArray[resultsIndex][respondentIndex][survey.data[iterate][2]] = null;
-                  localStorage.results = JSON.stringify(resultsArray);
+                  localStorage["results"] = JSON.stringify(resultsArray);
                 }
                 else{
                   resultsArray[resultsIndex][respondentIndex][survey.data[iterate][2]] = 98;
-                  localStorage.results = JSON.stringify(resultsArray);
+                  localStorage["results"] = JSON.stringify(resultsArray);
                 }
                 iterate = iterate + 1;
               }
@@ -318,7 +318,7 @@
           }
         }
         
-
+        alert(JSON.stringify(resultsArray));
         // Change Question Text
         if(found == true){
           //alert(qIndex);
@@ -454,6 +454,7 @@
 
         // Record answer
         resultsArray[resultsIndex][respondentIndex][qCode] = 99;
+        localStorage["results"] = JSON.stringify(resultsArray);
 
         while(found != true){
           if(survey.data[iterate][0] == "^"){
