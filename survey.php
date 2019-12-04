@@ -243,13 +243,16 @@
         if(resultsArray[resultsIndex][respondentIndex][qCode] == null){
           if(selectedAnswer.length > 1){
             resultsArray[resultsIndex][respondentIndex][qCode] = selectedAnswer;
+            localStorage.results = JSON.stringify(resultsArray);
           }
           else if(selectedAnswer.length == 1){
             resultsArray[resultsIndex][respondentIndex][qCode] = selectedAnswer[0];
+            localStorage.results = JSON.stringify(resultsArray);
           }
         }
         else if(selectedAnswer.length == 1){
           resultsArray[resultsIndex][respondentIndex][qCode] = selectedAnswer[0];
+          localStorage.results = JSON.stringify(resultsArray);
         }
 
         if(routeNext == ""){
@@ -291,6 +294,7 @@
               if(survey.data[iterate][2] == routeNext){
                 if(resultsArray[resultsIndex][respondentIndex][survey.data[iterate][2]] == 98){
                   resultsArray[resultsIndex][respondentIndex][survey.data[iterate][2]] = null;
+                  localStorage.results = JSON.stringify(resultsArray);
                 }
 
                 found = true;
@@ -299,9 +303,11 @@
               else{
                 if(resultsArray[resultsIndex][respondentIndex][survey.data[iterate][2]] == 98){
                   resultsArray[resultsIndex][respondentIndex][survey.data[iterate][2]] = null;
+                  localStorage.results = JSON.stringify(resultsArray);
                 }
                 else{
                   resultsArray[resultsIndex][respondentIndex][survey.data[iterate][2]] = 98;
+                  localStorage.results = JSON.stringify(resultsArray);
                 }
                 iterate = iterate + 1;
               }
@@ -339,6 +345,10 @@
           cIndexes = []
           choicesContainer.innerHTML = "";
           choicesContainer.innerHTML += findChoices();
+        }
+        else{
+          cIndexes = []
+          choicesContainer.innerHTML = "";
         }
         
 
@@ -415,9 +425,15 @@
         }
 
         // Do choice generation
-        cIndexes = []
-        choicesContainer.innerHTML = "";
-        choicesContainer.innerHTML += findChoices();
+        if(survey.data[qIndex][1] > 0){
+          cIndexes = []
+          choicesContainer.innerHTML = "";
+          choicesContainer.innerHTML += findChoices();
+        }
+        else{
+          cIndexes = []
+          choicesContainer.innerHTML = "";
+        }
 
         // 
         if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null || survey.data[qIndex][1] == 0){
@@ -464,15 +480,22 @@
         }
 
         // Do choice generation
-        cIndexes = []
-        choicesContainer.innerHTML = "";
-        choicesContainer.innerHTML += findChoices();
+        if(survey.data[qIndex][1] > 0){
+          cIndexes = []
+          choicesContainer.innerHTML = "";
+          choicesContainer.innerHTML += findChoices();
+        }
+        else{
+          cIndexes = []
+          choicesContainer.innerHTML = "";
+        }
 
         //clear selected answers
         selectedAnswer = [];
+        routeNext = ""
 
         //disable next button
-        if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null){
+        if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null || survey.data[qIndex][1] == 0){
           document.getElementById("nextBtn").disabled = false;
         }
         else{
