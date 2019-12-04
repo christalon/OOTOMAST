@@ -242,7 +242,7 @@
          // Record answer
         if(resultsArray[resultsIndex][respondentIndex][qCode] == null){
           if(selectedAnswer.length > 1){
-
+            resultsArray[resultsIndex][respondentIndex][qCode] = selectedAnswer;
           }
           else if(selectedAnswer.length == 1){
             resultsArray[resultsIndex][respondentIndex][qCode] = selectedAnswer[0];
@@ -288,12 +288,21 @@
           while(found != true){
             if(survey.data[iterate][0] == "^"){
               //alert("found");
-              resultsArray[resultsIndex][respondentIndex][survey.data[iterate][2]] = 98;
               if(survey.data[iterate][2] == routeNext){
+                if(resultsArray[resultsIndex][respondentIndex][survey.data[iterate][2]] == 98){
+                  resultsArray[resultsIndex][respondentIndex][survey.data[iterate][2]] = null;
+                }
+
                 found = true;
                 qIndex = iterate;
               }
               else{
+                if(resultsArray[resultsIndex][respondentIndex][survey.data[iterate][2]] == 98){
+                  resultsArray[resultsIndex][respondentIndex][survey.data[iterate][2]] = null;
+                }
+                else{
+                  resultsArray[resultsIndex][respondentIndex][survey.data[iterate][2]] = 98;
+                }
                 iterate = iterate + 1;
               }
             }
@@ -473,12 +482,13 @@
 
       // Still needs fixing
       function deleteRoute(qCode){
-        routesTable.forEach(function(item, index, object){
-          if(item == qCode){
-            object.splice(index, 1);
+        for(let elem in routesTable){
+          if(qCode == routesTable[elem]){
+            routesTable[elem] = null;
           }
-        });
+        }
       }
+      
 
       function findChoices(){
         var survey = surveyData;
@@ -498,47 +508,59 @@
             if(noOfSelectable == 1){
               if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null){
                 if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] == survey.data[cIndex][2]){
-                  output+= '<input type="radio" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +')" class="form-check-input" id="'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'" checked>';
+                  output+= '<input type="radio" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +')" class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'" checked>';
                 }
                 else{
-                  output+= '<input type="radio" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +')" class="form-check-input" id="'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
+                  output+= '<input type="radio" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +')" class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
                 }
               }
               else{
-                output+= '<input type="radio" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +')" class="form-check-input" id="'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
+                output+= '<input type="radio" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +')" class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
               }
               
               if(translated == true){
-                 output+= '<label class="form-check-label" for="'+ cIndex +'" id="qChoice'+ cIndex +'">'+ survey.data[cIndex][4] +'</label>';
+                 output+= '<label class="form-check-label" for="choice'+ cIndex +'" id="qChoice'+ cIndex +'">'+ survey.data[cIndex][4] +'</label>';
               }
               else{
-                output+= '<label class="form-check-label" for="'+ cIndex +'" id="qChoice'+ cIndex +'">'+ survey.data[cIndex][3] +'</label>';
+                output+= '<label class="form-check-label" for="choice'+ cIndex +'" id="qChoice'+ cIndex +'">'+ survey.data[cIndex][3] +'</label>';
               }
             }
             else{
               if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null){
-                if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] == survey.data[cIndex][2]){
-                  output+= '<input type="checkbox" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +')" class="form-check-input" id="'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'" checked>';
+                if(findExistingAnswer(resultsIndex, respondentIndex, survey.data[qIndex][2], survey.data[cIndex][2]) == true){
+                  output+= '<input type="checkbox" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +')" class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'" checked>';
                 }
                 else{
-                  output+= '<input type="checkbox" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +')" class="form-check-input" id="'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
+                  output+= '<input type="checkbox" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +')" class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
                 }
               }
               else{
-                output+= '<input type="checkbox" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +')" class="form-check-input" id="'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
+                output+= '<input type="checkbox" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +')" class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
               }
               
               if(translated == true){
-                 output+= '<label class="form-check-label" for="'+ cIndex +'" id="qChoice'+ cIndex +'">'+ survey.data[cIndex][4] +'</label>';
+                 output+= '<label class="form-check-label" for="choice'+ cIndex +'" id="qChoice'+ cIndex +'">'+ survey.data[cIndex][4] +'</label>';
               }
               else{
-                output+= '<label class="form-check-label" for="'+ cIndex +'" id="qChoice'+ cIndex +'">'+ survey.data[cIndex][3] +'</label>';
+                output+= '<label class="form-check-label" for="choice'+ cIndex +'" id="qChoice'+ cIndex +'">'+ survey.data[cIndex][3] +'</label>';
               }
             }
           }
           cIndex = cIndex+1;
         }
         return output;
+      }
+
+      function findExistingAnswer(resultsIndex, respondentIndex, qCode, num){
+        var found = false;
+
+        for(var i = 0; i < resultsArray[resultsIndex][respondentIndex][qCode].length; i++){
+          if(resultsArray[resultsIndex][respondentIndex][qCode][i] == num){
+            found = true;
+          }
+        }
+
+         return found;                                          
       }
 
       function setAnswer(num, choiceIndex){
@@ -550,9 +572,24 @@
         }
         else{
           //check first if answer exists in array, if it exists, remove
-          selectedAnswer.push(num);
-          if(selectedAnswer.length == noOfSelectable){
+          var checkbox = document.getElementById("choice"+choiceIndex);
+          if(checkbox.checked == false){
+              for( var i = 0; i < selectedAnswer.length; i++){ 
+              if ( selectedAnswer[i] === num) {
+                selectedAnswer.splice(i, 1); 
+              }
+            }
+          }
+          else
+          {
+            selectedAnswer.push(num);
+          }
+
+          if(selectedAnswer.length >= noOfSelectable){
             document.getElementById("nextBtn").disabled = false;
+          }
+          else{
+            document.getElementById("nextBtn").disabled = true;
           }
         }
       }
