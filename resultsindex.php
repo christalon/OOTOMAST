@@ -269,10 +269,16 @@
 		if(!localStorage.getItem('surveyList')) {
 
 		} else {
-			var surveyList = []
-		  surveyList = JSON.parse(localStorage.getItem('surveyList'));
+	    var surveyList = [];
+	    var results = [];
+	    surveyList = JSON.parse(localStorage.getItem('surveyList'));
+		  results = JSON.parse(localStorage.getItem('results'));
 		  for(var i = 0; i < surveyList.length ; i++){
-		  	output+= '<button type="submit" class="card" name="survey" value="'+ surveyList[i][0] +'"> '+ surveyList[i][1] +'</button>';
+		  	for(var j = 0; j < results.length; j++){
+		  		if(surveyList[i][0] == results[j][0]){
+		  			output+= '<button type="submit" class="card" name="survey" value="'+ surveyList[i][0] +'"> '+ surveyList[i][1] +'</button>';
+		  		}
+		  	}
 		  }
 		}
 		return output;

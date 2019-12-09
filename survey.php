@@ -100,6 +100,10 @@
       var routingTrail = [];
       var routeNext = "";
       var routesTable = [];
+<<<<<<< Updated upstream
+=======
+      var finished = false;
+>>>>>>> Stashed changes
 
       <?php $sId = $_POST["survey"]; ?>
 
@@ -268,6 +272,12 @@
                   iterate = iterate + 1;
                 }
               }
+<<<<<<< Updated upstream
+=======
+              else if(survey.data[iterate][0] == ""){
+                finished = true;
+              }
+>>>>>>> Stashed changes
               else{
                 iterate = iterate + 1;
               }
@@ -279,6 +289,12 @@
                   found = true;
                   qIndex = iterate;              
               }
+<<<<<<< Updated upstream
+=======
+              else if(survey.data[iterate][0] == ""){
+                finished = true;
+              }
+>>>>>>> Stashed changes
               else{
                 iterate = iterate + 1;
               }
@@ -312,6 +328,12 @@
                 iterate = iterate + 1;
               }
             }
+<<<<<<< Updated upstream
+=======
+            else if(survey.data[iterate][0] == ""){
+                finished = true;
+            }
+>>>>>>> Stashed changes
             else{
               iterate = iterate + 1;
             }
@@ -329,6 +351,20 @@
           else{
             document.getElementById('qText').innerHTML = ""+survey.data[qIndex][3];
           }
+        }
+        else if(found == false && finished == true){
+          //Prompt end screen
+        }
+        else{
+          //prompt error
+        }
+
+        // Check if transition question
+        if(noOfSelectable == 0){
+          generateTransitionScreen(true);
+        }
+        else{
+          generateTransitionScreen(false);
         }
 
         // Check if transition question
@@ -356,7 +392,11 @@
         routeNext = ""
 
         //disable next button
+<<<<<<< Updated upstream
         if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null || survey.data[qIndex][1] == 0){
+=======
+        if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null || survey.data[qIndex][1] == 0 || finished == false){
+>>>>>>> Stashed changes
           document.getElementById("nextBtn").disabled = false;
         }
         else{
@@ -522,7 +562,7 @@
 
         //Find each choices
         while(eof == 0){
-          if(survey.data[cIndex][0] == "^"){
+          if(survey.data[cIndex][0] == "^" || survey.data[cIndex][0] == ""){
             eof = 1;
           }
           else{
