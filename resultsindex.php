@@ -193,10 +193,6 @@
 			box-shadow: 2px 2px 3px #999;
 		}
 
-		.fa-plus{
-			margin-top:22px;
-		}
-
     /* Grid item css */
 
 	</style>
@@ -211,7 +207,7 @@
 		<span class="navbar-toggle" id="js-navbar-toggle">
         <i class="fas fa-bars"></i>
     </span>
-    <a href="#" class="logo"><img src="assets/ootomast.svg" class="animated fadeInUp"></a>
+    <a href="#" class="logo"><img src="assets/ootomast.svg" class="animated fadeInLeft"></a>
       <ul class="main-nav" id="js-menu">
         <li>
             <a href="index.php" class="nav-links">Surveys</a>

@@ -3,19 +3,11 @@
   <head>
     <title>OOTOMAST</title>
     <meta name="description" content="A cool thing made with Glitch">
-    <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- import the webpage's stylesheet -->
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
-    <!--<link rel="stylesheet" href="/mdb.min.css">
-    <!-- import the webpage's client-side javascript file -->
-    <script src="/client.js" defer></script>
     <style>
   * {
     box-sizing: border-box;
@@ -47,12 +39,12 @@
   .logo {
       display: inline-block;
       font-size: 22px;
-      margin-top: 10px;
+      margin-top: 5px;
       margin-left: 20px;
   }
 
   .logo img{
-    max-width: 30%;
+    width: 140px;
   }
 
   .navbar-toggle {
@@ -71,6 +63,109 @@
 
   .active {
     display: block;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-gap: 10px;
+  }
+
+  .card{
+    height: 200px;
+    object-fit: cover;
+    border: 1px solid blue;
+    border-radius: 25px;
+    margin: 20px;
+  }
+
+  .card:hover{
+    background: green;
+  }
+
+  .float{
+    position:fixed;
+    width:60px;
+    height:60px;
+    bottom:40px;
+    right:30px;
+    background-color:#229c43;
+    color:#FFF;
+    border-radius:50px;
+    text-align:center;
+    box-shadow: 2px 2px 3px #999;
+  }
+
+  .fa-plus{
+    margin-top:22px;
+  }
+
+    /* Survey Modal */
+
+    /* The Modal (background) */
+  .modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+  }
+
+  /* The Close Button */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  #navBtnCon{
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    position: fixed;
+    width: 100%;
+      /* max-width: 640px; */
+    z-index: 1;
+    text-align: center;
+    display: inline-flex;
+  }
+
+
+  #prevBtn{
+    margin: 5px;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  #passBtn{
+    margin: 5px;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  #nextBtn{
+    margin: 5px;
+    font-family: 'Montserrat', sans-serif;
   }
 
   @media screen and (min-width: 768px) {
@@ -100,6 +195,7 @@
     .logo img{
       max-width: 150px;
     }
+
    .navbar-toggle {
        display: none;
     }
@@ -108,45 +204,49 @@
         color: rgba(255, 255, 255, 1);
     }
 
-    /* Grid item css */
-
-    #navBtnCon{
-      bottom: 0px;
-      left: 50%;
-      transform: translateX(-50%);
-      position: fixed;
-      width: 100%;
-        /* max-width: 640px; */
-      z-index: 1;
-      text-align: center;
-      display: inline-flex;
+    .cards {
+      max-width: 960px;
+      margin: 0 auto 20px;
     }
 
-
-    #prevBtn{
-      margin: 5px;
-      font-family: 'Montserrat', sans-serif;
+    .card{
+      height: 200px;
+      object-fit: cover;
+      border: 1px solid blue;
+      border-radius: 25px;
+      margin-top: 20px;
     }
 
-    #nextBtn{
-      margin: 5px;
-      font-family: 'Montserrat', sans-serif;
+    .float{
+      position:fixed;
+      width:60px;
+      height:60px;
+      bottom:40px;
+      right:30px;
+      background-color:#229c43;
+      color:#FFF;
+      border-radius:50px;
+      text-align:center;
+      box-shadow: 2px 2px 3px #999;
     }
+
   </style>
   <script src="https://kit.fontawesome.com/637ce47f6a.js" crossorigin="anonymous"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" /> 
   <link href="https://fonts.googleapis.com/css?family=Montserrat:500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/animate.css"> 
+  <link rel="stylesheet" href="css/animate.css">
+  <link rel="stylesheet" href="https://cdnjs.com/libraries/bttn.css"> 
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
   </head>
   <body>
-      <nav class="navbar">
+      <nav class="navbar" style="padding: 0;">
     <span class="navbar-toggle" id="js-navbar-toggle">
         <i class="fas fa-bars"></i>
     </span>
-    <a href="#" class="logo"><img src="assets/ootomast.svg" class="animated fadeInUp"></a>
-      <ul class="main-nav" id="js-menu">
+    <a href="#" class="logo"><img src="assets/ootomast.svg" class="animated fadeInLeft"></a>
+      <ul class="main-nav" id="js-menu" style="margin-bottom: 0;">
         <li>
-            <a href="#" class="nav-links">Surveys</a>
+            <a href="index.php" class="nav-links">Surveys</a>
         </li>
         <li>
             <a href="resultsindex.php" class="nav-links" style="color: white;">Results</a>
@@ -179,7 +279,6 @@
       </div>
       </main>
 
-      <script src="https://button.glitch.me/button.js"></script>
       <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
