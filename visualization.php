@@ -30,6 +30,7 @@
       background: linear-gradient(to right, rgba(78,126,78,1) 0%, rgba(9,58,8,1) 100%);
       border: 1px solid rgba(0, 0, 0, 0.2);
       padding-bottom: 10px;
+      font-family: 'Montserrat', sans-serif;
   }
   .main-nav {
       list-style-type: none;
@@ -48,6 +49,10 @@
       font-size: 22px;
       margin-top: 10px;
       margin-left: 20px;
+  }
+
+  .logo img{
+    max-width: 30%;
   }
 
   .navbar-toggle {
@@ -91,6 +96,10 @@
     .logo {
         margin-top: 0;
     }
+
+    .logo img{
+      max-width: 150px;
+    }
    .navbar-toggle {
        display: none;
     }
@@ -126,27 +135,26 @@
   </style>
   <script src="https://kit.fontawesome.com/637ce47f6a.js" crossorigin="anonymous"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" /> 
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/animate.css"> 
   </head>
   <body>
       <nav class="navbar">
-        <span class="navbar-toggle" id="js-navbar-toggle">
-            <i class="fas fa-bars"></i>
-        </span>
-        <a href="#" class="logo">logo</a>
-          <ul class="main-nav" id="js-menu">
-            <li>
-                <a href="index.php" class="nav-links">Surveys</a>
-            </li>
-            <li>
-                <a href="visualization.php" class="nav-links">Results</a>
-            </li>
-            <li>
-                <a href="#" class="nav-links">About Us</a>
-            </li>
-            <li>
-                <a href="#" class="nav-links">Logout</a>
-            </li>
-      </nav>
+    <span class="navbar-toggle" id="js-navbar-toggle">
+        <i class="fas fa-bars"></i>
+    </span>
+    <a href="#" class="logo"><img src="assets/ootomast.svg" class="animated fadeInUp"></a>
+      <ul class="main-nav" id="js-menu">
+        <li>
+            <a href="#" class="nav-links">Surveys</a>
+        </li>
+        <li>
+            <a href="resultsindex.php" class="nav-links" style="color: white;">Results</a>
+        </li>
+        <li>
+            <a href="#" class="nav-links">About Us</a>
+        </li>
+  </nav>
 
       <header>
           <div style="margin: 15px 10px ; display: flex;">
@@ -159,12 +167,6 @@
         <canvas id="chart" width="800" height="450"></canvas>
       </div>
 
-<<<<<<< Updated upstream
-          <div name="navButtons" id="navBtnCon">
-            <form id="btnForm">
-                <button class="btn btn-primary btn-lg" type="button" id="prevBtn" value="back" onclick="prev()">Back</button>
-                <button class="btn btn-primary btn-lg"  type="button" id="nextBtn" value="next" onclick="next()">Next</button>
-=======
       <div id="navContainer">
         <div name="navButtons" id="navBtnCon" class="btn-group btn-group-justified">
           <div class="btn-group" style="width: 100%;">
@@ -175,7 +177,6 @@
           </div>
         </div>
       </div>
->>>>>>> Stashed changes
       </main>
 
       <script src="https://button.glitch.me/button.js"></script>
@@ -265,30 +266,6 @@
           
         }
 
-<<<<<<< Updated upstream
-            function prev() {
-                //Find previous question
-                var survey = surveyData;
-                var found = false;
-                var iterate = qidIndex-1;
-                var choicesContainer = document.getElementById("cBox");
-
-                while(found != true){
-                  if(survey.data[iterate][0] == "^"){
-                    //alert("found");
-                    found = true;
-                    qidIndex = iterate;
-                  }
-                  else{
-                    iterate = iterate - 1;
-                  }
-                }
-
-                if(found == true){
-                  document.getElementById('qText').innerHTML = ""+survey.data[qidIndex][3];
-                }
-            }
-=======
         function prev() {
           //Find previous question
           var survey = surveyData;
@@ -406,7 +383,6 @@
 
           return labels;
         } 
->>>>>>> Stashed changes
         
         function createBar(questionResults, labelsText)  {
           var survey = surveyData;

@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/checkboxes.min.css">
     <!--<link rel="stylesheet" href="/mdb.min.css">
     <!-- import the webpage's client-side javascript file -->
 
@@ -29,9 +30,9 @@
   </head>
   <body>
     <header>
-      <div style="margin: 15px 10px ; display: flex;">
-        <input type="checkbox" data-toggle="toggle" id="translateTgl">
-        <h3 style="font-size: 25px"> Translate </h3>
+      <div style="margin: 15px 10px ; display: flex; " class="ckbx-style-7">
+        <input type="checkbox" id="ckbx-style-7-1" value="0" name="ckbx-style-7">
+        <label for="ckbx-style-7-1"></label>
       </div>
     </header>
 
@@ -100,10 +101,7 @@
       var routingTrail = [];
       var routeNext = "";
       var routesTable = [];
-<<<<<<< Updated upstream
-=======
       var finished = false;
->>>>>>> Stashed changes
 
       <?php $sId = $_POST["survey"]; ?>
 
@@ -272,12 +270,9 @@
                   iterate = iterate + 1;
                 }
               }
-<<<<<<< Updated upstream
-=======
               else if(survey.data[iterate][0] == ""){
                 finished = true;
               }
->>>>>>> Stashed changes
               else{
                 iterate = iterate + 1;
               }
@@ -289,12 +284,9 @@
                   found = true;
                   qIndex = iterate;              
               }
-<<<<<<< Updated upstream
-=======
               else if(survey.data[iterate][0] == ""){
                 finished = true;
               }
->>>>>>> Stashed changes
               else{
                 iterate = iterate + 1;
               }
@@ -328,12 +320,9 @@
                 iterate = iterate + 1;
               }
             }
-<<<<<<< Updated upstream
-=======
             else if(survey.data[iterate][0] == ""){
                 finished = true;
             }
->>>>>>> Stashed changes
             else{
               iterate = iterate + 1;
             }
@@ -367,14 +356,6 @@
           generateTransitionScreen(false);
         }
 
-        // Check if transition question
-        if(noOfSelectable == 0){
-          generateTransitionScreen(true);
-        }
-        else{
-          generateTransitionScreen(false);
-        }
-
         // Do choice generation
         if(survey.data[qIndex][1] > 0){
           cIndexes = []
@@ -392,11 +373,7 @@
         routeNext = ""
 
         //disable next button
-<<<<<<< Updated upstream
-        if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null || survey.data[qIndex][1] == 0){
-=======
         if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null || survey.data[qIndex][1] == 0 || finished == false){
->>>>>>> Stashed changes
           document.getElementById("nextBtn").disabled = false;
         }
         else{
@@ -657,7 +634,7 @@
         }
       }
 
-      document.getElementById('translateTgl').onchange = function(e){
+      document.getElementById('ckbx-style-7-1').onchange = function(e){
 
         if(e.target.checked) {
             translate()

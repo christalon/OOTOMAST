@@ -13,6 +13,7 @@
 	    background: linear-gradient(to right, rgba(78,126,78,1) 0%, rgba(9,58,8,1) 100%);
 	    border: 1px solid rgba(0, 0, 0, 0.2);
 	    padding-bottom: 10px;
+	    font-family: 'Montserrat', sans-serif;
 	}
 	.main-nav {
 	    list-style-type: none;
@@ -29,9 +30,13 @@
 	.logo {
 	    display: inline-block;
 	    font-size: 22px;
-	    margin-top: 10px;
+	    margin-top: 5px;
 	    margin-left: 20px;
 	}
+
+	.logo img{
+    width: 140px;
+  }
 
 	.navbar-toggle {
     position: absolute;
@@ -149,6 +154,11 @@
     .logo {
         margin-top: 0;
     }
+
+    .logo img{
+      max-width: 150px;
+    }
+
    .navbar-toggle {
        display: none;
     }
@@ -191,7 +201,9 @@
 
 	</style>
 	<script src="https://kit.fontawesome.com/637ce47f6a.js" crossorigin="anonymous"></script>
-	<meta name="viewport" content="width=device-width, initial-scale=1" /> 
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:500&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="css/animate.css"> 
 </head>
 
 <body>
@@ -199,31 +211,28 @@
 		<span class="navbar-toggle" id="js-navbar-toggle">
         <i class="fas fa-bars"></i>
     </span>
-    <a href="#" class="logo">logo</a>
+    <a href="#" class="logo"><img src="assets/ootomast.svg" class="animated fadeInUp"></a>
       <ul class="main-nav" id="js-menu">
         <li>
             <a href="index.php" class="nav-links">Surveys</a>
         </li>
         <li>
-          	<a href="#" class="nav-links">Results</a>
+          	<a href="resultsindex.php" class="nav-links" style="color: white;">Results</a>
         </li>
         <li>
           	<a href="#" class="nav-links">About Us</a>
-        </li>
-        <li>
-          	<a href="#" class="nav-links">Logout</a>
         </li>
 	</nav>
 
 	<header>
           <div style="margin: 15px 10px ; display: flex;">
-              <h3 style="font-size: 25px"> List of Results </h3>
+              <h3 style="font-size: 25px"> Survey Results Available </h3>
           </div>
     </header>
 
-	<div>
+	<div class="animated fadeIn">
     <form id="form-id" method="post" action="visualization.php">
-  		<div class="cards" id="gridItemHolder">
+  		<div class="cards animated fadeIn" id="gridItemHolder">
 
   		</div>
     </form>
@@ -276,7 +285,7 @@
 		  for(var i = 0; i < surveyList.length ; i++){
 		  	for(var j = 0; j < results.length; j++){
 		  		if(surveyList[i][0] == results[j][0]){
-		  			output+= '<button type="submit" class="card" name="survey" value="'+ surveyList[i][0] +'"> '+ surveyList[i][1] +'</button>';
+		  			output+= '<button type="submit" class="card animated fadeIn" name="survey" value="'+ surveyList[i][0] +'"> '+ surveyList[i][1] +'</button>';
 		  		}
 		  	}
 		  }

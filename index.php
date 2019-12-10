@@ -13,6 +13,7 @@
 	    background: linear-gradient(to right, rgba(78,126,78,1) 0%, rgba(9,58,8,1) 100%);
 	    border: 1px solid rgba(0, 0, 0, 0.2);
 	    padding-bottom: 10px;
+      font-family: 'Montserrat', sans-serif;
 	}
 	.main-nav {
 	    list-style-type: none;
@@ -29,9 +30,13 @@
 	.logo {
 	    display: inline-block;
 	    font-size: 22px;
-	    margin-top: 10px;
+	    margin-top: 5px;
 	    margin-left: 20px;
 	}
+
+  .logo img{
+    width: 140px;
+  }
 
 	.navbar-toggle {
     position: absolute;
@@ -149,6 +154,10 @@
     .logo {
         margin-top: 0;
     }
+
+    .logo img{
+      max-width: 150px;
+    }
    .navbar-toggle {
        display: none;
     }
@@ -192,6 +201,9 @@
 	</style>
 	<script src="https://kit.fontawesome.com/637ce47f6a.js" crossorigin="anonymous"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1" /> 
+  <link rel="stylesheet" href="css/light-modal.min.css">
+  <link rel="stylesheet" href="css/animate.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:500&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -199,10 +211,10 @@
 		<span class="navbar-toggle" id="js-navbar-toggle">
         <i class="fas fa-bars"></i>
     </span>
-    <a href="#" class="logo">logo</a>
+    <a href="#" class="logo animated fadeInLeft"><img src="assets/ootomast.svg"></a>
       <ul class="main-nav" id="js-menu">
         <li>
-            <a href="#" class="nav-links">Surveys</a>
+            <a href="#" class="nav-links" style="color: white;">Surveys</a>
         </li>
         <li>
           	<a href="resultsindex.php" class="nav-links">Results</a>
@@ -210,39 +222,45 @@
         <li>
           	<a href="#" class="nav-links">About Us</a>
         </li>
-        <li>
-          	<a href="#" class="nav-links">Logout</a>
-        </li>
 	</nav>
 
-	<div>
-    <form id="form-id" method="post" action="survey.php">
-  		<div class="cards" id="gridItemHolder">
+	<div class="animated fadeIn">
+    <form id="form-id" method="post" action="visualization.php">
+      <div class="cards animated fadeIn" id="gridItemHolder">
 
-  		</div>
+      </div>
     </form>
-	</div>
+  </div>
 
-	<a href="#" class="float" id="modalBtn">
+	<a href="#addModal" class="float" id="modalBtn">
 		<i class="fas fa-plus"></i>
 	</a>
 
-	<div id="addSurveyModal" class="modal">
-  <!-- Modal content -->
-	 <div class="modal-content">
-	   	<span class="close">&times;</span>
-	  	<h1>Add survey</h1>
-	  	<p> Add survey via link</p>
-	  	<input type="text" id="url" placeholder="Enter URL"><br>
-	  	<input type="text" id="surveyNameURL" placeholder="Enter survey name">
-	  	<input type="button" value="Submit" onclick="parseURL()">
-	  	<br><br>
-		<p> Add survey via file upload </p>
-		<input type="file" value="Upload" id="files">
-		<input type="text" id="surveyNameFile" placeholder="Enter survey name">
-		<input type="button" value="Upload" onclick="parseUpload()">
-	 </div>
-	</div>
+  <div class="light-modal" id="addModal" role="dialog" aria-labelledby="light-modal-label" aria-hidden="false">
+        <div class="light-modal-content animated zoomInUp">
+            <!-- light modal header -->
+            <div class="light-modal-header">
+                <h3 class="light-modal-heading">Add Survey</h3>
+                <a href="#" class="light-modal-close-icon" aria-label="close">&times;</a>
+            </div>
+            <!-- light modal body -->
+            <div class="light-modal-body">
+                <p> Add survey via link</p>
+              <input type="text" id="url" placeholder="Enter URL"><br>
+              <input type="text" id="surveyNameURL" placeholder="Enter survey name">
+              <input type="button" value="Submit" onclick="parseURL()">
+              <br><br>
+              <p> Add survey via file upload </p>
+              <input type="file" value="Upload" id="files">
+              <input type="text" id="surveyNameFile" placeholder="Enter survey name">
+              <input type="button" value="Upload" onclick="parseUpload()">
+            </div>
+            <!-- light modal footer -->
+            <div class="light-modal-footer">
+                <a href="#" class="light-modal-close-btn" aria-label="close">Close</a>
+            </div>
+        </div>
+    </div>
 
 <script src="js/papaparse.js"></script>
 <script type="text/javascript">
@@ -257,32 +275,6 @@
 	    
 	    mainNav.classList.toggle('active');
 	});
-
-	// Get the modal
-	var modal = document.getElementById("addSurveyModal");
-
-	// Get the button that opens the modal
-	var btn = document.getElementById("modalBtn");
-
-	// Get the <span> element that closes the modal
-	var span = document.getElementsByClassName("close")[0];
-
-	// When the user clicks on the button, open the modal
-	btn.onclick = function() {
-		 modal.style.display = "block";
-	}
-
-	// When the user clicks on <span> (x), close the modal
-	span.onclick = function() {
-		 modal.style.display = "none";
-	}
-
-	// When the user clicks anywhere outside of the modal, close it
-	window.onclick = function(event) {
-		 if (event.target == modal) {
-		   modal.style.display = "none";
-		 }
-	}
 
 	function parseURL(){
     var url = document.getElementById('url').value;
@@ -367,7 +359,7 @@
 			var surveyList = []
 		  surveyList = JSON.parse(localStorage.getItem('surveyList'));
 		  for(var i = 0; i < surveyList.length ; i++){
-		  	output+= '<button type="submit" class="card" name="survey" value="'+ surveyList[i][0] +'"> '+ surveyList[i][1] +'</button>';
+		  	output+= '<button type="submit" class="card animated fadeIn" name="survey" value="'+ surveyList[i][0] +'"> '+ surveyList[i][1] +'</button>';
 		  }
 		}
 		return output;
