@@ -65,18 +65,18 @@
       </div>
     </main>
     <div id="footer">
-        <div name="navButtons" id="navBtnCon" class="btn-group btn-group-justified" role="group">
+        <div name="navButtons" id="navBtnCon" class="btn-group btn-group-justified" role="group" style="height: 60px;">
           <div class="btn-group" style="width: 100%;">
-            <button class="btn btn-primary btn-block" type="button" id="prevBtn" value="back" onclick="prev()">Back</button>
+            <button class="btn btn-primary btn-block" type="button" id="prevBtn" value="back" onclick="prev()" style="background-color: white;border-color: #4aa24f;color: #4aa24f;">Back</button>
           </div>
           <div class="btn-group" style="width: 20%;">
-            <button class="btn btn-primary btn-block" type="button" id="passBtn" value="pass" onclick="pass()">Pass</button>
+            <button class="btn btn-primary btn-block" type="button" id="passBtn" value="pass" onclick="pass()" style="background-color: white;border-color: #4aa24f;color: #4aa24f;">Pass</button>
           </div>
           <div class="btn-group" style="width: 100%;">
-            <button class="btn btn-primary btn-block" type="button" id="nextBtn" value="next" onclick="next()">Next</button>
+            <button class="btn btn-primary btn-block" type="button" id="nextBtn" value="next" onclick="next()" style="background-color: white;border-color: #4aa24f;color: #4aa24f;">Next</button>
           </div>
           <div class="btn-group" style="width: 100%;">
-            <button class="btn btn-primary btn-block" type="button" id="finishBtn" value="finish" onclick="finish()">Finish</button>
+            <button class="btn btn-primary btn-block" type="button" id="finishBtn" value="finish" onclick="finish()" style="background-color: white;border-color: #4aa24f;color: #4aa24f;">Finish</button>
           </div>
         </div>
     </div>
@@ -181,8 +181,6 @@
         var iterate = qIndex;
         var choicesContainer = document.getElementById("cBox");
       
-        // Change Question Text
-          //alert(qIndex);
         noOfSelectable = survey.data[qIndex][1];
 
         //if the first question is a transition, disable pass button
@@ -196,6 +194,7 @@
         }
         else{
           document.getElementById('qText').innerHTML = ""+survey.data[qIndex][3];
+          document.getElementById('surveyTitle').innerHTML = ""+survey.data[qIndex][(3)];
         }
 
         // Do choice generation
@@ -392,6 +391,10 @@
           else{
             document.getElementById("nextBtn").disabled = false;
           }
+
+          if(survey.data[qIndex][1] == 0){
+            document.getElementById('surveyTitle').innerHTML = ""+survey.data[qIndex][(3)];
+          }
         }
         else{
           document.getElementById("nextBtn").disabled = true;
@@ -471,6 +474,9 @@
         // 
         if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null || survey.data[qIndex][1] == 0){
           document.getElementById("nextBtn").disabled = false;
+          if(survey.data[qIndex][1] == 0){
+            document.getElementById('surveyTitle').innerHTML = ""+survey.data[qIndex][(3)];
+          }
         }
         else{
           document.getElementById("nextBtn").disabled = true;
