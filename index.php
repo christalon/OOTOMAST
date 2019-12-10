@@ -8,6 +8,13 @@
 	body {
 	    font-family: 'Josefin Sans', sans-serif;
 	}
+
+	.box-shadow	{
+		-webkit-box-shadow: 10px 10px 15px 5px rgba(0,0,0,0.75);
+		-moz-box-shadow: 10px 10px 15px 5px rgba(0,0,0,0.75);
+		box-shadow: 10px 10px 15px 5px rgba(0,0,0,0.75);
+	}
+
 	#navbarvis {
     font-size: 18px;
       background: linear-gradient(to right, rgba(78,126,78,1) 0%, rgba(9,58,8,1) 100%);
@@ -36,8 +43,8 @@
       margin-left: 20px;
 	}
 
-  .logo img{
-    width: 140px;
+  	.logo img{
+    	width: 140px;
     padding-bottom: .3rem;
   }
 
@@ -72,6 +79,8 @@
 		border: 1px solid blue;
 		border-radius: 25px;
 		margin: 20px;
+
+		box-shadow: 5px 5px 5px 5px;
 	}
 
 	.card:hover{
