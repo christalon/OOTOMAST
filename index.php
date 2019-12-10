@@ -400,7 +400,7 @@
       clickhere.style.display = "none";
 		  surveyList = JSON.parse(localStorage.getItem('surveyList'));
 		  for(var i = 0; i < surveyList.length ; i++){
-		  	output+= '<div class="buttonContainer"><button type="submit" class="card animated fadeIn" name="survey" value="'+ surveyList[i][0] +'"> '+ surveyList[i][1] +'</button></div>';
+		  	output+= '<button type="submit" class="card animated fadeIn" name="survey" value="'+ surveyList[i][0] +'"> '+ surveyList[i][1] +'</button>';
 		  }
 		}
 		return output;
