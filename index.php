@@ -237,6 +237,11 @@
     </form>
   </div>
 
+  <img src="assets/clickhere.svg" class="animated bounceIn" id="clickHere" style="width: 60%;max-width: 300px;
+    position: fixed;
+    bottom: 25;
+    right: 100;">
+
 	<a href="#addModal" class="float" id="modalBtn">
 		<i class="fas fa-plus"></i>
 	</a>
@@ -268,8 +273,11 @@
     </div>
 
 <script src="js/papaparse.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
 <script type="text/javascript">
 	// Generate survey list elements
+  initializeUI();
+
 	var itemHolder = document.getElementById("gridItemHolder");
 	itemHolder.innerHTML += generateSurveyList();
 
@@ -280,6 +288,32 @@
 	    
 	    mainNav.classList.toggle('active');
 	});
+
+  $(window).resize(function() {
+    var el = $('#clickHere');
+    var width = el.width();
+    if(window.innerWidth <= 500){
+      $("#clickHere").css({'bottom': 25 + (300-width)/6,
+                      'right': 100
+                     });
+    }
+    else{
+      $("#clickHere").css({'bottom': 25,
+                      'right': 100
+                     });
+    }
+  });
+
+  function initializeUI(){
+    var el = $('#clickHere');
+    var width = el.width();
+
+    if(window.innerWidth <= 500){
+      $("#clickHere").css({'bottom': 25 + (300-width)/6,
+                      'right': 100
+                     });
+    }
+  }
 
 	function parseURL(){
     var url = document.getElementById('url').value;
@@ -358,10 +392,12 @@
 
 	function generateSurveyList(){
 		var output = ""
+    var clickhere = document.getElementById("clickHere");
 		if(!localStorage.getItem('surveyList')) {
-
+      clickhere.style.display = "block";
 		} else {
 			var surveyList = []
+      clickhere.style.display = "none";
 		  surveyList = JSON.parse(localStorage.getItem('surveyList'));
 		  for(var i = 0; i < surveyList.length ; i++){
 		  	output+= '<button type="submit" class="card animated fadeIn" name="survey" value="'+ surveyList[i][0] +'"> '+ surveyList[i][1] +'</button>';
