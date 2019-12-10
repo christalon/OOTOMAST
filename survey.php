@@ -33,6 +33,7 @@
       <div style="margin: 15px 10px ; display: flex; " class="ckbx-style-7">
         <input type="checkbox" id="ckbx-style-7-1" value="0" name="ckbx-style-7">
         <label for="ckbx-style-7-1"></label>
+
       </div>
     </header>
 
@@ -58,6 +59,9 @@
           </div>
           <div class="btn-group" style="width: 100%;">
             <button class="btn btn-primary btn-block" type="button" id="nextBtn" value="next" onclick="next()">Next</button>
+          </div>
+          <div class="btn-group" style="width: 100%;">
+            <button class="btn btn-primary btn-block" type="button" id="finishBtn" value="finish" onclick="finish()">Next</button>
           </div>
         </div>
       </div>
@@ -196,7 +200,7 @@
         }
 
         // disable next button
-        //document.getElementById("nextBtn").disabled = true;
+        document.getElementById("finishBtn").display = none;
     	}
 
       function generateTransitionScreen(state){

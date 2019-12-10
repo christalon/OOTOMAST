@@ -9,11 +9,13 @@
 	    font-family: 'Josefin Sans', sans-serif;
 	}
 	.navbar {
-	    font-size: 18px;
-	    background: linear-gradient(to right, rgba(78,126,78,1) 0%, rgba(9,58,8,1) 100%);
-	    border: 1px solid rgba(0, 0, 0, 0.2);
-	    padding-bottom: 10px;
-	    font-family: 'Montserrat', sans-serif;
+	  font-size: 18px;
+      background: linear-gradient(to right, rgba(78,126,78,1) 0%, rgba(9,58,8,1) 100%);
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      font-family: 'Montserrat', sans-serif;
+      display: block;
+      padding: .6rem .1rem;
+      position: relative;
 	}
 	.main-nav {
 	    list-style-type: none;
@@ -30,12 +32,12 @@
 	.logo {
 	    display: inline-block;
 	    font-size: 22px;
-	    margin-top: 5px;
 	    margin-left: 20px;
 	}
 
 	.logo img{
     width: 140px;
+    padding-bottom: .3rem;
   }
 
 	.navbar-toggle {
@@ -45,6 +47,7 @@
     cursor: pointer; 
     color: rgba(255,255,255,0.8);
     font-size: 24px;
+    padding-top: 3;
 	}
 
 	.main-nav {
@@ -138,6 +141,7 @@
         padding-bottom: 0;
         height: 70px;
         align-items: center;
+        padding: 0;
     }
     .main-nav {
         display: flex;
