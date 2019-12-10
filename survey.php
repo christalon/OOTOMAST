@@ -25,18 +25,33 @@
     <link rel="stylesheet" href="css/checkboxes.min.css">
     <!--<link rel="stylesheet" href="/mdb.min.css">
     <!-- import the webpage's client-side javascript file -->
-
+    <style type="text/css">
+      #footer {
+        position: fixed;
+        height: 50px;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+        margin-bottom: 0px;
+      }
+    </style>
 
   </head>
   <body>
     <header>
-      <div style="margin: 15px 10px ; display: flex; " class="ckbx-style-7">
-        <input type="checkbox" id="ckbx-style-7-1" value="0" name="ckbx-style-7">
-        <label for="ckbx-style-7-1"></label>
-
-      </div>
+      <nav class="navbar navbar-light" style="background-color: #14861ac4;">
+        <a class="navbar-brand" href="index.php" style="color: white;"><i class="fas fa-arrow-left"></i></a>
+        <span class="navbar-text mr-auto" id="surveyTitle">
+          Navbar text with an inline element
+        </span>
+        <div class="ckbx-style-7" style="display: flex; margin-top: 5px;">
+          <h3 style="font-size: 17px; padding-top: 1px; margin-right: 8px; color: white;
+}">Translate</h3>
+          <input type="checkbox" id="ckbx-style-7-1" value="0" name="ckbx-style-7">
+          <label for="ckbx-style-7-1" style="height: .6em;"></label>
+        </div>
+      </nav>
     </header>
-
     <main>
       <div name="questionBox" id="qBox">
         <p name="questionText" id="qText">
@@ -48,9 +63,9 @@
           
         </form>
       </div>
-      
-      <div id="navContainer">
-        <div name="navButtons" id="navBtnCon" class="btn-group btn-group-justified">
+    </main>
+    <div id="footer">
+        <div name="navButtons" id="navBtnCon" class="btn-group btn-group-justified" role="group">
           <div class="btn-group" style="width: 100%;">
             <button class="btn btn-primary btn-block" type="button" id="prevBtn" value="back" onclick="prev()">Back</button>
           </div>
@@ -61,20 +76,10 @@
             <button class="btn btn-primary btn-block" type="button" id="nextBtn" value="next" onclick="next()">Next</button>
           </div>
           <div class="btn-group" style="width: 100%;">
-            <button class="btn btn-primary btn-block" type="button" id="finishBtn" value="finish" onclick="finish()">Next</button>
+            <button class="btn btn-primary btn-block" type="button" id="finishBtn" value="finish" onclick="finish()">Finish</button>
           </div>
         </div>
-      </div>
-    </main>
-    <!-- 
-      <section class="dreams">
-        <ul id="dreams"></ul>
-      </section>
-    
-
-    <footer>
-      Made with <a href="https://glitch.com">Glitch</a>!
-    </footer>-->
+    </div>
 
     <!-- include the Glitch button to show what the webpage is about and
           to make it easier for folks to view source and remix -->
@@ -87,6 +92,7 @@
     <script src="js/mdb.min.js"></script>
     <script src="js/papaparse.js"></script>
     <script src="js/jquery.cookie.js"></script>
+    <script src="https://kit.fontawesome.com/637ce47f6a.js" crossorigin="anonymous"></script>
     <script type="text/javascript">
 
     //Parse and Navigation
@@ -200,7 +206,8 @@
         }
 
         // disable next button
-        document.getElementById("finishBtn").display = none;
+        document.getElementById("finishBtn").parentElement.style.display = "none";
+        //document.getElementById("surveyTitle").innerHTML = ;
     	}
 
       function generateTransitionScreen(state){
@@ -377,8 +384,14 @@
         routeNext = ""
 
         //disable next button
-        if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null || survey.data[qIndex][1] == 0 || finished == false){
-          document.getElementById("nextBtn").disabled = false;
+        if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null || survey.data[qIndex][1] == 0){
+          if(finished == true){
+            document.getElementById("finishBtn").parentElement.style.display = "inline-flex";
+            document.getElementById("nextBtn").parentElement.style.display = "none";
+          }
+          else{
+            document.getElementById("nextBtn").disabled = false;
+          }
         }
         else{
           document.getElementById("nextBtn").disabled = true;

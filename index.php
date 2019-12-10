@@ -230,7 +230,7 @@
 	</nav>
 
 	<div class="animated fadeIn">
-    <form id="form-id" method="post" action="visualization.php">
+    <form id="form-id" method="post" action="survey.php">
       <div class="cards animated fadeIn" id="gridItemHolder">
 
       </div>
