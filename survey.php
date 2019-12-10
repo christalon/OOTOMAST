@@ -53,13 +53,17 @@
       </nav>
     </header>
     <main>
+      <div id="transitionTextCon">
+        <h3>The next set of questions will be about</h3>
+        <h1 id="transitionText">DLSU Arrows Shuttle Service</h1>
+      </div>
       <div name="questionBox" id="qBox">
         <p name="questionText" id="qText">
         </p>
       </div>
       
-      <div name="choicesBox">
-        <form class="form-check" style="display:flex; flex-direction: column; " id="cBox">
+      <div id="choicesBox">
+        <form class="form-check" style="display:flex; flex-direction: column; padding: 0;" id="cBox">
           
         </form>
       </div>
@@ -112,6 +116,7 @@
       var routeNext = "";
       var routesTable = [];
       var finished = false;
+      var divItems;
 
       <?php $sId = $_POST["survey"]; ?>
 
@@ -124,6 +129,18 @@
       window.onbeforeunload = function(event) {
         event.returnValue = "Your custom message.";
       };
+
+      function choiceSelected(item){
+        this.resetChoiceColor();
+        item.style.backgroundColor = '#4aa24f2b';
+      }
+
+      function resetChoiceColor() {
+        for(var i=0; i < divItems.length; i++) {
+          var item = divItems[i];
+          item.style.backgroundColor = 'white';
+        }
+      }
 
       function setSurvey(){
         surveyData = JSON.parse(localStorage.getItem(surveyID));
@@ -185,7 +202,7 @@
 
         //if the first question is a transition, disable pass button
         if(noOfSelectable == 0){
-          generateTransitionScreen(true);
+          generateTransitionScreen(true, survey.data[qIndex][3]);
         }
 
         if(translated == true){
@@ -202,6 +219,7 @@
           cIndexes = []
           choicesContainer.innerHTML = "";
           choicesContainer.innerHTML += findChoices();
+          divItems = document.getElementsByClassName("buttonContainer");
         }
 
         // disable next button
@@ -209,13 +227,25 @@
         //document.getElementById("surveyTitle").innerHTML = ;
     	}
 
-      function generateTransitionScreen(state){
+      function generateTransitionScreen(state, text){
         //hide items if true, otherwise return to normal
         if(state == true){
           document.getElementById("passBtn").parentElement.style.display = "none";
+          document.getElementById("qBox").style.display = "none";
+          document.getElementById("choicesBox").style.display = "none";
+
+          document.getElementById("transitionTextCon").style.display = "block";
+          document.getElementById("transitionText").innerHTML = text;
+
+          document.body.style.backgroundColor = "#0f8514";
         }
         else{
           document.getElementById("passBtn").parentElement.style.display = "inline-flex";
+          document.getElementById("qBox").style.display = "block";
+          document.getElementById("choicesBox").style.display = "block";
+
+          document.getElementById("transitionTextCon").style.display = "none";
+          document.body.style.backgroundColor = "white";
         }
       }
 
@@ -360,10 +390,10 @@
 
         // Check if transition question
         if(noOfSelectable == 0){
-          generateTransitionScreen(true);
+          generateTransitionScreen(true, survey.data[qIndex][3]);
         }
         else{
-          generateTransitionScreen(false);
+          generateTransitionScreen(false, survey.data[qIndex][3]);
         }
 
         // Do choice generation
@@ -371,6 +401,7 @@
           cIndexes = []
           choicesContainer.innerHTML = "";
           choicesContainer.innerHTML += findChoices();
+          divItems = document.getElementsByClassName("buttonContainer");
         }
         else{
           cIndexes = []
@@ -454,10 +485,10 @@
 
         // Check if transition question
         if(noOfSelectable == 0){
-          generateTransitionScreen(true);
+          generateTransitionScreen(true, survey.data[qIndex][3]);
         }
         else{
-          generateTransitionScreen(false);
+          generateTransitionScreen(false, survey.data[qIndex][3]);
         }
 
         // Do choice generation
@@ -465,6 +496,7 @@
           cIndexes = []
           choicesContainer.innerHTML = "";
           choicesContainer.innerHTML += findChoices();
+          divItems = document.getElementsByClassName("buttonContainer");
         }
         else{
           cIndexes = []
@@ -524,6 +556,7 @@
           cIndexes = []
           choicesContainer.innerHTML = "";
           choicesContainer.innerHTML += findChoices();
+          divItems = document.getElementsByClassName("buttonContainer");
         }
         else{
           cIndexes = []
@@ -571,41 +604,41 @@
             if(noOfSelectable == 1){
               if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null){
                 if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] == survey.data[cIndex][2]){
-                  output+= '<input type="radio" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +')" class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'" checked>';
+                  output+= '<div class="buttonContainer" onclick="choiceSelected(this)"><input type="radio" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +', null)" class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'" checked>';
                 }
                 else{
-                  output+= '<input type="radio" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +')" class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
+                  output+= '<div class="buttonContainer" onclick="choiceSelected(this)"><input type="radio" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +', null)" class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
                 }
               }
               else{
-                output+= '<input type="radio" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +')" class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
+                output+= '<div class="buttonContainer" onclick="choiceSelected(this)"><input type="radio" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +', null)" class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
               }
               
               if(translated == true){
-                 output+= '<label class="form-check-label" for="choice'+ cIndex +'" id="qChoice'+ cIndex +'">'+ survey.data[cIndex][4] +'</label>';
+                 output+= '<label class="form-check-label" for="choice'+ cIndex +'" id="qChoice'+ cIndex +'" style="width: 100%;height: 100%;">'+ survey.data[cIndex][4] +'</label></div>';
               }
               else{
-                output+= '<label class="form-check-label" for="choice'+ cIndex +'" id="qChoice'+ cIndex +'">'+ survey.data[cIndex][3] +'</label>';
+                output+= '<label class="form-check-label" for="choice'+ cIndex +'" id="qChoice'+ cIndex +'" style="width: 100%;height: 100%;">'+ survey.data[cIndex][3] +'</label></div>';
               }
             }
             else{
               if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null){
                 if(findExistingAnswer(resultsIndex, respondentIndex, survey.data[qIndex][2], survey.data[cIndex][2]) == true){
-                  output+= '<input type="checkbox" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +')" class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'" checked>';
+                  output+= '<div class="buttonContainer" onclick="choiceSelected(this)"><input type="checkbox" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +', this.parentElement)" class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'" checked>';
                 }
                 else{
-                  output+= '<input type="checkbox" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +')" class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
+                  output+= '<div class="buttonContainer"><input type="checkbox" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +', this.parentElement), " class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
                 }
               }
               else{
-                output+= '<input type="checkbox" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +')" class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
+                output+= '<div class="buttonContainer"><input type="checkbox" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +', this.parentElement)" class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
               }
               
               if(translated == true){
-                 output+= '<label class="form-check-label" for="choice'+ cIndex +'" id="qChoice'+ cIndex +'">'+ survey.data[cIndex][4] +'</label>';
+                 output+= '<label class="form-check-label" for="choice'+ cIndex +'" id="qChoice'+ cIndex +'" style="width: 100%;height: 100%;">'+ survey.data[cIndex][4] +'</label></div>';
               }
               else{
-                output+= '<label class="form-check-label" for="choice'+ cIndex +'" id="qChoice'+ cIndex +'">'+ survey.data[cIndex][3] +'</label>';
+                output+= '<label class="form-check-label" for="choice'+ cIndex +'" id="qChoice'+ cIndex +'" style="width: 100%;height: 100%;">'+ survey.data[cIndex][3] +'</label></div>';
               }
             }
           }
@@ -626,7 +659,7 @@
          return found;                                          
       }
 
-      function setAnswer(num, choiceIndex){
+      function setAnswer(num, choiceIndex, parentDiv){
         if(noOfSelectable == 1){
           selectedAnswer = [];
           selectedAnswer.push(num);
@@ -637,15 +670,17 @@
           //check first if answer exists in array, if it exists, remove
           var checkbox = document.getElementById("choice"+choiceIndex);
           if(checkbox.checked == false){
-              for( var i = 0; i < selectedAnswer.length; i++){ 
+            for( var i = 0; i < selectedAnswer.length; i++){ 
               if ( selectedAnswer[i] === num) {
                 selectedAnswer.splice(i, 1); 
               }
             }
+            parentDiv.style.backgroundColor = "white";
           }
           else
           {
             selectedAnswer.push(num);
+            parentDiv.style.backgroundColor = "#4aa24f2b";
           }
 
           if(selectedAnswer.length >= noOfSelectable){
