@@ -133,7 +133,7 @@
       function initializeResultsArray(){
       // should be stored in local storage
         var found = false;
-        var results = {};
+        var results = [];
         var max = 10;
         var min = 5;
         var respondentID = (Math.random() * ((max - min) + 1)) + min;
