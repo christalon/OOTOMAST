@@ -58,7 +58,6 @@
         <button class="btn btn-primary btn-block waves-effect waves-light" type="button" id="newRespondent" value="new" onclick="newRespondent()">New Respondent</button>
         <button class="btn btn-primary btn-block waves-effect waves-light" type="button" id="exit" value="exit" onclick="index.php">Exit</button>
       </div>
-
       <div id="transitionTextCon">
         <h3>The next set of questions will be about</h3>
         <h1 id="transitionText">DLSU Arrows Shuttle Service</h1>
@@ -205,7 +204,7 @@
         var choicesContainer = document.getElementById("cBox");
       
         noOfSelectable = survey.data[qIndex][1];
-
+        
         document.getElementById("endScreen").style.display = "none";
         //if the first question is a transition, disable pass button
         if(noOfSelectable == 0){
@@ -228,6 +227,7 @@
           choicesContainer.innerHTML += findChoices();
           divItems = document.getElementsByClassName("buttonContainer");
         }
+        
         else{
           cIndexes = []
           choicesContainer.innerHTML = "";
@@ -469,7 +469,6 @@
         //disable next button
         if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null || survey.data[qIndex][1] == 0){
           if(finished == true){
-            
           }
           else{
             document.getElementById("nextBtn").disabled = false;

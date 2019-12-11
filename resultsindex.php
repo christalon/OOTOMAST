@@ -71,6 +71,7 @@
 		border: 1px solid blue;
 		border-radius: 25px;
 		margin: 20px;
+		box-shadow: 5px 5px 5px 5px;
 	}
 
 	.card:hover{
