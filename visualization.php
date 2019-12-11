@@ -263,6 +263,8 @@
       <header>
           <div style="margin: 15px 10px ; display: flex;">
               <h3 style="font-size: 25px"> Results </h3>
+              <button type="button" class="btn btn-primary" id="uploadBtn" style="
+          margin-left: auto;" onclick="uploadResults()">Upload</button>
           </div>
       </header>
 
@@ -303,6 +305,7 @@
         var qCode;
         var question = [];
         var cIndex;
+        var resultsindex;
 
         <?php $sId = $_POST["survey"]; ?>
 
@@ -408,7 +411,6 @@
           var results = [];
           results = JSON.parse(localStorage.getItem('results'));
           var questionResults = [qCode, {}];
-          var resultIndex;
           var finalCount = [];
 
           question = questionResults;
@@ -542,6 +544,63 @@
             }
           });
         }
+
+        function uploadResults(){
+          var resultsArray = [];
+          var qCodeList = [];
+          //Find next question
+          var survey = surveyData;
+          var finished = false;
+          var iterate = 1;
+          var results = [];
+          results = JSON.parse(localStorage.getItem('results'));
+          var surveyLength = survey.data.length;
+          
+
+          while(finished != true){
+            if(surveyLength != iterate){
+              if(survey.data[iterate][0] == "^" && survey.data[iterate][1] > 0){
+                qCodeList.push(survey.data[iterate][2]);
+                iterate = iterate + 1;
+              }
+              else{
+                iterate = iterate + 1;
+              }
+            }
+            else{
+              finished = true;
+            }
+          }
+
+          for(var i = 1; i < results[resultIndex].length; i++){
+            resultsArray.push([results[resultIndex][i]["respondentID"], []]); 
+            for(var x = 0; x < qCodeList.length; x++){
+              resultsArray[i-1][x+1] = new Array();
+              resultsArray[i-1][x+1][0] = qCodeList[x];
+              if(results[resultIndex][i][qCodeList[x]] != 98 || results[resultIndex][i][qCodeList[x]] != 99){
+                if(results[resultIndex][i][qCodeList[x]] != null){
+                  if(results[resultIndex][i][qCodeList[x]].length > 1){
+                    for(var j = 0; j < results[resultIndex][i][qCodeList[x]].length; j++){
+                      resultsArray[i-1][x+1][j+1] = results[resultIndex][i][qCodeList[x]][j];
+                    }
+                  }
+                  else{
+                      resultsArray[i-1][x+1][1] = results[resultIndex][i][qCodeList[x]];
+                    }
+                  }
+                }
+              }
+            }
+
+            $.ajax({ 
+                   type: "POST", 
+                   url: "uploadresults.php", 
+                   data: {rArray : resultsArray, sID : surveyID, sName : "test"}, 
+                   success: function() { 
+                          alert("Success"); 
+                    } 
+            });
+          }
       </script>
 
   </body>

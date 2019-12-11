@@ -332,6 +332,7 @@
         var iterate = qIndex+1;
         var choicesContainer = document.getElementById("cBox");
         var qCode = survey.data[qIndex][2];
+        var surveyLength = survey.data.length;
 
          // Record answer
         if(resultsArray[resultsIndex][respondentIndex][qCode] == null){
@@ -353,36 +354,48 @@
           var existingRoute = Object.keys(routesTable)[Object.values(routesTable).indexOf(qCode)];
           if(existingRoute != null){
             while(found != true){
-              if(survey.data[iterate][0] == "^"){
-                if(survey.data[iterate][2] == existingRoute){
-                  found = true;
-                  qIndex = iterate;
+              if(surveyLength != iterate){
+                if(survey.data[iterate][0] == "^"){
+                  if(survey.data[iterate][2] == existingRoute){
+                    found = true;
+                    qIndex = iterate;
+                  }
+                  else{
+                    iterate = iterate + 1;
+                  }
+                }
+                else if(survey.data[iterate][0] == ""){
+                  finished = true;
                 }
                 else{
                   iterate = iterate + 1;
                 }
               }
-              else if(survey.data[iterate][0] == ""){
-                finished = true;
-              }
               else{
-                iterate = iterate + 1;
-              }
+                found = true;
+                finished = true;
+              }  
             }
           }
           else{
             while(found != true){
-              if(survey.data[iterate][0] == "^"){
+              if(surveyLength != iterate){
+                if(survey.data[iterate][0] == "^"){
                   found = true;
                   qIndex = iterate;              
-              }
-              else if(survey.data[iterate][0] == ""){
-                finished = true;
-                found = true;
+                }
+                else if(survey.data[iterate][0] == ""){
+                  finished = true;
+                  found = true;
+                }
+                else{
+                  iterate = iterate + 1;
+                }
               }
               else{
-                iterate = iterate + 1;
-              }
+                found = true;
+                finished = true;
+              }  
             }
           }
         }
@@ -649,7 +662,7 @@
 
         //Find each choices
         while(eof == 0){
-          if(survey.data[cIndex][0] == "^" || survey.data[cIndex][0] == ""){
+          if(survey.data[cIndex] == null || survey.data[cIndex][0] == "^" || survey.data[cIndex][0] == ""){
             eof = 1;
           }
           else{
@@ -739,7 +752,7 @@
             parentDiv.style.backgroundColor = "#4aa24f2b";
           }
 
-          if(selectedAnswer.length >= noOfSelectable){
+          if(selectedAnswer.length > 0){
             document.getElementById("nextBtn").disabled = false;
           }
           else{
