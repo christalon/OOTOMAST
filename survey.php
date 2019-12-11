@@ -53,6 +53,12 @@
       </nav>
     </header>
     <main>
+      <div id="endScreen">
+        <h1> Thank you for answering the survey!</h1>
+        <button class="btn btn-primary btn-block waves-effect waves-light" type="button" id="newRespondent" value="new" onclick="newRespondent()">New Respondent</button>
+        <button class="btn btn-primary btn-block waves-effect waves-light" type="button" id="exit" value="exit" onclick="index.php">Exit</button>
+      </div>
+
       <div id="transitionTextCon">
         <h3>The next set of questions will be about</h3>
         <h1 id="transitionText">DLSU Arrows Shuttle Service</h1>
@@ -80,7 +86,7 @@
             <button class="btn btn-primary btn-block" type="button" id="nextBtn" value="next" onclick="next()" style="background-color: white;border-color: #4aa24f;color: #4aa24f;">Next</button>
           </div>
           <div class="btn-group" style="width: 100%;">
-            <button class="btn btn-primary btn-block" type="button" id="finishBtn" value="finish" onclick="finish()" style="background-color: white;border-color: #4aa24f;color: #4aa24f;">Finish</button>
+            <button class="btn btn-primary btn-block" type="button" id="finishBtn" value="finish" onclick="generateEndScreen()" style="background-color: #4aa24f;border-color: #4aa24f;color: white;">Finish</button>
           </div>
         </div>
     </div>
@@ -200,6 +206,7 @@
       
         noOfSelectable = survey.data[qIndex][1];
 
+        document.getElementById("endScreen").style.display = "none";
         //if the first question is a transition, disable pass button
         if(noOfSelectable == 0){
           generateTransitionScreen(true, survey.data[qIndex][3]);
@@ -220,6 +227,10 @@
           choicesContainer.innerHTML = "";
           choicesContainer.innerHTML += findChoices();
           divItems = document.getElementsByClassName("buttonContainer");
+        }
+        else{
+          cIndexes = []
+          choicesContainer.innerHTML = "";
         }
 
         // disable next button
@@ -250,11 +261,44 @@
       }
 
       function generateEndScreen(){
-        // Generate screen elements, button to exit or new respondent
-        document.getElementById("nextBtn").style.display = "none";
-        document.getElementById("finishBtn").style.display = "inline-flex";
+        //Hide elements
+        document.getElementById("navBtnCon").style.display = "none";
+        document.getElementById("qBox").style.display = "none";
+        document.getElementById("choicesBox").style.display = "none";
 
-        //Reset indexes, generate new respondent and initialize survey again
+        // Generate screen elements, button to exit or new respondent
+        document.getElementById("endScreen").style.display = "block";
+
+        document.body.style.backgroundColor = "#0f8514";
+      }
+
+      function exit(){
+
+      }
+
+      function newRespondent(){
+        qIndex = 0;
+        cIndex = 0;
+        qidIndex = 1;
+        finished = false;
+        noOfSelectable = 0;
+        routeNext = "";
+        routesTable = [];
+        selectedAnswer = {};
+
+        //Hide end screen
+        document.getElementById("endScreen").style.display = "none";
+
+        //Show hidden elements
+        document.getElementById("navBtnCon").style.display = "inline-flex";
+        document.getElementById("qBox").style.display = "block";
+        document.getElementById("choicesBox").style.display = "block";
+        document.getElementById("nextBtn").parentElement.style.display = "inline-flex";
+        document.body.style.backgroundColor = "white";
+
+        //Call initialize functions
+        initializeResultsArray();
+        initializeSurvey();
       }
 
       function translate(){
@@ -382,8 +426,8 @@
         // Change Question Text
         if(found == true){
           if(finished == true){
-            alert("finished")
-            generateEndScreen();
+            document.getElementById("finishBtn").parentElement.style.display = "inline-flex";
+            document.getElementById("nextBtn").parentElement.style.display = "none";
           }
           else{
             noOfSelectable = survey.data[qIndex][1];
@@ -425,7 +469,7 @@
         //disable next button
         if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null || survey.data[qIndex][1] == 0){
           if(finished == true){
-            document.getElementById("nextBtn").style.display = "none";
+            
           }
           else{
             document.getElementById("nextBtn").disabled = false;

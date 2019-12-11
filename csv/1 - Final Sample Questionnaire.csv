@@ -1,0 +1,98 @@
+^,0,a1a,DLSU Laguna Campus,
+^,1,a1b,Have you ever been to Laguna Campus?,Nakapunta ka na ba sa DLSU Laguna Campus?
+a,,0,Yes,Oo
+b,,1,No,Hindi
+^,1,a1c,Which do you prefer to take your classes in?,Saan mo mas gusto mag klase?
+a,a1e,1,DLSU Taft Campus,DLSU Taft Campus
+b,a1d,2,DLSU Laguna Campus,DLSU Laguna Campus
+^,2,a1d,"If you prefer to take your classes in Laguna Campus, why?","Kung mas gusto mag klase sa DLSU Laguna Campus, bakit?"
+a,,1,I live near the campus,Malapit ang aking tirahan dito.
+b,,2,It Is More Peaceful,Mas mapayapa dito
+b,,3,Other Reason,Ibang Dahilan
+^,1,a1e,Do you agree that the DLSU Laguna Campus can be one of the best campuses in the Philippines in the near future?,Sumasang-ayon ka ba na ang DLSU Laguna Campus ay pwede maging isa sa pinakamagagandang campus sa Pilipinas balang araw?
+a,,1,Strongly Agree,Sobrang Sumasang-ayon
+b,,2,Agree,Sumasang-ayon
+b,,3,Neutral,Sakto
+b,,4,Disagree,Hindi Sumasang-ayon
+b,,5,Strongly Disagree,Sobrang Hindi Sumasang-ayon
+^,1,a1f,Are you going to recommend to the future DLSU students to take their classes in Laguna Campus in the future?,Irerekomenda mo ba sa mga magiging studyante ng DLSU na mag klase sa Laguna Campus?
+a,,0,Yes,Oo
+b,,1,No,Hindi
+^,1,a1g,Please mark the same answer you have in the previous question,Markahan ang katulad na sagot sa huling tanong
+a,,0,Yes,Oo
+b,,1,No,Hindi
+^,0,a1h,DLSU Laguna Campus Canteen,
+^,1,a1i,Have you ever been to DLSU Laguna Campus' canteen?,Nakapunta ka na ba kantin ng DLSU Laguna Campus?
+a,a1j,0,Yes,Oo
+b,a1n,1,No,Hindi
+^,1,a1j,"If yes, when do you eat in the Canteen?","Kung oo, tuwing kelan ka kumakain sa canteen?"
+a,,1,Always,Palagi
+b,,2,Often,Madalas
+b,,3,Sometimes,Minsan
+b,,4,Seldom,Bihira
+b,,5,Never,Hindi Kailanman
+^,1,a1k,How do you find the canteen's food quality?,Paano mo huhusgahan ang kalidad ng pagkain sa canteen?
+a,,1,Delicious,Masarap
+b,,2,Fair,Sakto
+b,,3,Poor,Hindi Masarap
+^,1,a1l,Is the price of the food reasonable?,"
+Makatarungan ba ang presyo ng pagkain?"
+a,,1,Too Expensive,Mahal
+b,,2,Just the right price,Sakto
+b,,3,Too Cheap,Mura
+^,1,a1m,Will having more food stalls be a great idea?,Magandang ideya ba ang magtayo pa ng mga kainan na pwesto?
+a,,0,Yes,Oo
+b,,1,No,Hindi
+^,1,a1n,"Please choose ""Yes"" for this question","Pakipili ang sagot na ""Oo"" para sa tanong na ito"
+a,,0,Yes,Oo
+b,,1,No,Hindi
+^,0,a1o,DLSU Arrows Shuttle Service,
+^,1,a1p,Do you ride the arrows shuttle?,Sumasakay ka ba ng Arrows Shuttle?
+a,,0,Yes,Oo
+b,,1,No,Hindi
+^,1,a1q,Are you satisfied with the schedule of the Arrows Shuttle?,Masaya ka ba sa iskedyul ng Arrows Shuttle?
+a,,0,Yes,Oo
+b,,1,No,Hindi
+^,1,a1r,Have you ever been left by the Arrows Shuttle?,Nangyari na ba na naiwan ka ng Arrows Shuttle?
+a,a1s,0,Yes,Oo
+b,a1t,1,No,Hindi
+^,1,a1s,"If yes, what did you do after being left behind by the Arrows Shuttle?","Kung oo, ano ang iyong ginawa pagkatapos ka maiwan ng Arrows Shuttle?"
+a,,1,Commute to Taft/Laguna Campus,Nag-commute papuntang Taft/Laguna Campus
+b,,2,Waited For The Next Schedule,Intayin ang susunod sa iskedyul
+b,,3,Drove to Taft/Laguna Campus,Nagmaneho papuntang Taft/Laguna Campus
+b,,4,Didn't Go To Taft/Laguna Campus Anymore,Hindi na pumunta sa Taft/Laguna Campus
+^,1,a1t,"If you are to rate the service of the Arrows Shuttle, what would it be?","Kung bibigyan mo ng grado ang serbisyo ng Arrows Shuttle, ano ang iyong ibibigay?"
+a,,1,Excellent,Lubos na Maayos
+b,,2,Very Good,Napakaayos
+b,,3,Good,Maayos
+b,,4,Satisfactory,Katamtaman
+b,,5,Poor,May pagkukulang
+^,1,a1u,What is this survey about?,Tungkol saan ang survey na ito?
+a,,1,DLSU Arrows Shuttle,DLSU Arrows Shuttle
+b,,2,DLSU Swimming Team,DLSU Swimming Team
+b,,3,DLSU Green Archers,DLSU Green Archers
+^,0,a1v,DLSU Enlistment,
+^,1,a1w,Can you access ANIMO.SYS during enlistment?,Nabubuksan mo ba ang ANIMO.SYS tuwing enlistment?
+a,a1x,0,Yes,Oo
+b,a1y,1,No,Hindi
+^,1,a1x,"If yes, when can you add classes during your scheduled enlistment period?","
+Kung oo, tuwing kelan ka nakakapagdagdag ng mga klase sa iyong nakatakdang panahon ng pag-enlist?"
+a,,1,Always,Palagi
+b,,2,Often,Madalas
+b,,3,Sometimes,Often
+b,,4,Seldom,Bihira
+b,,5,Never,Hindi Kailanman
+^,1,a1y,How frequent do you get all the subjects you need for the incoming term?,"
+Gaano kadalas mong makuha ang lahat ng mga klase na kailangan mo para sa papasok na term?"
+a,,1,Always,Palagi
+b,,2,Often,Madalas
+b,,3,Sometimes,Minsan
+b,,4,Seldom,Bihira
+b,,5,Never,Hindi Kailanman
+^,1,a1z,Can you drop classes successfully?,Nakakapagtanggal ka ba ng klase ng maayos?
+a,,0,Yes,Oo
+b,,1,No,Hindi
+^,1,a2a,How do you find the overall system of ANIMO.SYS?,
+a,,1,Good,Maganda
+b,,2,Fair,Sakto
+b,,3,Poor,Hindi Maganda
