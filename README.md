@@ -3,5 +3,5 @@ Survey Application with OOTOMINER Integration
 
 # Results Array Structure
 - surveyID
- - respondentID
-  - questionCode : answer
+-  respondentID
+-   questionCode : answer
