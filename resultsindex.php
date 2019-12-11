@@ -8,16 +8,15 @@
 	body {
 	    font-family: 'Josefin Sans', sans-serif;
 	}
-	#navbarvis {
-    font-size: 18px;
+	.navbar {
+	  font-size: 18px;
       background: linear-gradient(to right, rgba(78,126,78,1) 0%, rgba(9,58,8,1) 100%);
       border: 1px solid rgba(0, 0, 0, 0.2);
-      padding-bottom: 10px;
       font-family: 'Montserrat', sans-serif;
       display: block;
       padding: .6rem .1rem;
       position: relative;
-  }
+	}
 	.main-nav {
 	    list-style-type: none;
 	}
@@ -32,11 +31,11 @@
 	}
 	.logo {
 	    display: inline-block;
-      font-size: 22px;
-      margin-left: 20px;
+	    font-size: 22px;
+	    margin-left: 20px;
 	}
 
-  .logo img{
+	.logo img{
     width: 140px;
     padding-bottom: .3rem;
   }
@@ -136,7 +135,7 @@
 	}
 
 	@media screen and (min-width: 768px) {
-    #navbarvis {
+    .navbar {
         display: flex;
         justify-content: space-between;
         padding-bottom: 0;
@@ -163,6 +162,7 @@
     .logo img{
       max-width: 150px;
     }
+
    .navbar-toggle {
        display: none;
     }
@@ -197,87 +197,50 @@
 			box-shadow: 2px 2px 3px #999;
 		}
 
-		.fa-plus{
-			margin-top:22px;
-		}
-
     /* Grid item css */
 
 	</style>
 	<script src="https://kit.fontawesome.com/637ce47f6a.js" crossorigin="anonymous"></script>
-	<meta name="viewport" content="width=device-width, initial-scale=1" /> 
-  <link rel="stylesheet" href="css/light-modal.min.css">
-  <link rel="stylesheet" href="css/animate.css">
-  <link href="https://fonts.googleapis.com/css?family=Montserrat:500&display=swap" rel="stylesheet">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:500&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="css/animate.css"> 
 </head>
 
 <body>
-	<nav class="navbar" id="navbarvis">
+	<nav class="navbar">
 		<span class="navbar-toggle" id="js-navbar-toggle">
         <i class="fas fa-bars"></i>
     </span>
-    <a href="#" class="logo animated fadeInLeft"><img src="assets/ootomast.svg"></a>
+    <a href="#" class="logo"><img src="assets/ootomast.svg" class="animated fadeInLeft"></a>
       <ul class="main-nav" id="js-menu">
         <li>
-            <a href="#" class="nav-links" style="color: white;">Surveys</a>
+            <a href="index.php" class="nav-links">Surveys</a>
         </li>
         <li>
-          	<a href="resultsindex.php" class="nav-links">Results</a>
+          	<a href="resultsindex.php" class="nav-links" style="color: white;">Results</a>
         </li>
         <li>
           	<a href="#" class="nav-links">About Us</a>
         </li>
 	</nav>
 
+	<header>
+          <div style="margin: 15px 10px ; display: flex;">
+              <h3 style="font-size: 25px"> Survey Results Available </h3>
+          </div>
+    </header>
+
 	<div class="animated fadeIn">
-    <form id="form-id" method="post" action="survey.php">
-      <div class="cards animated fadeIn" id="gridItemHolder">
+    <form id="form-id" method="post" action="visualization.php">
+  		<div class="cards animated fadeIn" id="gridItemHolder">
 
-      </div>
+  		</div>
     </form>
-  </div>
+	</div>
 
-  <img src="assets/clickhere.svg" class="animated bounceIn" id="clickHere" style="width: 60%;max-width: 300px;
-    position: fixed;
-    bottom: 25;
-    right: 100;">
 
-	<a href="#addModal" class="float" id="modalBtn">
-		<i class="fas fa-plus"></i>
-	</a>
-
-  <div class="light-modal" id="addModal" role="dialog" aria-labelledby="light-modal-label" aria-hidden="false">
-        <div class="light-modal-content animated zoomInUp">
-            <!-- light modal header -->
-            <div class="light-modal-header">
-                <h3 class="light-modal-heading">Add Survey</h3>
-                <a href="#" class="light-modal-close-icon" aria-label="close">&times;</a>
-            </div>
-            <!-- light modal body -->
-            <div class="light-modal-body">
-                <p> Add survey via link</p>
-              <input type="text" id="url" placeholder="Enter URL"><br>
-              <input type="text" id="surveyNameURL" placeholder="Enter survey name">
-              <input type="button" value="Submit" onclick="parseURL()">
-              <br><br>
-              <p> Add survey via file upload </p>
-              <input type="file" value="Upload" id="files">
-              <input type="text" id="surveyNameFile" placeholder="Enter survey name">
-              <input type="button" value="Upload" onclick="parseUpload()">
-            </div>
-            <!-- light modal footer -->
-            <div class="light-modal-footer">
-                <a href="#" class="light-modal-close-btn" aria-label="close">Close</a>
-            </div>
-        </div>
-    </div>
-
-<script src="js/papaparse.js"></script>
-<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
 <script type="text/javascript">
 	// Generate survey list elements
-  initializeUI();
-
 	var itemHolder = document.getElementById("gridItemHolder");
 	itemHolder.innerHTML += generateSurveyList();
 
@@ -288,86 +251,6 @@
 	    
 	    mainNav.classList.toggle('active');
 	});
-
-  $(window).resize(function() {
-    var el = $('#clickHere');
-    var width = el.width();
-    if(window.innerWidth <= 500){
-      $("#clickHere").css({'bottom': 25 + (300-width)/6,
-                      'right': 100
-                     });
-    }
-    else{
-      $("#clickHere").css({'bottom': 25,
-                      'right': 100
-                     });
-    }
-  });
-
-  function initializeUI(){
-    var el = $('#clickHere');
-    var width = el.width();
-
-    if(window.innerWidth <= 500){
-      $("#clickHere").css({'bottom': 25 + (300-width)/6,
-                      'right': 100
-                     });
-    }
-  }
-
-	function parseURL(){
-    var url = document.getElementById('url').value;
-    var name = document.getElementById('surveyNameURL').value;
-
-    if(name != ""){
-    	//alert(url);
-    console.log(url)
-    Papa.parse(url, {
-		download: true,
-		complete: function(results) {
-			console.log(results);
-				//alert(results.data[0][2]);
-				//store("results", results, 1);
-				var surveyId = updateSurveyList();
-				//localStorage.results = JSON.stringify(results);
-				localStorage.setItem(surveyId+'', JSON.stringify(results));
-				}
-			});
-      setTimeout(function(){
-        window.location.reload();
-      },100);  
-    }
-    else{
-    	// error no survey name entered
-    }
-  }
-
-  function parseUpload(){
-  	var file = document.getElementById("files").files[0];
-  	var name = document.getElementById('surveyNameFile').value;
-
-  	if(name != ""){
-  		Papa.parse(file, {
-		download: true,
-		complete: function(results) {
-			console.log(results);
-				//alert(results.data[0][2]);
-				//store("results", results, 1);
-				//alert(name);
-				var surveyId = updateSurveyList(name);
-				//localStorage.results = JSON.stringify(results);
-				localStorage.setItem(surveyId+'', JSON.stringify(results));
-				}
-			});
-    	setTimeout(function(){
-        window.location.reload();
-      },100);   
-  	}
-  	else{
-  		//error no survey name
-  	}
-  	
-  }
 
   function deleteSurvey(){
 
@@ -392,15 +275,19 @@
 
 	function generateSurveyList(){
 		var output = ""
-    var clickhere = document.getElementById("clickHere");
 		if(!localStorage.getItem('surveyList')) {
-      clickhere.style.display = "block";
+
 		} else {
-			var surveyList = []
-      clickhere.style.display = "none";
-		  surveyList = JSON.parse(localStorage.getItem('surveyList'));
+	    var surveyList = [];
+	    var results = [];
+	    surveyList = JSON.parse(localStorage.getItem('surveyList'));
+		  results = JSON.parse(localStorage.getItem('results'));
 		  for(var i = 0; i < surveyList.length ; i++){
-		  	output+= '<button type="submit" class="card animated fadeIn" name="survey" value="'+ surveyList[i][0] +'"> '+ surveyList[i][1] +'</button>';
+		  	for(var j = 0; j < results.length; j++){
+		  		if(surveyList[i][0] == results[j][0]){
+		  			output+= '<button type="submit" class="card animated fadeIn" name="survey" value="'+ surveyList[i][0] +'"> '+ surveyList[i][1] +'</button>';
+		  		}
+		  	}
 		  }
 		}
 		return output;

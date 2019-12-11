@@ -277,7 +277,7 @@ License: MIT
 		var _escapedQuote = _quoteChar + _quoteChar;
 
 		/** whether to skip empty lines */
-		var _skipEmptyLines = false;
+		var _skipEmptyLines = true;
 
 		/** the columns (keys) we expect when we unparse objects */
 		var _columns = null;
