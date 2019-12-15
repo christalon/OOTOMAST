@@ -171,6 +171,14 @@
     font-family: 'Montserrat', sans-serif;
   }
 
+  #chartContainer{
+    position: relative;
+    margin: auto;
+    height: 80vh;
+    width: 80vw;
+    margin-bottom: 20%;
+  }
+
   @media screen and (min-width: 768px) {
     #navbarvis {
         display: flex;
@@ -234,6 +242,14 @@
       box-shadow: 2px 2px 3px #999;
     }
 
+    #chartContainer{
+      position: relative;
+      margin: auto;
+      height: 80vh;
+      width: 80vw;
+      margin-bottom: 10%;
+    }
+
   </style>
   <script src="https://kit.fontawesome.com/637ce47f6a.js" crossorigin="anonymous"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" /> 
@@ -273,13 +289,13 @@
         <canvas id="chart" width="800" height="450"></canvas>
       </div>
 
-      <div id="navContainer">
-        <div name="navButtons" id="navBtnCon" class="btn-group btn-group-justified">
+      <div id="footer">
+        <div name="navButtons" id="navBtnCon" class="btn-group btn-group-justified" role="group" style="height: 60px;">
           <div class="btn-group" style="width: 100%;">
-            <button class="btn btn-primary btn-block" type="button" id="prevBtn" value="back" onclick="prev()">Back</button>
+            <button class="btn btn-primary btn-block" type="button" id="prevBtn" value="back" onclick="prev()" style="background-color: white;border-color: #4aa24f;color: #4aa24f;">Back</button>
           </div>
           <div class="btn-group" style="width: 100%;">
-            <button class="btn btn-primary btn-block" type="button" id="nextBtn" value="next" onclick="next()">Next</button>
+            <button class="btn btn-primary btn-block" type="button" id="nextBtn" value="next" onclick="next()" style="background-color: white;border-color: #4aa24f;color: #4aa24f;">Next</button>
           </div>
         </div>
       </div>
@@ -474,7 +490,7 @@
           if(finalCount.length > 3)
             createBar(finalCount, getChoices());
           else 
-            createPie(finalCount, getChoices());
+            createBar(finalCount, getChoices());
         }
 
         function getChoices(){
@@ -502,16 +518,19 @@
           var survey = surveyData;
           document.getElementById("chartContainer").innerHTML = "";
           document.getElementById("chartContainer").innerHTML = "<canvas id='chart' width='800' height='450'></canvas>";
+
           new Chart(document.getElementById("chart"),{
             type: 'bar',
             data: {
               labels: labelsText,
               datasets: [{
+                label: false,
                 backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9"],
                 data: questionResults
               }]
             },
             options:{
+              maintainAspectRatio: false,
               legend: { display: true},
               title: {
                 display: true,
