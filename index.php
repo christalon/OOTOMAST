@@ -138,6 +138,17 @@
 	  cursor: pointer;
 	}
 
+	.my_content_container a {
+	    color: #000000;
+	    display: block;
+	    height: 2.5em;
+	    padding: 8 1em 0em 1em;
+	    width: 5em;       
+	    text-decoration: none;
+	    background-color: white;     
+	    box-shadow: 1px 4px 5px 0px rgb(0, 0, 0);
+	}
+
 	@media screen and (min-width: 768px) {
     #navbarvis {
         display: flex;
@@ -271,6 +282,11 @@
               <input type="file" value="Upload" id="files">
               <input type="text" id="surveyNameFile" placeholder="Enter survey name">
               <input type="button" value="Upload" onclick="parseUpload()">
+              <br><br>
+              <p> Create survey via Survey Builder </p>
+              <div class="my_content_container">
+			    <a class="" href="surveybuilder.php">Create</a>
+				</div>    
             </div>
             <!-- light modal footer -->
             <div class="light-modal-footer">
