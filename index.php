@@ -70,10 +70,11 @@
 	.card{
 		height: 200px;
 		object-fit: cover;
-		border: 1px solid blue;
-		border-radius: 25px;
 		margin: 20px;
-		box-shadow: 5px 5px 5px 5px;
+		box-shadow: 8px 4px 5px 0px rgb(220, 220, 220);
+		background: white;
+		font-size: 30px;
+		font-family: 'Montserrat', sans-serif;
 	}
 
 	.card:hover{
@@ -176,32 +177,36 @@
     .cards {
 		  max-width: 960px;
 		  margin: 0 auto 20px;
-		}
+	}
 
-		.card{
-			height: 200px;
-			object-fit: cover;
-			border: 1px solid blue;
-			border-radius: 25px;
-			margin-top: 20px;
-		}
+	.card{
+		height: 200px;
+	    object-fit: cover;
+	    margin-top: 20px;
+	    background: white;
+	    margin: 20px;
+    	box-shadow: 8px 4px 5px 0px rgb(220, 220, 220);
+    	font-size: 30px;
+		font-family: 'Montserrat', sans-serif;
+		overflow: hidden;
+	}
 
-		.float{
-			position:fixed;
-			width:60px;
-			height:60px;
-			bottom:40px;
-			right:30px;
-			background-color:#229c43;
-			color:#FFF;
-			border-radius:50px;
-			text-align:center;
-			box-shadow: 2px 2px 3px #999;
-		}
+	.float{
+		position:fixed;
+		width:60px;
+		height:60px;
+		bottom:40px;
+		right:30px;
+		background-color:#229c43;
+		color:#FFF;
+		border-radius:50px;
+		text-align:center;
+		box-shadow: 2px 2px 3px #999;
+	}
 
-		.fa-plus{
-			margin-top:22px;
-		}
+	.fa-plus{
+		margin-top:22px;
+	}
 
     /* Grid item css */
 
@@ -276,6 +281,7 @@
 
 <script src="js/papaparse.js"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+<script src="js/mdb.min.js"></script>
 <script type="text/javascript">
 	// Generate survey list elements
   initializeUI();

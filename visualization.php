@@ -145,9 +145,7 @@
 
   #navBtnCon{
     bottom: 0px;
-    left: 50%;
-    transform: translateX(-50%);
-    position: fixed;
+    position: relative;
     width: 100%;
       /* max-width: 640px; */
     z-index: 1;
@@ -176,7 +174,12 @@
     margin: auto;
     height: 80vh;
     width: 80vw;
-    margin-bottom: 20%;
+    margin-bottom: 10px;
+  }
+
+  #uploadBar{
+    display: block;
+    margin-left: auto;
   }
 
   @media screen and (min-width: 768px) {
@@ -247,7 +250,12 @@
       margin: auto;
       height: 80vh;
       width: 80vw;
-      margin-bottom: 10%;
+      margin-bottom: 10px;
+    }
+
+    #uploadBar{
+      display: block;
+      margin-left: auto;
     }
 
   </style>
@@ -257,6 +265,7 @@
   <link rel="stylesheet" href="css/animate.css">
   <link rel="stylesheet" href="https://cdnjs.com/libraries/bttn.css"> 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/compiled-4.10.1.min.css">
   </head>
   <body>
       <nav class="navbar" id="navbarvis">
@@ -278,39 +287,48 @@
 
       <header>
           <div style="margin: 15px 10px ; display: flex;">
-              <h3 style="font-size: 25px"> Results </h3>
+            <h3 style="font-size: 25px"> Results </h3>
+            <div name="navButtons" id="uploadBar" class="btn-group btn-group-justified" role="group">
               <button type="button" class="btn btn-primary" id="uploadBtn" style="
-          margin-left: auto;" onclick="uploadResults()">Upload</button>
+              margin-left: auto;" onclick="uploadResults()">Upload</button>
+              <button type="button" class="btn btn-primary" id="optionsBtn" style="
+              margin-left: auto;">Options</button>
+            </div>
           </div>
       </header>
+
+      <div id="sideBar" style="width: 100%; padding: 10px 20px 10px 20px;">
+        <select id="qSelect" class="mdb-select md-form colorful-select dropdown-primary" multiple searchable="Search here..">
+          <option value="" disabled selected>Choose questions</option>
+        </select>
+        <select id="cSelect" class="mdb-select" multiple searchable="Search here..">
+          <option value="" disabled selected>Filter choices</option>
+        </select>
+      </div>
 
       <main>
       <div id="chartContainer">
         <canvas id="chart" width="800" height="450"></canvas>
       </div>
 
-      <div id="footer">
-        <div name="navButtons" id="navBtnCon" class="btn-group btn-group-justified" role="group" style="height: 60px;">
-          <div class="btn-group" style="width: 100%;">
-            <button class="btn btn-primary btn-block" type="button" id="prevBtn" value="back" onclick="prev()" style="background-color: white;border-color: #4aa24f;color: #4aa24f;">Back</button>
-          </div>
-          <div class="btn-group" style="width: 100%;">
-            <button class="btn btn-primary btn-block" type="button" id="nextBtn" value="next" onclick="next()" style="background-color: white;border-color: #4aa24f;color: #4aa24f;">Next</button>
-          </div>
+      <footer class="page-footer font-small pt-4" style="background-color: #3d6e3d">
+        <!-- Footer Links -->
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-3">© 2019 Copyright:
+          <a href="index.php"> ootomast.com</a>
         </div>
-      </div>
+        <!-- Copyright -->
+
+      </footer>
       </main>
 
-      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
-    
       <script src="js/mdb.min.js"></script>
       <script src="js/papaparse.js"></script>
-      <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-      <script src="js/jquery.cookie.js"></script>
 
       <script type="text/javascript">
         //Parsing
@@ -338,35 +356,71 @@
             mainNav.classList.toggle('active');
         });
 
+        $(document).ready(function() {
+         $('.mdb-select').material_select();
+        });
+
+        $("#qSelect").change(function() {
+          //resultsCounter($('select#qSelect').val());
+          listChoices($('select#qSelect').val());
+        });
+
+        $("#cSelect").change(function() {
+          resultsCounter($('select#qSelect').val(), $('select#cSelect').val());
+        });
+
+
+
+
 
         function setSurvey(){
             surveyData = JSON.parse(localStorage.getItem(surveyID));
         }
 
         function initializeSurvey(){
-            var survey = surveyData;
-            var found = false;
-            var iterate = qidIndex+1;
-            var choicesContainer = document.getElementById("cBox");
-        
-            while(found != true){
-                if(survey.data[iterate][0] == "^" && survey.data[iterate][1] > 0){
-                  //alert("found");
-                  found = true;
-                  qidIndex = iterate;
-                  qCode = survey.data[qidIndex][2];
-                }
-                else{
-                    iterate = iterate + 1;
-            }
-
-            // Change Question Text
-            if(found == true){
-              //document.getElementById('qText').innerHTML = ""+survey.data[qidIndex][3];
-              resultsCounter();
+          var survey = surveyData;
+          var found = false;
+          var finished = false;
+          var iterate = qidIndex+1;
+          var boxIterate = 1;
+          var choicesContainer = document.getElementById("cBox");
+          var qSelectBox = document.getElementById("qSelect");
+          var surveyLength = survey.data.length;
+      
+          while(found != true){
+              if(survey.data[iterate][0] == "^" && survey.data[iterate][1] > 0){
+                //alert("found");
+                found = true;
+                qidIndex = iterate;
+                qCode = survey.data[qidIndex][2];
+              }
+              else{
+                  iterate = iterate + 1;
             }
           }
+
+          while(finished != true){
+            if(surveyLength != boxIterate){
+              if(survey.data[boxIterate][0] == "^" && survey.data[boxIterate][1] > 0){
+                qSelectBox.innerHTML += "<option value="+survey.data[boxIterate][2]+">"+survey.data[boxIterate][3]+"</option>"
+                boxIterate = boxIterate + 1;
+              }
+              else{
+                  boxIterate = boxIterate + 1;
+              }
+            }
+            else{
+              finished = true;
+            }
+          }
+
+          // Change Question Text
+          if(found == true){
+            //document.getElementById('qText').innerHTML = ""+survey.data[qidIndex][3];
+            //resultsCounter();
+          }
         }
+
 
         function next() {
           //Find next question
@@ -423,11 +477,59 @@
 
         }
 
-        function resultsCounter(){
+        function listChoices(qCodeList){
+          var survey = surveyData;
+          cIndex = 0;
+          var iterate = 0;
+          var cTextIndex = 3;
+          var finished = 0;
+          var eof = 0;
+          var choiceBox = document.getElementById("cSelect");
+
+          choiceBox.innerHTML = "";
+
+          //Find each choices
+          for(var i = 0; i < qCodeList.length; i++){
+            while(finished != 1){
+              if(survey.data[iterate][0] == "^" || survey.data[iterate][0] == ""){
+                if(survey.data[iterate][2] == qCodeList[i]){
+                  choiceBox.innerHTML += "<optgroup label='"+ survey.data[iterate][3] +"'>";
+                  cIndex = iterate + 1;
+                  while(eof != 1){
+                    if(survey.data[cIndex][0] == "^" || survey.data[cIndex][0] == ""){
+                      finished = 1;
+                      eof = 1;
+                      choiceBox.innerHTML += "</optgroup>"
+                    }
+                    else{
+                      choiceBox.innerHTML += "<option value="+ survey.data[iterate][2] +"-"+ survey.data[cIndex][2] +">"+ survey.data[cIndex][3] +"</option>";
+                      cIndex = cIndex+1;
+                    }
+                  }
+                }
+                else{
+                  iterate = iterate + 1;
+                }
+              }
+              else{
+                iterate = iterate + 1;
+              }
+            }
+            finished = 0;
+            eof = 0;
+          }
+        }
+
+        function resultsCounter(qCodeList, cCodeList){
           var results = [];
           results = JSON.parse(localStorage.getItem('results'));
-          var questionResults = [qCode, {}];
+          var questionResults;
           var finalCount = [];
+          var dataset = [];
+          var labels = [];
+          var match = 0;
+          var xlength = 0;
+          var xIndex = 0;
 
           question = questionResults;
 
@@ -438,83 +540,203 @@
             }
           }
 
-          //traverse the respondents
-           for(var i = 1; i < results[resultIndex].length; i++){
-            if(results[resultIndex][i][qCode] != 98 || results[resultIndex][i][qCode] != 99){
-              if(results[resultIndex][i][qCode] != null){
-                if(results[resultIndex][i][qCode].length > 1){
-                  for(var j = 0; j < results[resultIndex][i][qCode].length; j++){
-                    if(questionResults[1][results[resultIndex][i][qCode][j]] != null){
-                      questionResults[1][results[resultIndex][i][qCode][j]] += 1;
-                      question = questionResults;
-                    }
-                    else{
-                      questionResults[1][results[resultIndex][i][qCode][j]] = 0;
-                      questionResults[1][results[resultIndex][i][qCode][j]] += 1;
-                      question = questionResults;
+          if(qCodeList.length == 1){
+            //traverse the respondents
+            for(var k = 0; k < qCodeList.length; k++){
+              questionResults = [qCodeList[k], {}];
+              finalCount = [];
+              for(var l = 0; l < cCodeList.length; l++){
+                for(var i = 1; i < results[resultIndex].length; i++){
+                  if(results[resultIndex][i][qCodeList[k]] != 98 || results[resultIndex][i][qCodeList[k]] != 99){
+                    if(results[resultIndex][i][qCodeList[k]] != null){
+                      if(results[resultIndex][i][qCodeList[k]].length > 1){
+                        for(var j = 0; j < results[resultIndex][i][qCodeList[k]].length; j++){
+                          if(cCodeList[l].includes(qCodeList[k] +"-"+ results[resultIndex][i][qCodeList[k]]) == true){
+                            if(questionResults[1][results[resultIndex][i][qCodeList[k]][j]] != null){
+                              questionResults[1][results[resultIndex][i][qCodeList[k]][j]] += 1;
+                              question = questionResults;
+                            }
+                            else{
+                              questionResults[1][results[resultIndex][i][qCodeList[k]][j]] = 0;
+                              questionResults[1][results[resultIndex][i][qCodeList[k]][j]] += 1;
+                              question = questionResults;
+                            }
+                          }
+                        }
+                      }
+                      else{
+                        if(cCodeList[l].includes(qCodeList[k] +"-"+ results[resultIndex][i][qCodeList[k]]) == true){
+                          if(questionResults[1][results[resultIndex][i][qCodeList[k]]] != null){
+                            questionResults[1][results[resultIndex][i][qCodeList[k]]] += 1;
+                            question = questionResults;
+                          }
+                          else{
+                            questionResults[1][results[resultIndex][i][qCodeList[k]]] = 0;
+                            questionResults[1][results[resultIndex][i][qCodeList[k]]] += 1;
+                            question = questionResults;
+                          }
+                        }
+                      }
                     }
                   }
                 }
-                else{
-                  if(questionResults[1][results[resultIndex][i][qCode]] != null){
-                    questionResults[1][results[resultIndex][i][qCode]] += 1;
-                    question = questionResults;
+
+                //removed undefined
+                /*var filteredCount = questionResults[1].filter(function (el) {
+                  return el != undefined;
+                });
+
+                questionResults[1] = filteredCount;
+                alert(filteredCount);*/
+              }
+
+              labels = getChoices(qCodeList[k]);
+
+                for(var i = 0; i < labels.length; i++){
+                  if(questionResults[1][i] == null){
+                    finalCount[i] = 0;
                   }
                   else{
-                    questionResults[1][results[resultIndex][i][qCode]] = 0;
-                    questionResults[1][results[resultIndex][i][qCode]] += 1;
-                    question = questionResults;
+                    finalCount[i] = questionResults[1][i];
                   }
+                }
+
+                dataset.push({
+                  label: 'Respondent/s',
+                  data: finalCount,
+                  backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9"]
+                })
+            }
+          }
+          else if(qCodeList.length > 1){
+            finalCount = {};
+
+            for(var a = 0; a < cCodeList.length; a++){
+              if(cCodeList[a].match(qCodeList[0]) != null){
+                xlength += 1;
+              }
+            }
+
+            for(var i = 1; i < results[resultIndex].length; i++){
+              match = 0;
+              for(var k = 0; k < qCodeList.length; k++){
+                for(var l = 0; l < cCodeList.length; l++){
+                    if(results[resultIndex][i][qCodeList[k]] != 98 || results[resultIndex][i][qCodeList[k]] != 99){
+                      if(results[resultIndex][i][qCodeList[k]] != null){
+                        if(results[resultIndex][i][qCodeList[k]].length > 1){
+                          for(var j = 0; j < results[resultIndex][i][qCodeList[k]].length; j++){
+                            if(cCodeList[l].includes(qCodeList[k] +"-"+ results[resultIndex][i][qCodeList[k]]) == true){
+                              if(qCodeList[k] == qCodeList[0]){
+                                xIndex = parseInt(cCodeList[l][cCodeList[l].length-1]);
+                                match += xlength;
+                              }
+                              else{
+                                match += 1;
+                              }
+                            }
+                          }
+                        }
+                        else{
+                          if(cCodeList[l].includes(qCodeList[k] +"-"+ results[resultIndex][i][qCodeList[k]]) == true){
+                            if(qCodeList[k] == qCodeList[0]){
+                                xIndex = parseInt(cCodeList[l][cCodeList[l].length-1]);
+                                match += xlength;
+                            }
+                            else{
+                              match += 1;
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+
+                  //removed undefined
+                  /*var filteredCount = questionResults[1].filter(function (el) {
+                    return el != undefined;
+                  });
+
+                  questionResults[1] = filteredCount;
+                  alert(filteredCount);*/
+                }
+
+              if(match == cCodeList.length){
+                if(finalCount[xIndex] == null){
+                  finalCount[xIndex] = 0;
+                  finalCount[xIndex] += 1;
+                }
+                else{
+                  finalCount[xIndex] += 1;
                 }
               }
             }
-          }
 
-          //removed undefined
-          /*var filteredCount = questionResults[1].filter(function (el) {
-            return el != undefined;
-          });
+            labels = getChoices(qCodeList[0]);
+            var totalCount = [];
 
-          questionResults[1] = filteredCount;
-          alert(filteredCount);*/
+            for(var i = 0; i < labels.length; i++){
+              if(finalCount[i] == null){
+                totalCount[i] = 0;
+              }
+              else{
+                totalCount[i] = finalCount[i];
+              }
+            }
+
+            dataset.push({
+                    label: "Respondent/s",
+                    data: totalCount,
+                    backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9"]
+                  })
+
+          } 
           
-          for(var i = 0; i < getChoices().length; i++){
-            if(questionResults[1][i] == null){
-              finalCount[i] = 0;
-            }
-            else{
-              finalCount[i] = questionResults[1][i];
-            }
+          if(qCodeList.length > 1){
+            createBar(dataset, labels);
           }
-
-          if(finalCount.length > 3)
-            createBar(finalCount, getChoices());
-          else 
-            createBar(finalCount, getChoices());
+          else{
+            createBar(dataset, labels);
+          }  
         }
 
-        function getChoices(){
+        function getChoices(code){
           var survey = surveyData;
-          cIndex = qidIndex+1;
+          cIndex = 0;
+          var iterate = 0;
           var cTextIndex = 3;
+          var finished = 0;
           var eof = 0;
           var labels = [];
 
           //Find each choices
-          while(eof == 0){
-            if(survey.data[cIndex][0] == "^" || survey.data[cIndex][0] == ""){
-              eof = 1;
+          while(finished == 0){
+            if(survey.data[iterate][0] == "^" || survey.data[iterate][0] == ""){
+              if(survey.data[iterate][2] == code){
+                cIndex = iterate + 1;
+                while(eof != 1){
+                  if(survey.data[cIndex][0] == "^" || survey.data[cIndex][0] == ""){
+                    finished = 1;
+                    eof = 1;
+                  }
+                  else{
+                    labels.push(survey.data[cIndex][cTextIndex]);
+                    cIndex = cIndex+1;
+                  }
+                }
+              }
+              else{
+                iterate = iterate + 1;
+              }
             }
             else{
-              labels.push(survey.data[cIndex][cTextIndex]);
-              cIndex = cIndex+1;
+              iterate = iterate + 1;
             }
           }
 
           return labels;
         } 
         
-        function createBar(questionResults, labelsText)  {
+        function createBar(fCount, qLabels)  {
           var survey = surveyData;
           document.getElementById("chartContainer").innerHTML = "";
           document.getElementById("chartContainer").innerHTML = "<canvas id='chart' width='800' height='450'></canvas>";
@@ -522,45 +744,33 @@
           new Chart(document.getElementById("chart"),{
             type: 'bar',
             data: {
-              labels: labelsText,
-              datasets: [{
-                label: false,
-                backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9"],
-                data: questionResults
-              }]
+              labels: qLabels,
+              datasets: fCount
             },
             options:{
               maintainAspectRatio: false,
               legend: { display: true},
+              scales: {
+                yAxes: [{
+                  stacked: false,
+                  ticks: {
+                    beginAtZero: true
+                  }
+                }],
+                xAxes: [{
+                  stacked: false,
+                  ticks: {
+                    beginAtZero: true
+                  }
+                }]
+
+              },
               title: {
-                display: true,
-                text: survey.data[qidIndex][3]
+                fontSize: 17,
+                display: false,
               }
             } 
 
-          });
-        }
-
-        function createPie(questionResults, labelsText)  {
-          var survey = surveyData;
-          document.getElementById("chartContainer").innerHTML = "";
-          document.getElementById("chartContainer").innerHTML = "<canvas id='chart' width='800' height='450'></canvas>";
-
-          new Chart(document.getElementById("chart"), {
-            type: 'pie',
-            data: {
-              labels: labelsText,
-              datasets: [{
-                                backgroundColor: ["#3e95cd", "#8e5ea2"],
-                data: questionResults
-              }]
-            },
-            options: {
-              title: {
-                display: true,
-                text: survey.data[qidIndex][3]
-              } 
-            }
           });
         }
 
