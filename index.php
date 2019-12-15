@@ -186,9 +186,19 @@
 		.fa-plus{
 			margin-top:22px;
 		}
-		.trashbutton
+		#trashbutton
 		{
+			max-width: 960px;
+		  margin: 0 auto 20px;
 		
+		}
+
+		#trash{
+			height: 200px;
+			object-fit: cover;
+			border: 1px solid blue;
+			border-radius: 25px;
+			margin-top: 20px;
 		}
 
     /* Grid item css */
@@ -387,7 +397,7 @@
 		  for(var i = 0; i < surveyList.length ; i++){
 		  	output+= '<button type="submit" class="card" name="survey" value="'+ surveyList[i][0] +'"> '+ surveyList[i][1] + 
 
-		  	'</button> <div id ="trashbutton"> <button type = "button" onclick="deleteSurvey('+ surveyList[i][0] +')"> trash </div> </button>';
+		  	'</button> <div id ="trashbutton"> <button type = "button" class="trash" onclick="deleteSurvey('+ surveyList[i][0] +')"> trash </div> </button>';
 		  }
 		}
 		return output;
