@@ -235,7 +235,7 @@
     <a href="#" class="logo animated fadeInLeft"><img src="assets/ootomast.svg"></a>
       <ul class="main-nav" id="js-menu" style="margin-bottom: 0px;">
         <li>
-            <a href="#" class="nav-links" style="color: white;">Surveys</a>
+            <a href="index.php" class="nav-links" style="color: white;">Surveys</a>
         </li>
         <li>
           	<a href="resultsindex.php" class="nav-links">Results</a>

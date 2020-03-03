@@ -5,10 +5,10 @@ $surveyName = $_POST['sName'];
 $resultsArray = $_POST['rArray'];
 
 //DATABASE CONNECTION VARIABLES
-$host = "localhost:3306"; // Host name
-$username = "root"; // Mysql username
-$password = ""; // Mysql password
-$db_name = "ooto"; // Database name
+$host = "localhost"; // Host name
+$username = "id12624169_root"; // Mysql username
+$password = "ootomast98"; // Mysql password
+$db_name = "id12624169_ooto"; // Database name
 
 // Create connection
 $conn = mysqli_connect($host, $username, $password, $db_name);

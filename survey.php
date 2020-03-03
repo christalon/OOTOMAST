@@ -23,6 +23,7 @@
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/checkboxes.min.css">
+    <link rel="stylesheet" type="text/css" href="css/loading-bar.css"/>
     <!--<link rel="stylesheet" href="/mdb.min.css">
     <!-- import the webpage's client-side javascript file -->
     <style type="text/css">
@@ -47,16 +48,20 @@
         <div class="ckbx-style-7" style="display: flex; margin-top: 5px;">
           <h3 style="font-size: 17px; padding-top: 1px; margin-right: 8px; color: white;
 }">Translate</h3>
-          <input type="checkbox" id="ckbx-style-7-1" value="0" name="ckbx-style-7">
+          <input type="checkbox" id="ckbx-style-7-1" value="0" name="ckbx-style-7" style="display: none;">
           <label for="ckbx-style-7-1" style="height: .6em;"></label>
         </div>
       </nav>
     </header>
     <main>
+      <div class="progress" style="height: 5px;">
+        <div class="progress-bar" id="pBar" role="progressbar" style="width: 0; background-color: #76ba1b;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+      </div>
       <div id="endScreen">
         <h1> Thank you for answering the survey!</h1>
         <button class="btn btn-primary btn-block waves-effect waves-light" type="button" id="newRespondent" value="new" onclick="newRespondent()">New Respondent</button>
-        <button class="btn btn-primary btn-block waves-effect waves-light" type="button" id="exit" value="exit" onclick="index.php">Exit</button>
+        <a class="btn btn-primary btn-block waves-effect waves-light" id="exit" value="exit" href="index.php" style="padding: 15px;">Exit</a>
       </div>
       <div id="transitionTextCon">
         <h3>The next set of questions will be about</h3>
@@ -102,11 +107,14 @@
     <script src="js/papaparse.js"></script>
     <script src="js/jquery.cookie.js"></script>
     <script src="https://kit.fontawesome.com/637ce47f6a.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="js/loading-bar.js"></script>
     <script type="text/javascript">
+
 
     //Parse and Navigation
       var translated = false
       var qIndex = 0;
+      var qNumber = 0;
       var cIndex = 0;
       var qidIndex = 1;
       var noOfSelectable = 0;
@@ -122,17 +130,24 @@
       var routesTable = [];
       var finished = false;
       var divItems;
+      var totalQuestions;
+      var surveyName;
 
-      <?php $sId = $_POST["survey"]; ?>
+      <?php $sId = $_POST["surveyId"]; 
+            $sName = $_POST["surveyName"]; 
+      ?>
 
-      surveyID =  "<?php echo $sId ?>";
+      surveyID = "<?php echo $sId ?>";
+      surveyName = "<?php echo $sName ?>";
+
       //alert(surveyID);
       setSurvey();
       initializeResultsArray();
       initializeSurvey();
+      initializeProgressBar();
 
       window.onbeforeunload = function(event) {
-        event.returnValue = "Your custom message.";
+        return confirm("Are you sure you want to exit?")
       };
 
       function choiceSelected(item){
@@ -152,6 +167,31 @@
 
       }
 
+      function initializeProgressBar(){
+        var survey = surveyData;
+        var index = 0;
+        var total = 0;
+        var finished = false;
+
+        while(finished == false){
+          if(survey.data[index] == null){
+            finished = true;
+          }
+          
+          if(finished == false){
+            if(survey.data[index][0] == "^"){
+              total += 1;
+              index += 1;
+            }
+            else{
+              index += 1;
+            }
+          }
+        }
+
+        totalQuestions = total;
+      }
+
       function initializeResultsArray(){
       // should be stored in local storage
         var found = false;
@@ -162,7 +202,7 @@
 
 
         if(!localStorage.getItem('results')){
-          results.push([surveyID, {respondentID}]);
+          results.push([surveyID, {respondentID, surveyName}]);
           resultsIndex = results.length - 1;
           resultsArray = results;
           respondentIndex = 1;
@@ -180,19 +220,18 @@
           }
 
           if(found == true){
-            results[resultsIndex].push({respondentID});
+            results[resultsIndex].push({respondentID, surveyName});
             respondentIndex = results[resultsIndex].length - 1
             resultsArray = results;
             localStorage.results = JSON.stringify(results);
           }
           else{
-            results.push([surveyID, {respondentID}]);
+            results.push([surveyID, {respondentID, surveyName}]);
             resultsIndex = results.length - 1;
             resultsArray = results;
             respondentIndex = 1;
             localStorage.results = JSON.stringify(results);
           }
-
         }
 
       }
@@ -306,6 +345,7 @@
         if (translated == false){
           translated = true;
           document.getElementById('qText').innerHTML = ""+survey.data[qIndex][(3+1)];
+          document.getElementById('transitionText').innerHTML = ""+survey.data[qIndex][3+1];
 
           // Translate choices
           for (var i = 0; i < cIndexes.length; i++) {
@@ -316,6 +356,7 @@
         else{
           translated = false;
           document.getElementById('qText').innerHTML = ""+survey.data[qIndex][3];
+          document.getElementById('transitionText').innerHTML = ""+survey.data[qIndex][3];
 
           // Translate choices
           for (var i = 0; i < cIndexes.length; i++) {
@@ -364,7 +405,7 @@
                     iterate = iterate + 1;
                   }
                 }
-                else if(survey.data[iterate][0] == ""){
+                else if(survey.data[iterate][0] == null){
                   finished = true;
                 }
                 else{
@@ -384,7 +425,7 @@
                   found = true;
                   qIndex = iterate;              
                 }
-                else if(survey.data[iterate][0] == ""){
+                else if(survey.data[iterate][0] == null){
                   finished = true;
                   found = true;
                 }
@@ -438,6 +479,8 @@
         
         // Change Question Text
         if(found == true){
+          qNumber+=1;
+          setProgressBar();
           if(finished == true){
             document.getElementById("finishBtn").parentElement.style.display = "inline-flex";
             document.getElementById("nextBtn").parentElement.style.display = "none";
@@ -537,6 +580,8 @@
         // Change Question Text
         if(found == true){
           //alert(qIndex);
+          qNumber-=1;
+          setProgressBar();
           noOfSelectable = survey.data[qIndex][1];
           if(translated == true){
             document.getElementById('qText').innerHTML = ""+survey.data[qIndex][(3+1)];
@@ -608,6 +653,8 @@
         // Change Question Text
         if(found == true){
           //alert(qIndex);
+          qNumber+=1;
+          setProgressBar();
           noOfSelectable = survey.data[qIndex][1];
           if(translated == true){
             document.getElementById('qText').innerHTML = ""+survey.data[qIndex][(3+1)];
@@ -662,7 +709,7 @@
 
         //Find each choices
         while(eof == 0){
-          if(survey.data[cIndex] == null || survey.data[cIndex][0] == "^" || survey.data[cIndex][0] == ""){
+          if(survey.data[cIndex] == null || survey.data[cIndex][0] == "^"){
             eof = 1;
           }
           else{
@@ -769,6 +816,71 @@
             translate()
         }
       };
+      
+      function uploadResults(){
+          var resultsArray = [];
+          var qCodeList = [];
+          //Find next question
+          var survey = surveyData;
+          var finished = false;
+          var iterate = 1;
+          var results = [];
+          results = JSON.parse(localStorage.getItem('results'));
+          var surveyLength = survey.data.length;
+          
+
+          while(finished != true){
+            if(surveyLength != iterate){
+              if(survey.data[iterate][0] == "^" && survey.data[iterate][1] > 0){
+                qCodeList.push(survey.data[iterate][2]);
+                iterate = iterate + 1;
+              }
+              else{
+                iterate = iterate + 1;
+              }
+            }
+            else{
+              finished = true;
+            }
+          }
+
+          for(var i = 1; i < results[resultsIndex].length; i++){
+            resultsArray.push([results[resultsIndex][i]["respondentID"], []]); 
+            for(var x = 0; x < qCodeList.length; x++){
+              resultsArray[i-1][x+1] = new Array();
+              resultsArray[i-1][x+1][0] = qCodeList[x];
+              if(results[resultsIndex][i][qCodeList[x]] != 98 || results[resultsIndex][i][qCodeList[x]] != 99){
+                if(results[resultsIndex][i][qCodeList[x]] != null){
+                  if(results[resultsIndex][i][qCodeList[x]].length > 1){
+                    for(var j = 0; j < results[resultsIndex][i][qCodeList[x]].length; j++){
+                      resultsArray[i-1][x+1][j+1] = results[resultsIndex][i][qCodeList[x]][j];
+                    }
+                  }
+                  else{
+                      resultsArray[i-1][x+1][1] = results[resultsIndex][i][qCodeList[x]];
+                    }
+                  }
+                }
+              }
+            }
+
+            $.ajax({ 
+                   type: "POST", 
+                   url: "uploadresults.php", 
+                   data: {rArray : resultsArray, sID : surveyID, sName : "IALU"}, 
+                   success: function() { 
+                          alert("Success"); 
+                    } 
+            });
+          }
+
+          function setProgressBar(){
+            var percent;
+
+            percent = (qNumber/totalQuestions) * 100
+            $('.progress-bar').css('width', percent+'%').attr('aria-valuenow', percent);
+          }
+
     </script>
   </body>
 </html>

@@ -227,6 +227,7 @@
   <link rel="stylesheet" href="css/light-modal.min.css">
   <link rel="stylesheet" href="css/animate.css">
   <link href="https://fonts.googleapis.com/css?family=Montserrat:500&display=swap" rel="stylesheet">
+  <title>OOTOMAST</title>
 </head>
 
 <body>
@@ -312,6 +313,11 @@
 	    
 	    mainNav.classList.toggle('active');
 	});
+	
+	window.onload = () => {
+        let bannerNode = document.querySelector('[alt="www.000webhost.com"]').parentNode.parentNode;
+        bannerNode.parentNode.removeChild(bannerNode);
+    }
 
   $(window).resize(function() {
     var el = $('#clickHere');
@@ -393,8 +399,32 @@
   	
   }
 
-  function deleteSurvey(){
+  function deleteSurvey(surveyID){
+  	var key = 0;
+  	var sList = JSON.parse(localStorage.getItem('surveyList'));
+  	var clickhere = document.getElementById("clickHere");
+  	localStorage.removeItem(surveyID);
 
+  	if(confirm("Are you sure you want to delete this survey?") == true){
+  		for(i=0; i < sList.length ; i++){
+	  		if(sList[i][0] == surveyID){
+	  			key = i;
+	  		}
+	  	}
+
+	  	sList.splice(key, 1);
+
+	  	localStorage.setItem('surveyList', JSON.stringify(sList));
+
+	  	if(sList.length == 0){
+	  		clickhere.style.display = "block";
+	  	}
+
+	  	setTimeout(function(){
+	        window.location.reload();
+	      },100);
+	  	}
+  	
   }
 
   function updateSurveyList(surveyName){
@@ -416,15 +446,22 @@
 
 	function generateSurveyList(){
 		var output = ""
-    var clickhere = document.getElementById("clickHere");
+    	var clickhere = document.getElementById("clickHere");
 		if(!localStorage.getItem('surveyList')) {
-      clickhere.style.display = "block";
+	      clickhere.style.display = "block";
 		} else {
 			var surveyList = []
-      clickhere.style.display = "none";
-		  surveyList = JSON.parse(localStorage.getItem('surveyList'));
-		  for(var i = 0; i < surveyList.length ; i++){
-		  	output+= '<button type="submit" class="card animated fadeIn" name="survey" value="'+ surveyList[i][0] +'"> '+ surveyList[i][1] +'</button>';
+			surveyList = JSON.parse(localStorage.getItem('surveyList'));
+
+			if(surveyList.length == 0){
+				clickhere.style.display = "block";
+			}
+			else{
+				clickhere.style.display = "none";
+			}
+			
+			for(var i = 0; i < surveyList.length ; i++){
+			  	output+= '<div style="display: grid; position: relative;"><button type="submit" class="card animated fadeIn" name="surveyId" value="'+ surveyList[i][0] +'"> '+ surveyList[i][1] +'</button><input type="hidden" name="surveyName" value="'+ surveyList[i][1] +'" /><a href="#" class="fas fa-trash-alt" style="position: absolute; top: 40px; right: 40px; color: grey; font-size: 25px;" onclick="deleteSurvey('+ surveyList[i][0] +')"></a></div>';
 		  }
 		}
 		return output;
@@ -434,5 +471,7 @@
 	function addSurvey(){
 
 	}
+	
+	
 </script>
 </body>

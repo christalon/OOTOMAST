@@ -339,7 +339,7 @@
         var qCode;
         var question = [];
         var cIndex;
-        var resultsindex;
+        var resultsIndex;
 
         <?php $sId = $_POST["survey"]; ?>
 
@@ -801,20 +801,20 @@
             }
           }
 
-          for(var i = 1; i < results[resultIndex].length; i++){
-            resultsArray.push([results[resultIndex][i]["respondentID"], []]); 
+          for(var i = 1; i < results[resultsIndex].length; i++){
+            resultsArray.push([results[resultsIndex][i]["respondentID"], []]); 
             for(var x = 0; x < qCodeList.length; x++){
               resultsArray[i-1][x+1] = new Array();
               resultsArray[i-1][x+1][0] = qCodeList[x];
-              if(results[resultIndex][i][qCodeList[x]] != 98 || results[resultIndex][i][qCodeList[x]] != 99){
-                if(results[resultIndex][i][qCodeList[x]] != null){
-                  if(results[resultIndex][i][qCodeList[x]].length > 1){
-                    for(var j = 0; j < results[resultIndex][i][qCodeList[x]].length; j++){
-                      resultsArray[i-1][x+1][j+1] = results[resultIndex][i][qCodeList[x]][j];
+              if(results[resultsIndex][i][qCodeList[x]] != 98 || results[resultsIndex][i][qCodeList[x]] != 99){
+                if(results[resultsIndex][i][qCodeList[x]] != null){
+                  if(results[resultsIndex][i][qCodeList[x]].length > 1){
+                    for(var j = 0; j < results[resultsIndex][i][qCodeList[x]].length; j++){
+                      resultsArray[i-1][x+1][j+1] = results[resultsIndex][i][qCodeList[x]][j];
                     }
                   }
                   else{
-                      resultsArray[i-1][x+1][1] = results[resultIndex][i][qCodeList[x]];
+                      resultsArray[i-1][x+1][1] = results[resultsIndex][i][qCodeList[x]];
                     }
                   }
                 }
@@ -824,7 +824,7 @@
             $.ajax({ 
                    type: "POST", 
                    url: "uploadresults.php", 
-                   data: {rArray : resultsArray, sID : surveyID, sName : "test"}, 
+                   data: {rArray : resultsArray, sID : surveyID, sName : "IALU"}, 
                    success: function() { 
                           alert("Success"); 
                     } 
