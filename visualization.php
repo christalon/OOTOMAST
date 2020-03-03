@@ -272,7 +272,7 @@
     <span class="navbar-toggle" id="js-navbar-toggle">
         <i class="fas fa-bars"></i>
     </span>
-    <a href="#" class="logo"><img src="assets/ootomast.svg" class="animated fadeInLeft"></a>
+    <a href="index.php" class="logo"><img src="assets/ootomast.svg" class="animated fadeInLeft"></a>
       <ul class="main-nav" id="js-menu" style="margin-bottom: 0;">
         <li>
             <a href="index.php" class="nav-links">Surveys</a>

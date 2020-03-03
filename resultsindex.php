@@ -304,7 +304,7 @@
 
 		results = JSON.parse(localStorage.getItem('results'));
 		for(var j = 0; j < results.length; j++){
-		  		output+= '<div style="display: grid; position: relative;"><button type="submit" class="card animated fadeIn" name="survey" value="'+ results[j][0] +'"> '+ results[j][1].surveyName +'</button><a href="#" class="fas fa-trash-alt" style="position: absolute; top: 40px; right: 40px; color: grey; font-size: 25px;" onclick="deleteResult('+ results[j][0] +')"></a></div>';
+		  		output+= '<div style="display: grid; position: relative;"><button type="submit" class="card animated fadeIn" name="survey" value="'+ results[j][0] +'"> '+ results[j][1] +'</button><a href="#" class="fas fa-trash-alt" style="position: absolute; top: 40px; right: 40px; color: grey; font-size: 25px;" onclick="deleteResult('+ results[j][0] +')"></a></div>';
 		  	}
 
 		 return output;

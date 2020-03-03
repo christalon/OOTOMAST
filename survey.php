@@ -134,11 +134,9 @@
       var surveyName;
 
       <?php $sId = $_POST["surveyId"]; 
-            $sName = $_POST["surveyName"]; 
       ?>
 
       surveyID = "<?php echo $sId ?>";
-      surveyName = "<?php echo $sName ?>";
 
       //alert(surveyID);
       setSurvey();
@@ -147,8 +145,13 @@
       initializeProgressBar();
 
       window.onbeforeunload = function(event) {
-        return confirm("Are you sure you want to exit?")
+        return "Are you sure you want to exit?";
       };
+      
+      window.onload = () => {
+        let bannerNode = document.querySelector('[alt="www.000webhost.com"]').parentNode.parentNode;
+        bannerNode.parentNode.removeChild(bannerNode);
+    }
 
       function choiceSelected(item){
         this.resetChoiceColor();
@@ -199,10 +202,19 @@
         var max = 10;
         var min = 5;
         var respondentID = (Math.random() * ((max - min) + 1)) + min;
+        var sList = []
+
+        sList = JSON.parse(localStorage.getItem('surveyList'));
+
+        for(j = 0; j < sList.length; j++){
+          if(sList[j][0] == surveyID){
+            surveyName = sList[j][1];
+          }
+        }
 
 
         if(!localStorage.getItem('results')){
-          results.push([surveyID, {respondentID, surveyName}]);
+          results.push([surveyID, surveyName, {respondentID}]);
           resultsIndex = results.length - 1;
           resultsArray = results;
           respondentIndex = 1;
@@ -226,7 +238,7 @@
             localStorage.results = JSON.stringify(results);
           }
           else{
-            results.push([surveyID, {respondentID, surveyName}]);
+            results.push([surveyID, surveyName, {respondentID}]);
             resultsIndex = results.length - 1;
             resultsArray = results;
             respondentIndex = 1;

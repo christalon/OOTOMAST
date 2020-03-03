@@ -461,7 +461,7 @@
 			}
 			
 			for(var i = 0; i < surveyList.length ; i++){
-			  	output+= '<div style="display: grid; position: relative;"><button type="submit" class="card animated fadeIn" name="surveyId" value="'+ surveyList[i][0] +'"> '+ surveyList[i][1] +'</button><input type="hidden" name="surveyName" value="'+ surveyList[i][1] +'" /><a href="#" class="fas fa-trash-alt" style="position: absolute; top: 40px; right: 40px; color: grey; font-size: 25px;" onclick="deleteSurvey('+ surveyList[i][0] +')"></a></div>';
+			  	output+= '<div style="display: grid; position: relative;"><button type="submit" class="card animated fadeIn" name="surveyId" value="'+ surveyList[i][0] +'"> '+ surveyList[i][1] +'</button><a href="#" class="fas fa-trash-alt" style="position: absolute; top: 40px; right: 40px; color: grey; font-size: 25px;" onclick="deleteSurvey('+ surveyList[i][0] +')"></a></div>';
 		  }
 		}
 		return output;
