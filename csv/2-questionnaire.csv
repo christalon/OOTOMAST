@@ -1,0 +1,26 @@
+^,1,a1a,Do you ride the arrows shuttle?,Sumasakay ka ba ng Arrows Shuttle?
+a,,0,Yes,Oo
+b ,,1,No,Hindi
+^,1,a1b,Are you satisfied with the schedule of the Arrows Shuttle?,Masaya ka ba sa iskedyul ng Arrows Shuttle?
+a,,0,Yes,Oo
+b ,,1,No,Hindi
+^,1,a1c,Have you ever been left by the Arrows Shuttle?,Nangyari na ba na naiwan ka ng Arrows SHuttle?
+a,,0,Yes,Oo
+b ,,1,No,Hindi
+^,1,a1d,"If yes, what did you do after being left behind by the Arrows Shuttle?","Kung oo, ano ang iyong ginawa pagkatapos ka maiwan ng Arrows Shuttle?"
+a,,1,Commute to Taft/Laguna Campus,Nag-commute papuntang Taft/Laguna Campus
+b ,,2,Waited For The Next Schedule,Intayin ang susunod sa iskedyul
+b ,,3,Drove to Taft/Laguna Campus,Nagmaneho papuntang Taft/Laguna Campus
+b ,,4,Didn't Go To Taft/Laguna Campus Anymore,Hindi na pumunta sa Taft/Laguna Campus
+^,1,a1e,"If you are to rate the service of the Arrows Shuttle , ""what would it be?"" ","Kung bibigyan mo ng grado ang mga drayber ng Arrows Shuttle, ano ang iyong ibibigay?"
+a,,1,Excellent,Lubos na Maayos
+b ,,2,Very Good,Napakaayos
+b ,,3,Good,Maayos
+b ,,4,Satisfactory,Katamtaman
+b ,,5,Poor,May pagkukulang
+^,1,a1f,question,
+a,,,,
+b ,,,,
+b ,,,,
+^,,,,
+^,0,a1g,transition,

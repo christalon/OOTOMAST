@@ -314,6 +314,8 @@ left: 50%;
       <div name="navButtons" id="uploadBar" class="btn-group btn-group-justified" role="group">
         <button type="button" class="btn btn-primary" id="uploadBtn" style="
         margin-left: auto;" onclick="uploadResults()">Upload</button>
+        <button type="button" class="btn btn-primary" id="uploadBtn" style="
+        margin-left: auto;" onclick="downloadResults()">Download</button>
         <button type="button" class="btn btn-primary" id="optionsBtn" style="
         margin-left: auto;">Options</button>
       </div>
@@ -343,6 +345,7 @@ left: 50%;
   </main>
 
   <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script src="js/FileSaver.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
@@ -352,6 +355,8 @@ left: 50%;
 
   <script type="text/javascript">
         //Parsing
+
+
         var qidIndex = 0;
         var surveyID;
         var surveyData = [];
@@ -395,11 +400,17 @@ left: 50%;
         
         function getResultsIndex(){
           var results = [];
-          results = JSON.parse(localStorage.getItem("results"));
+
+          if(!localStorage.getItem("results")){
+            
+          }
+          else{
+            results = JSON.parse(localStorage.getItem("results"));
           
-          for(i = 0; i < results.length; i++){
-            if(results[i][0] == surveyID){
-              resultsIndex = i;
+            for(i = 0; i < results.length; i++){
+              if(results[i][0] == surveyID){
+                resultsIndex = i;
+              }
             }
           }
         }
@@ -806,6 +817,7 @@ left: 50%;
             }
           }
 
+
           document.getElementById("uploadingScreen").style.display = "block";
           
           var posting = $.post( "uploadresults.php", { rArray : resultsArray, sID : surveyID, sName : surveyName} );
@@ -820,6 +832,47 @@ left: 50%;
                   alert('Error - ' + errorMessage);
                   document.getElementById("uploadingScreen").style.display = "none";
                 })
+          
+        }
+
+        function downloadResults(){
+          var csvResults = [];
+          var csvData;
+          var firstQCode;
+          var respondentCount = 1;
+          var csvIndex = 0;
+          var surveyName;
+          var fileName;
+          var surveyList = [];
+          surveyList = JSON.parse(localStorage.getItem('surveyList'));
+          //List all question codes
+
+          for(i = 0; i < surveyList.length; i++){
+            if(surveyList[i][0] == surveyID){
+              surveyName = surveyList[i][1];
+            }
+          }
+
+          firstQCode = results[0].questionCode;
+
+          for(var i = 0; i < results.length; i++){
+            if(firstQCode == results[i].questionCode){
+              csvResults[csvIndex] = respondentCount;
+              csvResults.push([results[i].questionCode, results[i].answer]);
+              respondentCount += 1;
+              csvIndex += 1;
+            }
+            else{
+              csvResults.push([results[i].questionCode, results[i].answer]);
+              csvIndex += 1;
+            }
+          }
+
+          csvData = Papa.unparse(results);
+          fileName = surveyName+"-results.csv"
+
+          var blob = new Blob([csvData],{type: "text/csv;charset=utf-8"});
+          saveAs(blob, fileName);
           
         }
       </script>

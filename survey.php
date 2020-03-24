@@ -154,6 +154,7 @@
     var totalQuestions;
     var surveyName;
     var facilitated = true;
+    var autoRedirect = false;
 
     <?php
     $sId = $_POST["surveyId"];
@@ -184,7 +185,9 @@
       initializeProgressBar();
 
       window.onbeforeunload = function(event) {
-      	return "Are you sure you want to exit?";
+      	if(autoRedirect == false){
+      		return "Are you sure you want to exit?";
+      	}
       };
       
       window.onload = () => {
@@ -245,7 +248,8 @@
       var max = 10;
       var min = 5;
       var respondentID = (Math.random() * ((max - min) + 1)) + min;
-      var sList = []
+      var sList = [];
+      var sessionResults = [];
       
       if(surveyName == "none"){
       	sList = JSON.parse(localStorage.getItem('surveyList'));
@@ -258,45 +262,76 @@
       }
       
       if(facilitated == false){
-      	if(localStorage.getItem('results')){ 
-      		localStorage.removeItem('results');
-      	}
-      }
+      	sessionStorage.removeItem('sessionResults');
+      	if(!sessionStorage.getItem('sessionResults')){
+	      	sessionResults.push([surveyID, surveyName, {respondentID}]);
+	      	resultsIndex = sessionResults.length - 1;
+	      	resultsArray = sessionResults;
+	      	respondentIndex = 2;
+	      	sessionStorage.sessionResults = JSON.stringify(sessionResults);
 
-      if(!localStorage.getItem('results')){
-      	results.push([surveyID, surveyName, {respondentID}]);
-      	resultsIndex = results.length - 1;
-      	resultsArray = results;
-      	respondentIndex = 2;
-      	localStorage.results = JSON.stringify(results);
+	      }
+	      else{
+	      	sessionResults = JSON.parse(sessionStorage.sessionResults);
+	      	
 
+	      	for(var i =0; i < sessionResults.length; i++){
+	      		if(sessionResults[i][0] == surveyID){
+	      			resultsIndex = i;
+	      			found = true;
+	      		}
+	      	}
+
+	      	if(found == true){
+	      		sessionResults[resultsIndex].push({respondentID, surveyName});
+	      		respondentIndex = sessionResults[resultsIndex].length - 1
+	      		resultsArray = sessionResults;
+	      		sessionStorage.sessionResults = JSON.stringify(sessionResults);
+	      	}
+	      	else{
+	      		sessionResults.push([surveyID, surveyName, {respondentID}]);
+	      		resultsIndex = sessionResults.length - 1;
+	      		resultsArray = sessionResults;
+	      		respondentIndex = 2;
+	      		sessionStorage.sessionResults = JSON.stringify(sessionResults);
+	      	}
+	      }
       }
       else{
-      	results = JSON.parse(localStorage.results);
-      	
+	      	if(!localStorage.getItem('results')){
+	      	results.push([surveyID, surveyName, {respondentID}]);
+	      	resultsIndex = results.length - 1;
+	      	resultsArray = results;
+	      	respondentIndex = 2;
+	      	localStorage.results = JSON.stringify(results);
 
-      	for(var i =0; i < results.length; i++){
-      		if(results[i][0] == surveyID){
-      			resultsIndex = i;
-      			found = true;
-      		}
-      	}
+	      }
+	      else{
+	      	results = JSON.parse(localStorage.results);
+	      	
 
-      	if(found == true){
-      		results[resultsIndex].push({respondentID, surveyName});
-      		respondentIndex = results[resultsIndex].length - 1
-      		resultsArray = results;
-      		localStorage.results = JSON.stringify(results);
-      	}
-      	else{
-      		results.push([surveyID, surveyName, {respondentID}]);
-      		resultsIndex = results.length - 1;
-      		resultsArray = results;
-      		respondentIndex = 2;
-      		localStorage.results = JSON.stringify(results);
-      	}
+	      	for(var i =0; i < results.length; i++){
+	      		if(results[i][0] == surveyID){
+	      			resultsIndex = i;
+	      			found = true;
+	      		}
+	      	}
+
+	      	if(found == true){
+	      		results[resultsIndex].push({respondentID, surveyName});
+	      		respondentIndex = results[resultsIndex].length - 1
+	      		resultsArray = results;
+	      		localStorage.results = JSON.stringify(results);
+	      	}
+	      	else{
+	      		results.push([surveyID, surveyName, {respondentID}]);
+	      		resultsIndex = results.length - 1;
+	      		resultsArray = results;
+	      		respondentIndex = 2;
+	      		localStorage.results = JSON.stringify(results);
+	      	}
+	      }
       }
-
     }
 
     function initializeSurvey(){
@@ -485,16 +520,32 @@
          if(resultsArray[resultsIndex][respondentIndex][qCode] == null){
          	if(selectedAnswer.length > 1){
          		resultsArray[resultsIndex][respondentIndex][qCode] = selectedAnswer;
-         		localStorage["results"] = JSON.stringify(resultsArray);
+
+         		if(facilitated == false){
+         			sessionStorage["sessionResults"] = JSON.stringify(resultsArray);
+         		}
+         		else{
+         			localStorage["results"] = JSON.stringify(resultsArray);
+         		}
          	}
          	else if(selectedAnswer.length == 1){
          		resultsArray[resultsIndex][respondentIndex][qCode] = selectedAnswer[0];
-         		localStorage["results"] = JSON.stringify(resultsArray);
+         		if(facilitated == false){
+         			sessionStorage["sessionResults"] = JSON.stringify(resultsArray);
+         		}
+         		else{
+         			localStorage["results"] = JSON.stringify(resultsArray);
+         		}
          	}
          }
          else if(selectedAnswer.length == 1){
          	resultsArray[resultsIndex][respondentIndex][qCode] = selectedAnswer[0];
-         	localStorage["results"] = JSON.stringify(resultsArray);
+         	if(facilitated == false){
+         			sessionStorage["sessionResults"] = JSON.stringify(resultsArray);
+         		}
+         		else{
+         			localStorage["results"] = JSON.stringify(resultsArray);
+         		}
          }
 
          if(routeNext == ""){
@@ -565,7 +616,12 @@
                   if(survey.data[iterate][2].replace(/\s/g, '') == routeNext){
                   	if(resultsArray[resultsIndex][respondentIndex][survey.data[iterate][2]] == 98){
                   		resultsArray[resultsIndex][respondentIndex][survey.data[iterate][2]] = null;
-                  		localStorage["results"] = JSON.stringify(resultsArray);
+                  		if(facilitated == false){
+					         			sessionStorage["sessionResults"] = JSON.stringify(resultsArray);
+					         		}
+					         		else{
+					         			localStorage["results"] = JSON.stringify(resultsArray);
+					         		}
                   	}
                   	qNumber+=1;
                   	found = true;
@@ -574,11 +630,21 @@
                   else{
                   	if(resultsArray[resultsIndex][respondentIndex][survey.data[iterate][2]] == 98){
                   		resultsArray[resultsIndex][respondentIndex][survey.data[iterate][2]] = null;
-                  		localStorage["results"] = JSON.stringify(resultsArray);
+                  		if(facilitated == false){
+					         			sessionStorage["sessionResults"] = JSON.stringify(resultsArray);
+					         		}
+					         		else{
+					         			localStorage["results"] = JSON.stringify(resultsArray);
+					         		}
                   	}
                   	else{
                   		resultsArray[resultsIndex][respondentIndex][survey.data[iterate][2]] = 98;
-                  		localStorage["results"] = JSON.stringify(resultsArray);
+                  		if(facilitated == false){
+					         			sessionStorage["sessionResults"] = JSON.stringify(resultsArray);
+					         		}
+					         		else{
+					         			localStorage["results"] = JSON.stringify(resultsArray);
+					         		}
                   	}
                   	qNumber+=1;
                   	iterate = iterate + 1;
@@ -781,7 +847,12 @@
 
         // Record answer
         resultsArray[resultsIndex][respondentIndex][qCode] = 99;
-        localStorage["results"] = JSON.stringify(resultsArray);
+        if(facilitated == false){
+   				sessionStorage["sessionResults"] = JSON.stringify(resultsArray);
+     		}
+     		else{
+     			localStorage["results"] = JSON.stringify(resultsArray);
+     		}
 
         while(found != true){
         	if(surveyLength != iterate){
@@ -1005,7 +1076,6 @@
         var finished = false;
         var iterate = 1;
         var results = [];
-        results = JSON.parse(localStorage.getItem('results'));
         var surveyLength = survey.data.length;
         var surveyList = []
         surveyList = JSON.parse(localStorage.getItem('surveyList'));
@@ -1018,6 +1088,12 @@
         	}
         }
         
+        if(facilitated == false){
+        	results = JSON.parse(sessionStorage.getItem('sessionResults'));
+        }
+        else{
+        	results = JSON.parse(localStorage.getItem('results'));
+        }
 
         while(finished != true){
         	if(surveyLength != iterate){
@@ -1060,6 +1136,10 @@
           
           posting.done(function(  ) {
           	document.getElementById("uploadingScreen").style.display = "none";
+          	autoRedirect = true;
+            setTimeout(function () {
+							   window.location.href = "http://ootomast.000webhostapp.com/dosurvey"; 
+							}, 1000); //will call the function after 1 secs.
           });
           
           posting.fail(function(xhr, status, error) {
@@ -1067,6 +1147,10 @@
                   var errorMessage = xhr.status + ': ' + xhr.statusText
                   alert('Error - ' + errorMessage);
                   document.getElementById("uploadingScreen").style.display = "none";
+                  autoRedirect = true;
+                  setTimeout(function () {
+									   window.location.href = "http://ootomast.000webhostapp.com/dosurvey"; 
+									}, 1000); //will call the function after 1 secs.
                 })
         }
 
