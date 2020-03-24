@@ -68,9 +68,11 @@
 	.card{
 		height: 200px;
 		object-fit: cover;
-		border: 1px solid blue;
-		border-radius: 25px;
 		margin: 20px;
+		box-shadow: 8px 4px 5px 0px rgb(220, 220, 220);
+		background: white;
+		font-size: 30px;
+		font-family: 'Montserrat', sans-serif;
 	}
 
 	.card:hover{
@@ -178,10 +180,14 @@
 
 		.card{
 			height: 200px;
-			object-fit: cover;
-			border: 1px solid blue;
-			border-radius: 25px;
-			margin-top: 20px;
+	    object-fit: cover;
+	    margin-top: 20px;
+	    background: white;
+	    margin: 20px;
+    	box-shadow: 8px 4px 5px 0px rgb(220, 220, 220);
+    	font-size: 30px;
+		font-family: 'Montserrat', sans-serif;
+		overflow: hidden;
 		}
 
 		.float{
@@ -200,6 +206,7 @@
     /* Grid item css */
 
 	</style>
+
 	<script src="https://kit.fontawesome.com/637ce47f6a.js" crossorigin="anonymous"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:500&display=swap" rel="stylesheet">
@@ -226,7 +233,7 @@
 
 	<header>
           <div style="margin: 15px 10px ; display: flex;">
-              <h3 style="font-size: 25px"> Survey Results Available </h3>
+              <h3 style="font-size: 25px; font-family: Roboto; font-weight: 300;"> Survey Results Available </h3>
           </div>
     </header>
 
@@ -252,8 +259,25 @@
 	    mainNav.classList.toggle('active');
 	});
 
-  function deleteSurvey(){
+  function deleteResult(resultID){
+  	var key = 0;
+  	var rList = JSON.parse(localStorage.getItem('results'));
 
+  	if(confirm("Are you sure you want to delete this result? (This will only delete the results within the local storage)") == true){
+  		for(i=0; i < rList.length ; i++){
+	  		if(rList[i][0] == resultID){
+	  			key = i;
+	  		}
+	  	}
+
+	  	rList.splice(key, 1);
+
+	  	localStorage.setItem('results', JSON.stringify(rList));
+
+	  	setTimeout(function(){
+	        window.location.reload();
+	      },100);
+	  	}
   }
 
   function updateSurveyList(surveyName){
@@ -275,23 +299,20 @@
 
 	function generateSurveyList(){
 		var output = ""
-		if(!localStorage.getItem('surveyList')) {
-
-		} else {
 	    var surveyList = [];
 	    var results = [];
-	    surveyList = JSON.parse(localStorage.getItem('surveyList'));
-		  results = JSON.parse(localStorage.getItem('results'));
-		  for(var i = 0; i < surveyList.length ; i++){
-		  	for(var j = 0; j < results.length; j++){
-		  		if(surveyList[i][0] == results[j][0]){
-		  			output+= '<button type="submit" class="card animated fadeIn" name="survey" value="'+ surveyList[i][0] +'"> '+ surveyList[i][1] +'</button>';
-		  		}
+
+		results = JSON.parse(localStorage.getItem('surveyList'));
+		for(var j = 0; j < results.length; j++){
+		  		output+= '<div style="display: grid; position: relative;"><button type="submit" class="card animated fadeIn" name="survey" style="border-radius: 20px;" value="'+ results[j][0] +'"> '+ results[j][1] +'</button><a href="#" class="fas fa-trash-alt" style="position: absolute; top: 40px; right: 40px; color: grey; font-size: 25px;" onclick="deleteResult(\''+ results[j][0] +'\')"></a></div>';
 		  	}
-		  }
-		}
-		return output;
-	}
+
+		 return output;
+
+		 }
+
+		
+
 
 
 	function addSurvey(){

@@ -76,6 +76,7 @@ footer {
 
 #cBox{
   margin: 50px 10px;
+  margin-bottom: 80px;
   background-color: white;
   box-shadow: 1px 3px 11px 0px #e0e0e0;
 }
@@ -285,6 +286,7 @@ footer {
 #transitionTextCon{
   margin: 20px;
   height: 100%;
+  margin-bottom: 100px;
 }
 
 #transitionTextCon h3{
