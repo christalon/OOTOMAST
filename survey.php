@@ -340,6 +340,7 @@
     	var iterate = qIndex;
     	var choicesContainer = document.getElementById("cBox");
     	var backButton = document.getElementById("backButton");
+    	autoRedirect = false;
     	
     	noOfSelectable = survey.data[qIndex][1];
     	
@@ -452,6 +453,7 @@
         	routeNext = "";
         	routesTable = [];
         	selectedAnswer = {};
+        	autoRedirect = false;
 
         //Hide end screen
         document.getElementById("endScreen").style.display = "none";
@@ -461,6 +463,7 @@
         document.getElementById("qBox").style.display = "block";
         document.getElementById("choicesBox").style.display = "block";
         document.getElementById("nextBtn").parentElement.style.display = "inline-flex";
+        document.getElementById("prevBtn").parentElement.style.display = "inline-flex";
         document.getElementById("nextBtn").disabled = false;
         document.body.style.backgroundColor = "white";
 
@@ -671,6 +674,7 @@
         		setProgressBar();
         		document.getElementById("finishBtn").parentElement.style.display = "inline-flex";
         		document.getElementById('qText').innerHTML = "Please press the 'Done' button below to finish the survey.";
+        		document.getElementById('transitionText').innerHTML = "Please press the 'Done' button below to finish the survey.";
         		document.getElementById("passBtn").parentElement.style.display = "none";
         		document.getElementById("prevBtn").parentElement.style.display = "none";
         		document.getElementById("choicesBox").style.display = "none";
@@ -883,6 +887,7 @@
         		setProgressBar();
         		document.getElementById("finishBtn").parentElement.style.display = "inline-flex";
         		document.getElementById('qText').innerHTML = "Please press the 'Done' button below to finish the survey.";
+        		document.getElementById('transitionText').innerHTML = "Please press the 'Done' button below to finish the survey.";
         		document.getElementById("passBtn").parentElement.style.display = "none";
         		document.getElementById("prevBtn").parentElement.style.display = "none";
         		document.getElementById("choicesBox").style.display = "none";
@@ -1136,10 +1141,13 @@
           
           posting.done(function(  ) {
           	document.getElementById("uploadingScreen").style.display = "none";
-          	autoRedirect = true;
-            setTimeout(function () {
-							   window.location.href = "http://ootomast.000webhostapp.com/dosurvey"; 
-							}, 1000); //will call the function after 1 secs.
+          	if(facilitated == false){
+          	    autoRedirect = true;
+                setTimeout(function () {
+    							   window.location.href = "http://ootomast.000webhostapp.com/dosurvey"; 
+    							}, 1000); //will call the function after 1 secs.
+            }
+          	
           });
           
           posting.fail(function(xhr, status, error) {
@@ -1147,11 +1155,13 @@
                   var errorMessage = xhr.status + ': ' + xhr.statusText
                   alert('Error - ' + errorMessage);
                   document.getElementById("uploadingScreen").style.display = "none";
-                  autoRedirect = true;
-                  setTimeout(function () {
-									   window.location.href = "http://ootomast.000webhostapp.com/dosurvey"; 
-									}, 1000); //will call the function after 1 secs.
-                })
+                  if(facilitated == false){
+              	    autoRedirect = true;
+                    setTimeout(function () {
+        							   window.location.href = "http://ootomast.000webhostapp.com/dosurvey"; 
+        							}, 1000); //will call the function after 1 secs.
+                }
+            })
         }
 
         function setProgressBar(){
