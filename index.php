@@ -22,7 +22,7 @@
 	.main-nav {
 		list-style-type: none;
 	}
-	.nav-links,
+	#js-menu a,
 	.logo {
 		text-decoration: none;
 		color: rgba(255, 255, 255, 0.7);
@@ -163,6 +163,7 @@
 			margin-right: 30px;
 			flex-direction: row;
 			justify-content: flex-end;
+			margin-bottom: 0rem;
 		}
 		.main-nav li {
 			margin: 0;
@@ -227,6 +228,8 @@
 	<link rel="stylesheet" href="css/light-modal.min.css">
 	<link rel="stylesheet" href="css/animate.css">
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:500&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="css/compiled-4.10.1.min.css">
 	<title>OOTOMAST</title>
 </head>
 
@@ -261,47 +264,112 @@
 		bottom: 25;
 		right: 100;">
 
-		<a href="#addModal" class="float" id="modalBtn">
-			<i class="fas fa-plus"></i>
-		</a>
+		<button type="button" class="btn float" data-toggle="modal" id="modalBtn" style="border-radius: 50px; padding: 0; background-color: #229c43;" data-target= "#exampleModalCenter">
+			<i class="fas fa-plus" style="display: inline; color: white"></i>
+		</button>
 
-		<div class="light-modal" id="addModal" role="dialog" aria-labelledby="light-modal-label" aria-hidden="false">
-			<div class="light-modal-content animated zoomInUp">
-				<!-- light modal header -->
-				<div class="light-modal-header">
-					<h3 class="light-modal-heading">Add Survey</h3>
-					<a href="#" class="light-modal-close-icon" aria-label="close">&times;</a>
+		<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLongTitle">Add Survey</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+					</button>
 				</div>
-				<!-- light modal body -->
-				<div class="light-modal-body">
-					<p> Add survey via link</p>
-					<input type="text" id="url" placeholder="Enter URL"><br>
-					<input type="text" id="surveyNameURL" placeholder="Enter survey name">
-					<input type="button" value="Submit" onclick="parseURL()">
-					<br><br>
-					<p> Add survey via file upload </p>
-					<input type="file" value="Upload" id="files">
-					<input type="text" id="surveyNameFile" placeholder="Enter survey name">
-					<input type="button" value="Upload" onclick="parseUpload()">
-					<br><br>
-					<p> Add survey via code </p>
-					<input type="text" id="surveyCode" placeholder="Enter survey code">
-					<input type="button" value="Submit" onclick="getSurveyDB()">
-					<br><br>
-					<p> Create survey via Survey Builder </p>
-					<div class="my_content_container">
-						<a class="" href="surveybuilder.php">Create</a>
-					</div>    
+				<div class="modal-body">
+					<ul class="nav nav-tabs">
+						<li class="nav-item"><a class="nav-link active show" href="#file" data-toggle="tab">File</a></li>
+						<li class="nav-item"><a class="nav-link" href="#url" data-toggle="tab">URL</a></li>
+						<li class="nav-item"><a class="nav-link" href="#code" data-toggle="tab">Code</a></li>
+						<li class="nav-item"><a class="nav-link" href="surveybuilder.php" data-toggle="tab">Survey Builder</a></li>
+					</ul>
+
+					<div class="tab-content" style="width: auto;">
+						<div class="tab-pane active show" id="file" style="margin-top: 50px;">
+							<form class="needs-validation" novalidate onsubmit="return parseUpload()">
+								<div class="input-group mb-3">
+									<div class="input-group-prepend">
+										<span class="input-group-text">Upload</span>
+									</div>
+									<div class="custom-file">
+										<input type="file" class="custom-file-input" id="fileCSV" accept=".csv" required>
+										<div class="invalid-feedback">
+											Please choose a csv file.
+										</div>
+										<label class="custom-file-label" for="fileCSV">Choose file</label>
+									</div>
+								</div>
+								<div class="input-group mb-3">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="inputGroup-sizing-default">Name</span>
+									</div>
+									<input type="text" id="surveyNameFile" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" required>
+									<div class="invalid-feedback">
+										Please choose survey name.
+									</div>
+								</div>
+									<button type="submit" class="btn btn-success btn-lg btn-block" style="margin-bottom: 50px">Submit</button>
+							</form>	
+						</div>
+							
+						
+						<div class="tab-pane" id="url" style="margin-top: 50px;">
+							<form class="needs-validation" novalidate onsubmit="return parseURL()">
+								<div class="input-group mb-3">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="inputGroup-sizing-default">URL</span>
+									</div>
+									<input type="text" id="urlFile" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" required>
+									<div class="invalid-feedback">
+										Please enter URL.
+									</div>
+								</div>
+								<div class="input-group mb-3">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="inputGroup-sizing-default">Name</span>
+									</div>
+									<input type="text" id="surveyNameURL" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" required>
+									<div class="invalid-feedback">
+										Please choose survey name.
+									</div>
+								</div>
+									<button type="submit" class="btn btn-success btn-lg btn-block" style="margin-bottom: 50px">Submit</button>
+							</form>
+						</div> 
+							
+						<div class="tab-pane" id="code" style="margin-top: 50px;">
+							<form class="needs-validation" novalidate onsubmit="return getSurveyDB()">
+								<div class="input-group mb-3">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="inputGroup-sizing-default">Code</span>
+									</div>
+									<input type="text" id="surveyCode" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" required>
+									<div class="invalid-feedback">
+										Please enter a code.
+									</div>
+								</div>
+								<button type="submit" class="btn btn-success btn-lg btn-block" style="margin-bottom: 50px">Submit</button>
+							</form>
+						</div>
+						
+
+						<div class="tab-pane" id="builder">
+							content 1
+						</div>
+					</div> 
 				</div>
-				<!-- light modal footer -->
-				<div class="light-modal-footer">
-					<a href="#" class="light-modal-close-btn" aria-label="close">Close</a>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+				</div>
 				</div>
 			</div>
-		</div>
+			</div>
 
 		<script src="js/papaparse.js"></script>
-		<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 		<script src="js/mdb.min.js"></script>
 		<script type="text/javascript">
 	// Generate survey list elements
@@ -322,6 +390,24 @@
 		let bannerNode = document.querySelector('[alt="www.000webhost.com"]').parentNode.parentNode;
 		bannerNode.parentNode.removeChild(bannerNode);
 	}
+
+	(function() {
+		'use strict';
+		window.addEventListener('load', function() {
+		// Fetch all the forms we want to apply custom Bootstrap validation styles to
+		var forms = document.getElementsByClassName('needs-validation');
+		// Loop over them and prevent submission
+		var validation = Array.prototype.filter.call(forms, function(form) {
+		form.addEventListener('submit', function(event) {
+		if (form.checkValidity() === false) {
+		event.preventDefault();
+		event.stopPropagation();
+		}
+		form.classList.add('was-validated');
+		}, false);
+		});
+		}, false);
+		})();
 
 	$(window).resize(function() {
 		var el = $('#clickHere');
@@ -350,17 +436,18 @@
 	}
 
 	function getSurveyDB(){
+		
 		var code = document.getElementById("surveyCode").value;
 		var params = "sCode=" + code;
 		var data = [];
 		var surveyList = []
 		var found = false;
 		
-
-		xhr = new XMLHttpRequest();
-		xhr.open("POST", "getSurvey.php");
-		xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-		xhr.onreadystatechange = function() {//Call a function when the state changes.
+		if(document.getElementById("surveyCode").validity.valid == true){
+			xhr = new XMLHttpRequest();
+			xhr.open("POST", "getSurvey.php");
+			xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+			xhr.onreadystatechange = function() {//Call a function when the state changes.
 			if(xhr.readyState == 4 && xhr.status == 200) {
 				data = JSON.parse(xhr.responseText);
 		        //alert(data);
@@ -389,7 +476,10 @@
 		      
 		    }
 		    xhr.send(params);
-		  }
+		}
+		
+			return false;
+	}
 
 		  
 		  
@@ -420,10 +510,10 @@
 
 
     	  function parseURL(){
-    	  	var url = document.getElementById('url').value;
+    	  	var url = document.getElementById('urlFile').value;
     	  	var name = document.getElementById('surveyNameURL').value;
 
-    	  	if(name != ""){
+    	  	if(document.getElementById('urlFile').validity.valid == true && document.getElementById('surveyNameURL').validity.valid){
 		//alert(url);
 		console.log(url)
 		Papa.parse(url, {
@@ -444,16 +534,18 @@
 	else{
 		// error no survey name entered
 	}
+
+	return false;
 }
 
 function parseUpload(){
-	var file = document.getElementById("files").files[0];
+	var file = document.getElementById("fileCSV").files[0];
 	var name = document.getElementById('surveyNameFile').value;
 	var jsonResponse;
 	var code = Math.random().toString(36).substr(2, 6);
 	
-
-	var xhr = new XMLHttpRequest();
+	if(file != null && document.getElementById('surveyNameFile').validity.valid == true){
+		var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState == XMLHttpRequest.DONE) {
 			jsonResponse =  JSON.parse(xhr.responseText);
@@ -479,14 +571,17 @@ function parseUpload(){
 				//localStorage.results = JSON.stringify(results);
 				localStorage.setItem(code+'', JSON.stringify(results));
 			}
-		});
-    	    }
-    	    else{
-			//error no survey name
-		}
+			});
+				}
+				else{
+			}
 
-		alert("This is your survey's unique code: " + code);
-		
+			alert("This is your survey's unique code: " + code);
+			return false;
+		}
+		else{
+			return false;
+		}
 	}
 
 	function uploadSurveyMeta(surveyCode, surveyID, surveyName){
@@ -565,10 +660,10 @@ function parseUpload(){
 			
 			for(var i = 0; i < surveyList.length ; i++){
 				if(surveyList[i][1].length < 30){
-					output+= '<div style="display: grid; position: relative;"><button type="submit" class="card animated fadeIn" name="surveyId" style="border-radius: 20px;" value="'+ surveyList[i][0] +'"> '+ surveyList[i][1] +'</button><a href="#" class="fas fa-trash-alt" style="position: absolute; top: 40px; right: 40px; color: grey; font-size: 25px;" onclick="deleteSurvey(\''+ surveyList[i][0] +'\')"></a></div>';
+					output+= '<div style="display: grid; position: relative;"><button type="submit" class="card animated fadeIn" name="surveyId" style="border-radius: 20px; display: block; flex-direction: unset;" value="'+ surveyList[i][0] +'"> '+ surveyList[i][1] +'</button><a href="#" class="fas fa-trash-alt" style="position: absolute; top: 40px; right: 40px; color: grey; font-size: 25px;" onclick="deleteSurvey(\''+ surveyList[i][0] +'\')"></a></div>';
 				}
 				else{
-					output+= '<div style="display: grid; position: relative;"><button type="submit" class="card animated fadeIn" name="surveyId" style="border-radius: 20px; font-size: 15px;" value="'+ surveyList[i][0] +'"> '+ surveyList[i][1] +'</button><a href="#" class="fas fa-trash-alt" style="position: absolute; top: 40px; right: 40px; color: grey; font-size: 25px;" onclick="deleteSurvey(\''+ surveyList[i][0] +'\')"></a></div>';
+					output+= '<div style="display: grid; position: relative;"><button type="submit" class="card animated fadeIn" name="surveyId" style="border-radius: 20px; font-size: 15px; display: block; flex-direction: unset;" value="'+ surveyList[i][0] +'"> '+ surveyList[i][1] +'</button><a href="#" class="fas fa-trash-alt" style="position: absolute; top: 40px; right: 40px; color: grey; font-size: 25px;" onclick="deleteSurvey(\''+ surveyList[i][0] +'\')"></a></div>';
 				}
 				
 			}
