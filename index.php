@@ -282,7 +282,7 @@
 						<li class="nav-item"><a class="nav-link active show" href="#file" data-toggle="tab">File</a></li>
 						<li class="nav-item"><a class="nav-link" href="#url" data-toggle="tab">URL</a></li>
 						<li class="nav-item"><a class="nav-link" href="#code" data-toggle="tab">Code</a></li>
-						<li class="nav-item"><a class="nav-link" href="surveybuilder.php" data-toggle="tab">Survey Builder</a></li>
+						<li class="nav-item"><a class="nav-link" href="#builder" data-toggle="tab">Survey Builder</a></li>
 					</ul>
 
 					<div class="tab-content" style="width: auto;">
@@ -331,7 +331,7 @@
 									</div>
 									<input type="text" id="surveyNameURL" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" required>
 									<div class="invalid-feedback">
-										Please choose survey name.
+										Please add a survey name.
 									</div>
 								</div>
 									<button type="submit" class="btn btn-success btn-lg btn-block" style="margin-bottom: 50px">Submit</button>
@@ -355,7 +355,7 @@
 						
 
 						<div class="tab-pane" id="builder">
-							content 1
+							<a class="btn btn-success btn-lg btn-block" href="surveybuilder.php">Go to Survey Builder</a>
 						</div>
 					</div> 
 				</div>

@@ -218,6 +218,7 @@
     /* Grid item css */
 
 	</style>
+	<title>Survey Builder</title>
 	<link rel="stylesheet" href="css/compiled-4.10.1.min.css">
 	<script src="https://kit.fontawesome.com/637ce47f6a.js" crossorigin="anonymous"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1" /> 
@@ -232,7 +233,7 @@
 		<span class="navbar-toggle" id="js-navbar-toggle">
         <i class="fas fa-bars"></i>
     </span>
-    <a href="#" class="logo animated fadeInLeft"><img src="assets/ootomast.svg"></a>
+    <a href="index.php" class="logo animated fadeInLeft"><img src="assets/ootomast.svg"></a>
       <ul class="main-nav" id="js-menu" style="margin-bottom: 0px;">
         <li>
             <a href="index.php" class="nav-links" style="color: white;">Surveys</a>
@@ -261,14 +262,47 @@
    			<p>Categories are for mining purposes to help you categorize the choices in identifying groups</p>
    		</div>
   </div>
-  <div>
-  	<button id="newQuestionBtn" type="button" class="btn btn-success" onclick="showBuilder(1)">New Question</button>
-  	<button id="newChoiceBtn" type="button" class="btn btn-success" onclick="showBuilder(2)">New Choice</button>
-  	<button id="newTransitionBtn" type="button" class="btn btn-success" onclick="showBuilder(3)">New Transition</button>
+  <div >
+  	<div id = "builderMenu">
+  		<button id="newSurveyButton" type="button" class="btn btn-success" onclick="showBuilder(1)">New Survey</button>
+  	</div>
   </div>
-  
-  <div id="builderBody" style="padding: 10px;">
-  	<h5 style="margin-bottom: 20px;">Questions List</h5>
+
+  <div id = "builderMenu2" style = "display :none">
+  		<button id="newSurveyButton2" type="button" class="btn btn-success" onclick="showBuilder(1)">New Survey</button>
+  	</div>
+
+
+  <div id="surveyTitleBuilder" style="display: none; margin: 10px;">
+  	<form class="needs-validation" novalidate onsubmit="return showBuilder(2)">
+  		<div class="md-form">
+	  		<input type="text" id="SurveyTitle" class="form-control" required>
+			  <div class="invalid-feedback">
+					Please add a survey title.
+				</div>
+	  		<label for="SurveyTitle">Survey Title</label>
+	  	</div>
+  		
+	  	<button type="submit" class="btn btn-success">Add Survey</button>
+	</div>
+
+
+<div id="questionsMenu" style = "display :none">
+	<button id="addQuestionButton" type="button" class="btn btn-success" onclick="showBuilder(3)">Add Question</button>
+	<button id="addTransitionButton" type="button" class="btn btn-success" onclick="showBuilder(5)">Add Transition Page</button>
+	<button id="menuButton" type="button" class="btn btn-success" onclick="builderMenu()">Back to Builder Menu</button>
+
+  </div>
+
+  <div id = "choiceMenu" style = "display :none">
+ 
+ 	<button id="addNewQuestion" type="button" class="btn btn-success" onclick="showBuilder(3)">Add New Question</button>
+  	<button id="newChoice" type="button" class="btn btn-success" onclick="showBuilder(4)">Add Choices</button>
+  	<button id="addTransitionButton2" type="button" class="btn btn-success" onclick="showBuilder(5)">Add New Transition Page</button>
+  	<button id="doneButtone" type="button" class="btn btn-success" onclick="builderMenu()">Done</button>
+	</div>
+  <div id="builderBody" style = "display :none; margin: 10px;">
+  	<h5  id = "qListName" style="margin-bottom: 20px;">Questions List</h5>
   	<div id="questionsTable">
   		<!--Table-->
 		<table id="tablePreview" class="table table-sm">
@@ -276,6 +310,7 @@
 		  <thead>
 		    <tr>
 		      <th>#</th>
+		      <th>Choice Count</th>
 		      <th>Question Code</th>
 		      <th>Question Text</th>
 		      <th>Question Translation</th>
@@ -308,30 +343,28 @@
 	  		<textarea id="qTranslation" class="md-textarea form-control" rows="3"></textarea>
 	  		<label for="qTranslation">Question Translation</label>
 	  	</div>
-	  	<button id="add" type="button" class="btn btn-success" onclick="addQuestion()">Add</button>
+	  	<button id="addQuestionBtn" type="button" class="btn btn-success" onclick="addQuestion()">Add Question</button>
 	</div>
   	
   	
   	<div id="choiceBuilder" style="display: none">
   		<h5 style="margin-bottom: 20px;">Choices List</h5>
-  		<div>
-  			<select class="mdb-select md-form colorful-select dropdown-primary" id="qCodeList" name="qCodeList" searchable="Search here..">
-  				
-			</select>
-  		</div>
+  		
 		
   		<div id="choicesTable">
 	  		<!--Table-->
-			<table id="tablePreview" class="table table-sm">
+			<table id="tablePreview2" class="table table-sm">
 			<!--Table head-->
 			  <thead>
 			    <tr>
 			      <th>#</th>
 			      <th>Category</th>
+			      <th>Question Code </th>
 			      <th>Route</th>
 			      <th>Text</th>
 			      <th>Translation</th>
 			      <th>Action</th>
+			      
 			    </tr>
 			  </thead>
 			  <!--Table head-->
@@ -342,6 +375,17 @@
 			</table>
 			<!--Table-->
   		</div>
+
+  		<div id="dropDowns">
+  			<select class="mdb-select md-form colorful-select dropdown-primary" id="qCodeList" name="qCodeList" value = "Select Question Code" searchable="Search here..">
+  				
+			</select>
+
+			<select class="mdb-select md-form colorful-select dropdown-primary" id="routeCodeList" name="routeCodeList" value = "Select Route To" searchable="Search here where to route.." data-stop-refresh="true">
+  				
+			</select>
+  		</div>
+
   		<div class="md-form">
 	  		<input type="text" id="category" class="form-control">
 	  		<label for="category">Set Choice Category</label>
@@ -354,12 +398,8 @@
 	  		<textarea id="cTranslation" class="md-textarea form-control" rows="3"></textarea>
 	  		<label for="cTranslation">Choice Translation</label>
 	  	</div>
-	  	<div>
-  			<select class="mdb-select" id="routeCodeList" name="routeCodeList" searchable="Search here..">
-  				
-			</select>
-  		</div>
-  		<button id="add" type="button" class="btn btn-success" onclick="addChoice()">Add</button>
+	  
+  		<button id="addChoiceBtn" type="button" class="btn btn-success" onclick="addChoice()" >Add</button>
   	</div>
 
   	<div id="transitionBuilder" style="display: none">
@@ -372,9 +412,9 @@
 	  		<textarea id="tTranslation" class="md-textarea form-control" rows="3"></textarea>
 	  		<label for="tTranslation">Transition Translation</label>
 	  	</div>
-	  	<button id="add" type="button" class="btn btn-success" onclick="addTransition()">Add</button>
+	  	<button id="addTSlide" type="button" class="btn btn-success" onclick="addTransition()">Add Transition Slide</button>
 	</div>
-  </div>
+
 
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
@@ -382,6 +422,7 @@
 	<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
 	<script src="js/mdb.min.js"></script>
+
 <script type="text/javascript">
 	$('.mdb-select').materialSelect({
 	});
@@ -389,44 +430,158 @@
 	var selectedQCode;
 	var routeSelected = 1;
 
-	$('#qCodeList').change(function() {
+	$('#qCodeList').change(function() 
+	{
 		listChoices($('select#qCodeList').val());
 		selectedQCode = $('select#qCodeList').val();
     });
 
-    $('#routeCodeList').change(function() {
+    $('#routeCodeList').change(function() 
+    {
 		routeSelected = $('select#routeCodeList').val();
     });
 
 
 	var survey = {};
 	var qCodeList = [];
+	var surveyListData = []
 	var questionCount = 0;
+	var surveyCode;
+
+	(function() {
+		'use strict';
+		window.addEventListener('load', function() {
+		// Fetch all the forms we want to apply custom Bootstrap validation styles to
+		var forms = document.getElementsByClassName('needs-validation');
+		// Loop over them and prevent submission
+		var validation = Array.prototype.filter.call(forms, function(form) {
+		form.addEventListener('submit', function(event) {
+		if (form.checkValidity() === false) {
+		event.preventDefault();
+		event.stopPropagation();
+		}
+		form.classList.add('was-validated');
+		}, false);
+		});
+		}, false);
+		})();
 
 	initializeSurveyArray();
+	
+	function createSurveyData(name){
+		surveyCode = Math.random().toString(36).substr(2, 6);
+
+		surveyListData = [surveyCode, name];
+	}
+
+	function choiceMenu()
+	{
+		var cMenu = document.getElementById("choiceMenu");
+		var cBuilder = document.getElementById("choiceBuilder");
+		var qBuilder = document.getElementById("questionBuilder");
+		var qTable = document.getElementById("questionsTable");
+		var bBody = document.getElementById("builderBody");
+		var tBuilder = document.getElementById("transitionBuilder");
+		var qListName = document.getElementById("qListName");
+
+
+		qListName.style.display = "block";
+		bBody.style.display = "block";
+		tBuilder.style.display = "none";
+		cBuilder.style.display = "none";
+		cMenu.style.display = "block";
+		qBuilder.style.display = "none";
+		qTable.style.display = "block";
+
+		document.getElementById("category").value = "";
+		document.getElementById("cText").value = "";
+		document.getElementById("cTranslation").value = "";
+
+
+
+	}
 
 	function initializeSurveyArray(){
 		survey.data = [];
 	}
 
-	function showBuilder(id){
+	function showBuilder(id)
+	{
+		
+		var qMenu = document.getElementById("questionsMenu");
+		var bMenu = document.getElementById("builderMenu2");
+		var sBuilder = document.getElementById("surveyTitleBuilder");
 		var qBuilder = document.getElementById("questionBuilder");
 		var cBuilder = document.getElementById("choiceBuilder");
 		var tBuilder = document.getElementById("transitionBuilder");
+		var tBuilder2 = document.getElementById("transitionBuilder");
+		var qListName = document.getElementById("qListName");
 
 		qBuilder.style.display = "none";
 		cBuilder.style.display = "none";
 		tBuilder.style.display = "none";
+		tBuilder2.style.display = "none";
+		qMenu.style.display = "none";
+		
 
-		if(id == 1){
-			qBuilder.style.display = "block";
+		if(id == 1)
+		{
+			bMenu.style.display = "none";
+			sBuilder.style.display = "block";
+			newSurveyButton.style.display = "none";
+			//qBuilder.style.display = "block";
 		}
-		else if(id == 2){
+		else if(id == 2)
+		{
+			if(document.getElementById("SurveyTitle").validity.valid == true){
+				sBuilder.style.display = "none";
+				surveyTitleBuilder.style.display = "none";
+				qMenu.style.display = "block";
+
+				createSurveyData(document.getElementById("SurveyTitle").value)
+			}
+		}
+
+		else if(id == 3)
+		{
+			questionsTable.style.display = "block";
+			builderBody.style.display = "block";
+			questionBuilder.style.display = "block";
+			//cBuilder.style.display = "block";
+		}
+		else if(id == 4){
+			builderBody.style.display = "block";
+			questionsTable.style.display = "none";
+			qListName.style.display = "none";
 			cBuilder.style.display = "block";
+			//cBuilder.style.display = "block";
 		}
-		else{
+		else
+		{
+			builderBody.style.display = "block";
+			questionsTable.style.display = "none";
+			qListName.style.display = "none";
 			tBuilder.style.display = "block";
+			qMenu.style.display = "none";
+			
 		}
+		
+		return false;
+	}
+
+	function builderMenu()
+	{
+		var builderM = document.getElementById("builderMenu2");
+		var qMenu = document.getElementById("questionsMenu");
+		var cMenu = document.getElementById("choiceMenu");
+		var bBuilder = document.getElementById("builderBody");
+
+		cMenu.style.display = "none";
+		bBuilder.style.display = "none";
+		qMenu.style.display = "none";
+		builderM.style.display = "block";
+
+		document.getElementById("SurveyTitle").value = "";
 	}
 
 	function addQuestion(){
@@ -449,7 +604,9 @@
 		}
 
 		if(qCode.value != ""){
-			if(qCodeList.includes(qCode.value) == false){
+			if(qCodeList.includes(qCode.value) == false)
+			{
+				
 				question[2] = qCode.value;
 				qCodeList.push(qCode.value);
 				success += 1;
@@ -471,13 +628,9 @@
 			alert("Question Text cannot be empty!")
 		}
 
-		if(qTranslation.value != ""){
-			question[4] = qTranslation.value;
-			success += 1;
-		}
-		else{
-			alert("Question Translation cannot be empty!")
-		}
+
+		question[4] = qTranslation.value;
+		success += 1;
 
 		if(success == 4){
 			survey.data.push(question);
@@ -487,23 +640,34 @@
 			qTranslation.value = "";
 			questionCount += 1;
 
-			qTable.innerHTML += "<tr><th scope='row'>"+ questionCount +"</th><td>" + question[2]+ "</td><td>"+  question[3] +"</td><td>"+ question[4] +"</td><td><button id='delete' type='button' class='btn btn-danger' onclick='deleteQuestion("+ question[2] +")' style='margin:0; padding: 5 15 5 15;'>Delete</button></td></tr>";
+			qTable.innerHTML += "<tr><th scope='row'>"+ questionCount +"</th><td>" +question[1]+ "</td><td>"+ question[2]+ "</td><td>"+  question[3] +"</td><td>"+ question[4] +"</td><td><button id='delete' type='button' class='btn btn-danger' onclick='deleteQuestion()' style='margin:0; padding: 5 15 5 15;'>Delete</button></td></tr>";
+
+			alert("Question successfully added!");
 
 			updateQCodeList();
+
 		}
+		choiceMenu();
 	}
 
 	function updateQCodeList(){
 		var codeList = document.getElementById("qCodeList");
 		var routeList = document.getElementById("routeCodeList");
 
-		routeList.innerHTML = "<option value='1' disabled='true' selected='true'>Select Route (None if not routing)</option><option value='1'>None</option>";
+		$('#routeCodeList').materialSelect({destroy:true});
+		$('#routeCodeList').empty();
+		$('#routeCodeList').data('stop-refresh', true);
+
+		routeList.innerHTML = "<option value='1' disabled selected>Select Route To</option><option value=''>None</option><option value='END'>END</option>";
+		
 		codeList.innerHTML = "<option value='1' disabled selected>Select Question Code</option>";
 		
 		for(var i = 0; i < qCodeList.length; i++){
 			codeList.innerHTML += "<option value="+ qCodeList[i] +">"+ qCodeList[i] +"</option>";
 			routeList.innerHTML += "<option value="+ qCodeList[i] +">"+ qCodeList[i] +"</option>";
 		}
+
+		$('#routeCodeList').materialSelect();
 	}
 
 	function listChoices(qCode){
@@ -526,7 +690,7 @@
 		                      eof = 1;
 		                    }
 		                    else{
-		                      cTable.innerHTML += "<tr><th scope='row'>"+ cIndex +"</th><td>" + survey.data[cIndex][0]+ "</td><td>"+ survey.data[cIndex][1] +"</td><td>"+  survey.data[cIndex][3] +"</td><td>"+ survey.data[cIndex][4] +"</td><td><button id='delete' type='button' class='btn btn-danger' onclick='deleteChoice("+ qCode +","+ survey.data[cIndex][2] +" )' style='margin:0; padding: 5 15 5 15;'>Delete</button></td></tr>";
+		                      cTable.innerHTML += "<tr><th scope='row'>"+ cIndex +"</th><td>" + survey.data[cIndex][0]+ "</td><td>"+ qCode +"</td><td>"+ survey.data[cIndex][1] +"</td><td>"+ survey.data[cIndex][3] +"</td><td>"+ survey.data[cIndex][4] +"</td><td><button id='delete1' type='button' class='btn btn-danger' onclick='deleteChoice()' style='margin:0; padding: 5 15 5 15;'>Delete</button></td></tr>";
 		                      cIndex = cIndex+1;
 		                    }
 	                  	}
@@ -550,19 +714,25 @@
 		}
 	}
 
-	function addChoice(){
+	function addChoice()
+	{
 		var choice = []
+		var routeCode = document.getElementById("routeTo");
+		var selectedCode = document.getElementById("qCodeList")
 		var category = document.getElementById("category");
 		var cText = document.getElementById("cText");
 		var cTranslation = document.getElementById("cTranslation");
 		var success = 0;
+		var cMenu = document.getElementById("choiceMenu");
 
 		if(survey.data.length == 0){
 			alert("Survey doesn't have questions yet!");
 		}
-		else{
+		else
+		{
 			success += 1;
 		}
+
 
 		if(category.value != ""){
 			if(category.value[1] == null){
@@ -584,9 +754,17 @@
 			choice[1] = "";
 		}
 
+	    var selectedValue = selectedCode.options[selectedCode.selectedIndex].value;
+		if (selectedValue == "1")
+		{
+		    alert("Please select question code");
+		}
+
 		var index;
 		index = findQuestionIndex(selectedQCode);
-		choice[2] =  (index[0] - index[1])-2;
+
+		
+		choice[2] =  ((index[0] - index[1])-1)+"";
 
 		if(cText.value != ""){
 			choice[3] = cText.value;
@@ -609,8 +787,15 @@
 			indexes = findQuestionIndex(selectedQCode);
 			survey.data.splice(indexes[0], 0, choice);
 			listChoices(selectedQCode);
+			alert("Choice successfully added!");
+		}
+		else
+		{
+			alert("Please try again");
 		}
 
+		choiceMenu();
+		
 	}
 
 	function findQuestionIndex(qCode){
@@ -647,21 +832,25 @@
                 iterate = iterate + 1;
               }
             }
-        result.push(cIndex+1);
+        result.push(cIndex);
         result.push(iterate);
 
         return result;
 	}
 
 	function addTransition(){
+		var bBuilder = document.getElementById("builderBody");
 		var transition = [];
 		var tText = document.getElementById("tText");
 		var tTranslation = document.getElementById("tTranslation");
 		var qTable = document.getElementById("questionsTable").getElementsByTagName('tbody')[0];
 		var success = 0;
+		var qListName = document.getElementById("qListName");
+
+		builderBody.style.display = "block";
 
 		transition[0] = "^";
-		transition[1] = 0;
+		transition[1] = "0";
 		transition[2] = "aaa";
 
 		if(tText.value != ""){
@@ -680,22 +869,95 @@
 			alert("Transition Translation cannot be empty!");
 		}
 
-		if(success == 2){
+		if(success == 2)
+		{
 			survey.data.push(transition);
 			questionCount += 1;
 
-			qTable.innerHTML += "<tr><th scope='row'>"+ questionCount +"</th><td>" + transition[2]+ "</td><td>"+  transition[3] +"</td><td>"+ transition[4] +"</td><td><button id='delete' type='button' class='btn btn-danger' onclick='deleteQuestion("+ transition[2] +")' style='margin:0; padding: 5 15 5 15;'>Delete</button></td></tr>";
+			qTable.innerHTML += "<tr><th scope='row'>"+ questionCount +"</th><td>" + "NA" +  "</td><td>" +transition[2]+ "</td><td>"+  transition[3] +"</td><td>"+ transition[4] +"</td><td><button id='delete' type='button' class='btn btn-danger' onclick='deleteQuestion()' style='margin:0; padding: 5 15 5 15;'>Delete</button></td></tr>";
+
+			alert("Transiliton slide successfully added!");
+			qListName.style.display = "none";
+
+
 		}
+
+		choiceMenu();
 	}
 
-	function deleteQuestion(qCode){
+	function deleteQuestion()
+	{
+	
+		var index, table = document.getElementById("tablePreview");
+		for(var i = 1; i < table.rows.length;i++)
+		{
+			var value = table.rows[i].cells[2].innerHTML;
+				
+
+			table.rows[i].cells[5].onclick = function()
+			{
+
+				var c = confirm("do you want to delete this row");
+				if(c==true)
+				{
+					for (var j = 0; j < 10;j++)
+					{
+						
+						if (qCodeList[j] == value)
+						{
+							var count = j;
+							qCodeList.splice(count,1);
+
+						}
+					}
+
+					index = this.parentElement.rowIndex;
+					table.deleteRow(index);
+					updateQCodeList();
+
+				}
+			}
+
+		}
+
 
 	}
 
-	function deleteChoice(qCode, cIndex){
+	function deleteChoice()
+	{
+		var index, table = document.getElementById("tablePreview2");
+
+		for(var i = 1; i < table.rows.length;i++)
+		{
+			//var value = table.rows[i].cells[2].innerHTML;
+				
+
+			table.rows[i].cells[5].onclick = function()
+			{
+
+				var c = confirm("do you want to delete this row");
+				if(c==true)
+				{
+					/*for (var j = 0; j < 10;j++)
+					{
+						
+						if (qCodeList[j] == value)
+						{
+							var count = j;
+							qCodeList.splice(count,1);
+
+						}
+					}*/
+
+					index = this.parentElement.rowIndex;
+					table.deleteRow(index);
+
+				}
+			}
+
+		}
 
 	}
-
 
 </script>
 </body>
