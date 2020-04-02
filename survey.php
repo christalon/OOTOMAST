@@ -125,8 +125,6 @@
     	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
     	<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
     	<script src="js/mdb.min.js"></script>
-    	<script src="js/papaparse.js"></script>
-    	<script src="js/jquery.cookie.js"></script>
     	<script src="https://kit.fontawesome.com/637ce47f6a.js" crossorigin="anonymous"></script>
     	<script type="text/javascript">
 
