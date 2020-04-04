@@ -234,6 +234,30 @@
 </head>
 
 <body>
+	<div id="uploadingScreen" style="height: 100%;
+	width: 100%;
+	position: absolute;
+	z-index: 9999;
+	background: #4256459c;
+	display:none;
+	text-align: center">
+	<h1 class="mx-auto" style="color: white;
+	top: 50%;
+	transform: translateY(-50%);
+	position: relative;
+	-webkit-transform: translateY(-50%);">
+	Uploading Survey...Please Wait
+	</h1>
+	<img style="
+	top: 50%;
+	transform: translateY(-50%);
+	position: relative;
+	-webkit-transform: translateY(-50%);
+	display: flex;
+	left: 50%;
+	-webkit-transform: translateX(-50%);" src="assets/loading2.gif">
+	</div>
+
 	<nav class="navbar" id="navbarvis">
 		<span class="navbar-toggle" id="js-navbar-toggle">
 			<i class="fas fa-bars"></i>

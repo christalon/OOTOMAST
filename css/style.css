@@ -333,3 +333,10 @@ footer {
   margin: auto;
   margin-top: 2%;
 }
+
+@media screen and (min-width: 768px) {
+
+  .vidPlayer{
+    width: 560px;
+  }
+}

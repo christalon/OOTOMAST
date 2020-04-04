@@ -65,7 +65,7 @@
 	<nav class="navbar navbar-light" style="background-color: #14861ac4;">
 		<a class="navbar-brand" id="backButton" href="index.php" style="color: white;"><i class="fas fa-arrow-left"></i></a>
 		<span class="navbar-text mr-auto" id="surveyTitle">
-			Navbar text with an inline element
+
 		</span>
 		<div class="ckbx-style-7" style="display: flex; margin-top: 5px;">
 			<h3 style="font-size: 17px; padding-top: 1px; margin-right: 8px; color: white;
@@ -153,6 +153,10 @@
     var surveyName;
     var facilitated = true;
     var autoRedirect = false;
+	var youtubeReady = false;
+	var playerCount = 0;
+	var videoUrl = [];
+	var withMedia = false;
 
     <?php
     $sId = $_POST["surveyId"];
@@ -177,16 +181,46 @@
     facilitated = "<?php echo $facilitated ?>";
 
       //alert(surveyID);
-      setSurvey();
-      initializeResultsArray();
-      initializeSurvey();
-      initializeProgressBar();
 
       window.onbeforeunload = function(event) {
       	if(autoRedirect == false){
       		return "Are you sure you want to exit?";
       	}
       };
+
+	  // Youtube API ----------------------
+	  var tag = document.createElement('script');
+
+	  tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+	  function youtube_parser(url){
+            var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+            var match = url.match(regExp);
+            return (match&&match[7].length==11)? match[7] : false;
+	  }
+	  
+	  function imgur_parser(url){
+        var regExp = /(http:|https:)?\/\/(www\.)?(imgur.com)?\/?(a\S+)?(\S+)?/;
+			var match = url.match(regExp);
+			if(match[4] == null){
+				return match[5];
+			}
+			else{
+				return match[4];
+			}
+      }
+
+	  function onYouTubeIframeAPIReady() {
+        youtubeReady = true;
+		setSurvey();
+		initializeResultsArray();
+		initializeSurvey();
+		initializeProgressBar();
+      }
+
+	  //-------------------------------------
       
       window.onload = () => {
       	let bannerNode = document.querySelector('[alt="www.000webhost.com"]').parentNode.parentNode;
@@ -349,7 +383,7 @@
     	document.getElementById("endScreen").style.display = "none";
             //if the first question is a transition, disable pass button
             if(noOfSelectable == 0){
-            	generateTransitionScreen(true, survey.data[qIndex][3]);
+            	generateTransitionScreen(true, createTextLinks_(survey.data[qIndex][3]));
             }
             
             if(translated == true){
@@ -358,7 +392,7 @@
             }
             else{
             	document.getElementById('qText').innerHTML = ""+survey.data[qIndex][3];
-            	if(survey.data[qIndex][3].length < 50){
+            	if(survey.data[qIndex][3].length < 50 && withMedia == false){
             		document.getElementById('surveyTitle').innerHTML = ""+createTextLinks_(survey.data[qIndex][3]);
             	}
             }
@@ -391,7 +425,20 @@
 
         	document.getElementById("transitionTextCon").style.display = "block";
         	document.getElementById("transitionText").innerHTML = text;
-        	if(text.length < 50){
+
+			if(playerCount > 0){
+				for(var i = 0; i < playerCount ; i++){
+					var player;
+					var id = youtube_parser(videoUrl[i]);
+					player = new YT.Player('player'+i, {
+						height: 300,
+						width: "100%",
+						videoId: id,
+					});
+				}
+			}
+
+        	if(text.length < 50 && withMedia == false){
         		document.getElementById("instructions").style.display = "block";
         		document.getElementById("transitionText").style.fontSize = "2.5rem";
         		document.getElementById("transitionText").style.textAlign = "center";
@@ -1170,17 +1217,38 @@
         }
         
         function createTextLinks_(text) {
+			videoUrl = [];
+			var spaceText;
+			var matchText;
+			playerCount = 0;
+			withMedia = false;
 
-        	return (text || "").replace(
-        		/([^\S]|^)(((https?\:\/\/)|(www\.))(\S+))/gi,
-        		function(match, space, url){
-        			var hyperlink = url;
-        			if (!hyperlink.match('^https?:\/\/')) {
-        				hyperlink = 'http://' + hyperlink;
-        			}
-        			return space + '<a href="' + hyperlink + '" target="_blank"> Link </a>';
-        		}
-        		);
+			if(youtubeReady == true){
+				text = (text || "").replace(
+					/(http:|https:)?\/\/(www\.)?(youtube.com|youtu.be)\/(watch)?(\?v=)?(\S+)?/gi,
+					function(match, space, url){
+						videoUrl.push(match);
+						var replaceText = '<div style="margin: 2%; text-align: center;"><div class="vidPlayer" id="player'+ playerCount +'"></div></div>';
+						playerCount++;
+						withMedia = true;
+						return replaceText;
+					}
+				);
+			}
+
+			text = (text || "").replace(
+					/(http:|https:)?\/\/(www\.)?(imgur.com)?\/?(a\S+)?(\S+)?/gi,
+					function(match, space, url){
+						var imgid = imgur_parser(match);
+						var replaceText = '<div style="margin: 3%"><img src="'+match+'" style="width:100%; height:100%"></div>';
+						withMedia = true;
+						return replaceText;
+					}
+				);
+
+
+
+			return text;
         };
 
       </script>

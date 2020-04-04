@@ -5,6 +5,8 @@ function getSurveyDB(){
     var data = [];
     var surveyList = []
     var found = false;
+
+    document.getElementById("uploadingScreen").style.display = "block";
     
     if(document.getElementById("surveyCode").validity.valid == true){
         xhr = new XMLHttpRequest();
@@ -44,8 +46,6 @@ function getSurveyDB(){
         return false;
 }
 
-      
-      
       
       function getCsvDropbox(path, code){
           var xhr = new XMLHttpRequest();
@@ -108,6 +108,8 @@ var jsonResponse;
 var code = Math.random().toString(36).substr(2, 6);
 
 if(file != null && document.getElementById('surveyNameFile').validity.valid == true){
+    document.getElementById("uploadingScreen").style.display = "block";
+
     var xhr = new XMLHttpRequest();
 xhr.onreadystatechange = function() {
     if (xhr.readyState == XMLHttpRequest.DONE) {
