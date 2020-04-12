@@ -1237,7 +1237,7 @@
 			}
 
 			text = (text || "").replace(
-					/(http:|https:)?\/\/(www\.)?(imgur.com)?\/?(a\S+)?(\S+)?/gi,
+					/(http:|https:)?\/\/(www\.)?(imgur.com)\/?(a\S+)?(\S+)?/gi,
 					function(match, space, url){
 						var imgid = imgur_parser(match);
 						var replaceText = '<div style="margin: 3%"><img src="'+match+'" style="width:100%; height:100%"></div>';
@@ -1246,7 +1246,16 @@
 					}
 				);
 
-
+			text = (text || "").replace(
+				/([^\S]|^)(((https?\:\/\/)|(www\.))(\S+))/gi,
+				function(match, space, url){
+				var hyperlink = url;
+				if (!hyperlink.match('^https?:\/\/')) {
+					hyperlink = 'http://' + hyperlink;
+				}
+				return space + '<a href="' + hyperlink + '"> Link </a>';
+				}
+			);
 
 			return text;
         };

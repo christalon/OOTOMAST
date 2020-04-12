@@ -182,6 +182,10 @@
     margin-left: auto;
   }
 
+  canvas{
+    height:600px !important;
+  }
+
   @media screen and (min-width: 768px) {
     #navbarvis {
       display: flex;
@@ -326,6 +330,9 @@ left: 50%;
     <select id="qSelect" class="mdb-select md-form colorful-select dropdown-primary" multiple searchable="Search here..">
       <option value="" disabled selected>Choose questions</option>
     </select>
+    <select id="sSelect" class="mdb-select md-form colorful-select dropdown-primary" multiple searchable="Search here..">
+      <option value="" disabled selected>Choose questions to stack</option>
+    </select>
   </div>
 
   <main>
@@ -362,11 +369,15 @@ left: 50%;
         var surveyData = [];
         var resultsTotal = [];
         var results = [];
+        var stackedResults = [];
         var qCode;
         var question = [];
         var cIndex;
         var resultsIndex;
         var qCodeList = [];
+        var stackedTotal = 0;
+        var stackedRequestFinished = false;
+        var stackedQCodes = [];
 
         <?php $sId = $_POST["survey"]; ?>
 
@@ -388,8 +399,22 @@ left: 50%;
        });
 
         $("#qSelect").change(function() {
-          //resultsCounter($('select#qSelect').val());;
+          
           iterateQuestions($('select#qSelect').val());
+
+          if($('select#qSelect').val().length > 1){
+            $parent = $("#sSelect").parent()
+            $parent.children("input").prop("disabled", true);
+          }
+          else{
+            $parent = $("#sSelect").parent()
+            $parent.children("input").prop("disabled", false);
+          }
+        });
+
+        $("#sSelect").change(function() {
+          stackedQCodes = $('select#qSelect').val();
+          stackedGenerator($('select#qSelect').val(), $('select#sSelect').val());
         });
 
 
@@ -423,8 +448,14 @@ left: 50%;
           var boxIterate = 1;
           var choicesContainer = document.getElementById("cBox");
           var qSelectBox = document.getElementById("qSelect");
+          var sSelectBox = document.getElementById("sSelect");
           var surveyLength = survey.length;
           var results = [];
+
+          $('#sSelect').materialSelect({destroy:true});
+		      $('#sSelect').empty();
+          $('#sSelect').data('stop-refresh', true);
+          sSelectBox.innerHTML += '<option value="" disabled selected>Choose questions to stack</option>';
           
           while(found != true){
             if(survey[iterate][0] == "^" && survey[iterate][1] > 0){
@@ -442,6 +473,7 @@ left: 50%;
               if(surveyLength != boxIterate){
                 if(survey[boxIterate][0] == "^" && survey[boxIterate][1] > 0){
                   qSelectBox.innerHTML += "<option value="+survey[boxIterate][2]+">"+survey[boxIterate][3]+"</option>"
+                  sSelectBox.innerHTML += "<option value="+survey[boxIterate][2]+">"+survey[boxIterate][3]+"</option>"
                   boxIterate = boxIterate + 1;
                 }
                 else{
@@ -452,6 +484,8 @@ left: 50%;
                 finished = true;
               }
             }
+          
+            $('#sSelect').materialSelect();
 
           // Change Question Text
           if(found == true){
@@ -523,7 +557,7 @@ left: 50%;
           
           xhr.open("POST", "getresults.php");
           xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-		    xhr.onreadystatechange = function() {//Call a function when the state changes.
+		      xhr.onreadystatechange = function() {//Call a function when the state changes.
           if(xhr.readyState == 4 && xhr.status == 200) {
             results = JSON.parse(xhr.responseText);
           }
@@ -566,7 +600,7 @@ left: 50%;
                 }
               }
               xhr.open('POST', 'https://content.dropboxapi.com/2/files/download');
-              xhr.setRequestHeader('Authorization', 'ACCESS KEY');
+              xhr.setRequestHeader('Authorization', 'Bearer fk7KkPvKLrAAAAAAAAAAWMrD_8cLKxixtP2iQj6okuuuVVFKJaKmRUZ8OpIDXfrQ');
               xhr.setRequestHeader('Content-Type', 'application/octet-stream');
               xhr.setRequestHeader('Dropbox-API-Arg', '{"path":"'+path+'"}');
               xhr.send();
@@ -584,6 +618,105 @@ left: 50%;
             }
           }
 
+          function getStackedResults(baseQuestion, stackCodes, stackChoices, baseQuestionLength){
+            var params = "surveyID=" + surveyID + "&baseCode=" + baseQuestion + "&stackCodes=" + stackCodes + "&stackChoices=" + stackChoices + "&baseQuestionLength=" + baseQuestionLength;
+          
+            xhr = new XMLHttpRequest();
+            
+            xhr.open("POST", "getStackResults.php");
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {//Call a function when the state changes.
+              if(xhr.readyState == 4 && xhr.status == 200) {
+                stackedResults = JSON.parse(xhr.responseText);
+                stackBuilder(baseQuestion, stackCodes);
+                //alert(stackedResults);
+              }
+            }
+          
+            xhr.send(params);
+          }
+
+          function stackedGenerator(baseQuestion, stackCodes){
+            var baseLabels = [];
+            var charDataset = [];
+            var dataset = [];
+            var choicesLength = [];
+            var labels = [];
+
+            baseLabels = getChoices(baseQuestion);
+
+
+            for(var z = 0; z < stackCodes.length; z++){
+              var label = [];
+              label = getChoices(stackCodes[z]);
+              labels.push(label);
+              choicesLength.push(labels[z].length);
+            }
+
+
+            if(stackCodes != ""){
+              getStackedResults(baseQuestion, stackCodes, choicesLength, baseLabels.length);
+            }
+          }
+
+          function stackBuilder(baseQuestion, stackCodes){
+            var stackedBarDataset = [];
+            var baseChoices = getChoices(baseQuestion);
+            var baseChoicesLength = baseChoices.length;
+            var totalChoices;
+            var choicesLength = [];
+            var maxValue = 0;
+            var maxLabelLength;
+            var surveyQuestionTitle;
+            var stackLabels = [];
+
+            for(var z = 0; z < stackCodes.length; z++){
+              var stackLabel = [];
+              stackLabel = getChoices(stackCodes[z])
+              stackLabels.push(stackLabel);
+              choicesLength.push(stackLabels[z].length);
+            }
+
+            for(var i = 0; i < stackCodes.length; i++){
+              for(var j = 0; j < choicesLength[i]; j++){
+                var stackedData = [];
+                var stackedBarDataDescription = {};
+                for(var k = 0; k < baseChoicesLength; k++){
+                  stackedData[k] = stackedResults[i][j][k].length;
+
+                  if(maxValue < stackedData[k]){
+                    maxValue = stackedData[k];
+                  }
+                }
+                stackedBarDataDescription.data = stackedData;
+                stackedBarDataDescription.backgroundColor = '#'+Math.floor(Math.random()*16777215).toString(16);;
+                stackedBarDataDescription.label = stackLabels[i][j];
+                stackedBarDataset.push(stackedBarDataDescription);
+              }
+
+            }
+
+            for (var i = 0; i < surveyData.length; i++){
+              if(surveyData[i][2] == baseQuestion){
+                surveyQuestionTitle = surveyData[i][3];
+              }
+            }
+
+            for(var i = 0; i < baseChoices.length; i++){
+              if(baseChoices[i].length > maxLabelLength){
+                maxLabelLength = baseChoices[i].length;
+              }
+            }
+
+            // missing maxlabellength and maxvalue
+            document.getElementById("chartContainer").innerHTML = "";
+            var container = document.getElementById("chartContainer");
+            var canvas = document.createElement('div');
+            canvas.innerHTML = "<div class='container-md' style='margin:3%; position: relative'><canvas id='chart1'></canvas><div>";
+            container.appendChild(canvas.firstChild);
+            createBar(stackedBarDataset, baseChoices, maxValue, 1, surveyQuestionTitle, maxLabelLength);
+          }
+          
           function resultsCounter(code, iteration){
             var questionResults;
             var finalCount = [];
@@ -631,7 +764,7 @@ left: 50%;
             
             bardata.push({
               barPercentage: 0.5,
-              label: "Respondent/s",
+              labels: labels,
               data: dataset,
               backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9"]
             })
@@ -694,7 +827,7 @@ left: 50%;
             typeChart = "horizontalBar";
             
             xOptions.push({
-              stacked: false,
+              stacked: true,
               ticks: {
                 beginAtZero: true,
                 max: maxValue+10,
@@ -708,7 +841,7 @@ left: 50%;
             });
             
             yOptions.push({
-              stacked: false,
+              stacked: true,
               ticks: {
                 beginAtZero: true
               }
@@ -716,7 +849,7 @@ left: 50%;
           }
           else{
            yOptions.push({
-            stacked: false,
+            stacked: true,
             ticks: {
               beginAtZero: true,
               max: maxValue+10,
@@ -730,7 +863,7 @@ left: 50%;
           });
            
            xOptions.push({
-            stacked: false,
+            stacked: true,
             ticks: {
               beginAtZero: true
             }
@@ -744,7 +877,7 @@ left: 50%;
             datasets: fCount
           },
           options:{
-            maintainAspectRatio: true,
+            maintainAspectRatio: false,
             responsive: true,
             legend: { display: true},
             scales: {
