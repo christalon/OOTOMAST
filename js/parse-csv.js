@@ -62,7 +62,7 @@ function getSurveyDB(){
           }
         }
         xhr.open('POST', 'https://content.dropboxapi.com/2/files/download');
-        xhr.setRequestHeader('Authorization', 'Bearer fk7KkPvKLrAAAAAAAAAAWMrD_8cLKxixtP2iQj6okuuuVVFKJaKmRUZ8OpIDXfrQ');
+        xhr.setRequestHeader('Authorization', 'ACCESS CODE');
         xhr.setRequestHeader('Content-Type', 'application/octet-stream');
         xhr.setRequestHeader('Dropbox-API-Arg', '{"path":"'+path+'"}');
         xhr.send();
@@ -119,7 +119,7 @@ xhr.onreadystatechange = function() {
           }
         }
         xhr.open('POST', 'https://content.dropboxapi.com/2/files/upload');
-        xhr.setRequestHeader('Authorization', 'Bearer fk7KkPvKLrAAAAAAAAAAWMrD_8cLKxixtP2iQj6okuuuVVFKJaKmRUZ8OpIDXfrQ');
+        xhr.setRequestHeader('Authorization', 'ACCESS CODE');
         xhr.setRequestHeader('Content-Type', 'application/octet-stream');
         xhr.setRequestHeader('Dropbox-API-Arg', '{"path":"/csv/'+name+'.csv", "mode":{".tag":"overwrite"}}');
         xhr.send(file);
