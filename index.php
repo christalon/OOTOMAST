@@ -27,6 +27,7 @@
 		text-decoration: none;
 		color: rgba(255, 255, 255, 0.7);
 	}
+
 	.main-nav li {
 		text-align: center;
 		margin: 15px auto;
@@ -149,6 +150,10 @@
 		box-shadow: 1px 4px 5px 0px rgb(0, 0, 0);
 	}
 
+	#card-container{
+		margin-top: 80px;
+	}
+
 	@media screen and (min-width: 768px) {
 		#navbarvis {
 			display: flex;
@@ -258,7 +263,7 @@
 	-webkit-transform: translateX(-50%);" src="assets/loading2.gif">
 	</div>
 
-	<nav class="navbar" id="navbarvis">
+	<nav class="navbar" id="navbarvis" style="position: fixed; top: 0; width: 100%; z-index: 9999;">
 		<span class="navbar-toggle" id="js-navbar-toggle">
 			<i class="fas fa-bars"></i>
 		</span>
@@ -275,7 +280,7 @@
 			</li>
 		</nav>
 
-		<div class="animated fadeIn">
+		<div class="animated fadeIn" id="card-container">
 			<form id="form-id" method="post" action="survey.php">
 				<div class="cards animated fadeIn" id="gridItemHolder">
 

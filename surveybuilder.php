@@ -441,6 +441,14 @@
 		routeSelected = $('select#routeCodeList').val();
     });
 
+	let mainNav = document.getElementById('js-menu');
+	let navBarToggle = document.getElementById('js-navbar-toggle');
+
+	navBarToggle.addEventListener('click', function () {
+		
+		mainNav.classList.toggle('active');
+	});
+
 
 	var survey = {};
 	var qCodeList = [];

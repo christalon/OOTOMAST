@@ -14,8 +14,11 @@
     padding: 0;
     margin: 0;
   }
-  body {
-    font-family: 'Josefin Sans', sans-serif;
+  html, body {
+    font-family: 'Montserrat', sans-serif;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
   }
   #navbarvis {
     font-size: 18px;
@@ -183,7 +186,7 @@
   }
 
   canvas{
-    height:600px !important;
+    height: 600px !important
   }
 
   @media screen and (min-width: 768px) {
@@ -295,6 +298,52 @@ display: flex;
 left: 50%;
 -webkit-transform: translateX(-50%);" src="assets/loading2.gif">
 </div>
+<div id="loadingScreen" style="height: 100%;
+  width: 100%;
+  position: absolute;
+  z-index: 9999;
+  background: #4256459c;
+  display:none;
+  text-align: center">
+  <h1 class="mx-auto" style="color: white;
+  top: 50%;
+  transform: translateY(-50%);
+  position: relative;
+  -webkit-transform: translateY(-50%);">
+  Fetching Results...Please Wait
+</h1>
+<img style="
+top: 50%;
+transform: translateY(-50%);
+position: relative;
+-webkit-transform: translateY(-50%);
+display: flex;
+left: 50%;
+-webkit-transform: translateX(-50%);" src="assets/loading2.gif">
+</div>
+<div id="loadingStack" style="height: 100%;
+  width: 100%;
+  position: absolute;
+  z-index: 9999;
+  background: #4256459c;
+  display:none;
+  text-align: center">
+  <h1 class="mx-auto" style="color: white;
+  top: 50%;
+  transform: translateY(-50%);
+  position: relative;
+  -webkit-transform: translateY(-50%);">
+  Generating Graph...Please Wait
+</h1>
+<img style="
+top: 50%;
+transform: translateY(-50%);
+position: relative;
+-webkit-transform: translateY(-50%);
+display: flex;
+left: 50%;
+-webkit-transform: translateX(-50%);" src="assets/loading2.gif">
+</div>
 <nav class="navbar" id="navbarvis">
   <span class="navbar-toggle" id="js-navbar-toggle">
     <i class="fas fa-bars"></i>
@@ -315,13 +364,11 @@ left: 50%;
   <header>
     <div style="margin: 15px 10px ; display: flex;">
       <h3 style="font-size: 25px"> Results </h3>
-      <div name="navButtons" id="uploadBar" class="btn-group btn-group-justified" role="group">
+      <div name="navButtons" id="uploadBar" class="btn-group btn-group-justify" role="group">
         <button type="button" class="btn btn-primary" id="uploadBtn" style="
-        margin-left: auto;" onclick="uploadResults()">Upload</button>
+        margin-left: auto; float: right;" onclick="uploadResults()">Upload</button>
         <button type="button" class="btn btn-primary" id="uploadBtn" style="
-        margin-left: auto;" onclick="downloadResults()">Download</button>
-        <button type="button" class="btn btn-primary" id="optionsBtn" style="
-        margin-left: auto;">Options</button>
+        margin-left: auto; float: right;" onclick="downloadResults()">Download</button>
       </div>
     </div>
   </header>
@@ -425,6 +472,8 @@ left: 50%;
         
         function getResultsIndex(){
           var results = [];
+
+          document.getElementById("loadingScreen").style.display = "block";
 
           if(!localStorage.getItem("results")){
             
@@ -560,6 +609,7 @@ left: 50%;
 		      xhr.onreadystatechange = function() {//Call a function when the state changes.
           if(xhr.readyState == 4 && xhr.status == 200) {
             results = JSON.parse(xhr.responseText);
+            document.getElementById("loadingScreen").style.display = "none";
           }
         }
         
@@ -600,7 +650,7 @@ left: 50%;
                 }
               }
               xhr.open('POST', 'https://content.dropboxapi.com/2/files/download');
-              xhr.setRequestHeader('Authorization', 'ACCESS CODE');
+              xhr.setRequestHeader('Authorization', 'Bearer fk7KkPvKLrAAAAAAAAAAVwRxiFVN59RZPK04m1imA0qk22EGjOP_IUEV8bwb9uJk');
               xhr.setRequestHeader('Content-Type', 'application/octet-stream');
               xhr.setRequestHeader('Dropbox-API-Arg', '{"path":"'+path+'"}');
               xhr.send();
@@ -655,6 +705,7 @@ left: 50%;
 
 
             if(stackCodes != ""){
+              document.getElementById("loadingStack").style.display = "block";
               getStackedResults(baseQuestion, stackCodes, choicesLength, baseLabels.length);
             }
           }
@@ -666,7 +717,7 @@ left: 50%;
             var totalChoices;
             var choicesLength = [];
             var maxValue = 0;
-            var maxLabelLength;
+            var maxLabelLength = 0;
             var surveyQuestionTitle;
             var stackLabels = [];
 
@@ -714,6 +765,7 @@ left: 50%;
             var canvas = document.createElement('div');
             canvas.innerHTML = "<div class='container-md' style='margin:3%; position: relative'><canvas id='chart1'></canvas><div>";
             container.appendChild(canvas.firstChild);
+            document.getElementById("loadingStack").style.display = "none";
             createBar(stackedBarDataset, baseChoices, maxValue, 1, surveyQuestionTitle, maxLabelLength);
           }
           
