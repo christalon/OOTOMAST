@@ -229,6 +229,29 @@
 </head>
 
 <body>
+<div id="uploadingScreen" style="height: 100%;
+  width: 100%;
+  position: absolute;
+  z-index: 9999;
+  background: #4256459c;
+  display:none;
+  text-align: center">
+  <h1 class="mx-auto" style="color: white;
+  top: 50%;
+  transform: translateY(-50%);
+  position: relative;
+  -webkit-transform: translateY(-50%);">
+  Uploading Survey...Please Wait
+</h1>
+<img style="
+top: 50%;
+transform: translateY(-50%);
+position: relative;
+-webkit-transform: translateY(-50%);
+display: flex;
+left: 50%;
+-webkit-transform: translateX(-50%);" src="assets/loading2.gif">
+</div>
 	<nav class="navbar" id="navbarvis">
 		<span class="navbar-toggle" id="js-navbar-toggle">
         <i class="fas fa-bars"></i>
@@ -299,7 +322,7 @@
  	<button id="addNewQuestion" type="button" class="btn btn-success" onclick="showBuilder(3)">Add New Question</button>
   	<button id="newChoice" type="button" class="btn btn-success" onclick="showBuilder(4)">Add Choices</button>
   	<button id="addTransitionButton2" type="button" class="btn btn-success" onclick="showBuilder(5)">Add New Transition Page</button>
-  	<button id="doneButtone" type="button" class="btn btn-success" onclick="builderMenu()">Done</button>
+  	<button id="doneButton" type="button" class="btn btn-success" onclick="saveSurvey()">Done</button>
 	</div>
   <div id="builderBody" style = "display :none; margin: 10px;">
   	<h5  id = "qListName" style="margin-bottom: 20px;">Questions List</h5>
@@ -422,6 +445,7 @@
 	<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
 	<script src="js/mdb.min.js"></script>
+	<script src="js/papaparse.min.js"></script>
 
 <script type="text/javascript">
 	$('.mdb-select').materialSelect({
@@ -603,6 +627,8 @@
 		var question = [];
 		question[0] = "^";
 
+		var qCodeListData = [];
+
 		if(isNaN(parseInt(noSelectable.value)) == false){
 			question[1] = noSelectable.value;
 			success += 1;
@@ -616,7 +642,8 @@
 			{
 				
 				question[2] = qCode.value;
-				qCodeList.push(qCode.value);
+				qCodeListData[0] = qCode.value;
+				//qCodeList.push(qCode.value);
 				success += 1;
 			}
 			else{
@@ -630,6 +657,7 @@
 
 		if(qText.value != ""){
 			question[3] = qText.value;
+			qCodeListData[1] = qText.value;
 			success += 1;
 		}
 		else{
@@ -650,6 +678,8 @@
 
 			qTable.innerHTML += "<tr><th scope='row'>"+ questionCount +"</th><td>" +question[1]+ "</td><td>"+ question[2]+ "</td><td>"+  question[3] +"</td><td>"+ question[4] +"</td><td><button id='delete' type='button' class='btn btn-danger' onclick='deleteQuestion()' style='margin:0; padding: 5 15 5 15;'>Delete</button></td></tr>";
 
+			qCodeList.push(qCodeListData);
+
 			alert("Question successfully added!");
 
 			updateQCodeList();
@@ -668,11 +698,11 @@
 
 		routeList.innerHTML = "<option value='1' disabled selected>Select Route To</option><option value=''>None</option><option value='END'>END</option>";
 		
-		codeList.innerHTML = "<option value='1' disabled selected>Select Question Code</option>";
+		codeList.innerHTML = "<option value='1' disabled selected>Select Question</option>";
 		
 		for(var i = 0; i < qCodeList.length; i++){
-			codeList.innerHTML += "<option value="+ qCodeList[i] +">"+ qCodeList[i] +"</option>";
-			routeList.innerHTML += "<option value="+ qCodeList[i] +">"+ qCodeList[i] +"</option>";
+			codeList.innerHTML += "<option value="+ qCodeList[i][0] +">"+ qCodeList[i][1] +"</option>";
+			routeList.innerHTML += "<option value="+ qCodeList[i][0] +">"+ qCodeList[i][1] +"</option>";
 		}
 
 		$('#routeCodeList').materialSelect();
@@ -782,15 +812,11 @@
 			alert("Choice Text cannot be empty!");
 		}
 
-		if(cTranslation.value != ""){
-			choice[4] =  cTranslation.value;
-			success += 1;
-		}
-		else{
-			alert("Choice Translation cannot be empty!");
-		}
 
-		if(success == 4){
+		choice[4] =  cTranslation.value;
+		success += 1;
+
+		if(success >= 4){
 			var indexes;
 			indexes = findQuestionIndex(selectedQCode);
 			survey.data.splice(indexes[0], 0, choice);
@@ -869,15 +895,10 @@
 			alert("Transition text cannot be empty!");
 		}
 
-		if(tTranslation.value != ""){
-			transition[4] = tTranslation.value;
-			success += 1;
-		}
-		else{
-			alert("Transition Translation cannot be empty!");
-		}
 
-		if(success == 2)
+		transition[4] = tTranslation.value;
+
+		if(success == 1)
 		{
 			survey.data.push(transition);
 			questionCount += 1;
@@ -965,6 +986,69 @@
 
 		}
 
+	}
+
+	function uploadSurveyMeta(surveyCode, surveyID, surveyName) {
+		var params = "sID=" + surveyID + "&sCode=" + surveyCode + "&sName=" + surveyName;
+				
+		xhr = new XMLHttpRequest();
+		
+		xhr.open("POST", "uploadsurvey.php");
+		xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		xhr.onreadystatechange = function() {//Call a function when the state changes.
+			if(xhr.readyState == 4 && xhr.status == 200) {
+				// Add survey to surveyList
+				if(!localStorage.getItem('surveyList')){
+					var surveyData = [];
+					surveyData.push(surveyListData);
+
+					localStorage.setItem("surveyList", JSON.stringify(surveyData))
+				}
+				else{
+					var surveyData = [];
+					surveyData = JSON.parse(localStorage.getItem('surveyList'));
+					surveyData.push(surveyListData);
+
+					localStorage.setItem("surveyList", JSON.stringify(surveyData));
+				}
+
+				// Set survey data to localStorage
+				localStorage.setItem(surveyListData[0], JSON.stringify(survey));
+
+				// Redirect
+				setTimeout(function () {
+					window.location.replace("http://ootomast.000webhostapp.com/index.php");
+				}, 100);
+			}
+		}
+
+		xhr.send(params);
+	}
+
+
+	function saveSurvey(){
+		var r = confirm("Are you sure you want to finish building a survey?");
+		if (r == true) {
+			document.getElementById("uploadingScreen").style.display = "block";
+
+			//Upload survey to Dropbox
+			var xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState == XMLHttpRequest.DONE) {
+					jsonResponse = JSON.parse(xhr.responseText);
+					uploadSurveyMeta(surveyListData[0], jsonResponse["id"], surveyListData[1]);
+				}
+			};
+			xhr.open("POST", "https://content.dropboxapi.com/2/files/upload");
+			xhr.setRequestHeader("Authorization", "Bearer fk7KkPvKLrAAAAAAAAAAVwRxiFVN59RZPK04m1imA0qk22EGjOP_IUEV8bwb9uJk");
+			xhr.setRequestHeader("Content-Type", "application/octet-stream");
+			xhr.setRequestHeader(
+			"Dropbox-API-Arg",
+			'{"path":"/csv/' + surveyListData[1] + '.csv", "mode":{".tag":"overwrite"}}'
+			);
+
+			xhr.send(Papa.unparse(survey));
+		}
 	}
 
 </script>

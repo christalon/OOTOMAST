@@ -326,7 +326,7 @@
 										<div class="invalid-feedback">
 											Please choose a csv file.
 										</div>
-										<label class="custom-file-label" for="fileCSV">Choose file</label>
+										<label id="fileInputLabel" class="custom-file-label" for="fileCSV" style="overflow: hidden;">Choose file</label>
 									</div>
 								</div>
 								<div class="input-group mb-3">
@@ -396,7 +396,7 @@
 			</div>
 
 		<script src="js/papaparse.min.js"></script>
-		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8=" crossorigin="anonymous"></script>
+		<script src="https://code.jquery.com/jquery-3.5.0.slim.min.js" integrity="sha256-MlusDLJIP1GRgLrOflUQtshyP0TwT/RHXsI1wWGnQhs=" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 		<script src="js/mdb.min.js"></script>
@@ -464,6 +464,15 @@
 			});
 		}
 	}
+
+	$('input[type="file"]').change(function(e){
+		var fileName = "Choose File"
+		if(e.target.files[0] != null){
+			fileName = e.target.files[0].name;
+		}
+
+        $('.custom-file-label').html(fileName);
+    });
 
 </script>
 </body>

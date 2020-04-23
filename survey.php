@@ -225,14 +225,17 @@
       window.onload = () => {
       	let bannerNode = document.querySelector('[alt="www.000webhost.com"]').parentNode.parentNode;
       	bannerNode.parentNode.removeChild(bannerNode);
-      }
+	  }
+	  
 
-      function choiceSelected(item){
-      	this.resetChoiceColor();
+      function choiceSelected(item, isCheckbox){
+		
+		resetChoiceColor();
 
-      	item.firstElementChild.checked = true; 
-      	item.firstElementChild.click();
-      	
+		item.firstElementChild.checked = true; 
+		if(isCheckbox == false){
+			item.firstElementChild.click();
+		}
       	item.style.backgroundColor = '#4aa24f2b';
       }
 
@@ -374,7 +377,8 @@
     	var backButton = document.getElementById("backButton");
     	autoRedirect = false;
     	
-    	noOfSelectable = survey.data[qIndex][1];
+		noOfSelectable = survey.data[qIndex][1];
+		document.getElementById("transitionTextCon").style.display = "none";
     	
     	if(facilitated == false){
     		backButton.style.display = "none";
@@ -384,7 +388,10 @@
             //if the first question is a transition, disable pass button
             if(noOfSelectable == 0){
             	generateTransitionScreen(true, createTextLinks_(survey.data[qIndex][3]));
-            }
+			}
+			else{
+				document.getElementById("nextBtn").disabled = "true";
+			}
             
             if(translated == true){
             	document.getElementById('qText').innerHTML = ""+survey.data[qIndex][(3+1)];
@@ -419,9 +426,9 @@
         //hide items if true, otherwise return to normal
         $('body').animate({ scrollTop: top }, 0);
         if(state == true){
-        	document.getElementById("passBtn").parentElement.style.display = "none";
+			document.getElementById("passBtn").parentElement.style.display = "none";
         	document.getElementById("qBox").style.display = "none";
-        	document.getElementById("choicesBox").style.display = "none";
+			document.getElementById("choicesBox").style.display = "none";
 
         	document.getElementById("transitionTextCon").style.display = "block";
         	document.getElementById("transitionText").innerHTML = text;
@@ -590,11 +597,21 @@
          	resultsArray[resultsIndex][respondentIndex][qCode] = selectedAnswer[0];
          	if(facilitated == false){
          			sessionStorage["sessionResults"] = JSON.stringify(resultsArray);
-         		}
-         		else{
-         			localStorage["results"] = JSON.stringify(resultsArray);
-         		}
-         }
+			}
+			else{
+				localStorage["results"] = JSON.stringify(resultsArray);
+			}
+		 }
+		 else if(selectedAnswer.length > 1){
+			resultsArray[resultsIndex][respondentIndex][qCode] = selectedAnswer;
+
+			if(facilitated == false){
+				sessionStorage["sessionResults"] = JSON.stringify(resultsArray);
+			}
+			else{
+				localStorage["results"] = JSON.stringify(resultsArray);
+			}
+		}
 
          if(routeNext == ""){
          	var existingRoute = Object.keys(routesTable)[Object.values(routesTable).indexOf(qCode)];
@@ -831,7 +848,8 @@
         if(found == true){
           //alert(qIndex);
           setProgressBar();
-          noOfSelectable = survey.data[qIndex][1];
+		  noOfSelectable = survey.data[qIndex][1];
+		  qCode = survey.data[qIndex][2];
           if(translated == true){
           	translate();
             //document.getElementById('qText').innerHTML = ""+survey.data[qIndex][(2+1)];
@@ -867,8 +885,16 @@
         	$('body').animate({ scrollTop: top }, 0);
         }
 
-        //clear sets
-        selectedAnswer = [];
+		
+		//clear sets
+		selectedAnswer = [];
+		if(Array.isArray(resultsArray[resultsIndex][respondentIndex][qCode])){
+			selectedAnswer = resultsArray[resultsIndex][respondentIndex][qCode];
+		}
+		else if(resultsArray[resultsIndex][respondentIndex][qCode] != null){
+			selectedAnswer.push(resultsArray[resultsIndex][respondentIndex][qCode]);
+		}
+
         routeNext = ""
 
         if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null || survey.data[qIndex][1] == 0){
@@ -1019,14 +1045,14 @@
             if(noOfSelectable == 1){
             	if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null){
             		if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] == survey.data[cIndex][2]){
-            			output+= '<div class="buttonContainer" onclick="choiceSelected(this)"><input type="radio" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +', null)" class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'" checked>';
+            			output+= '<div class="buttonContainer" style="background:#4aa24f2b;" onclick="choiceSelected(this, false)"><input type="radio" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +', null)" class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'" checked>';
             		}
             		else{
-            			output+= '<div class="buttonContainer" onclick="choiceSelected(this)"><input type="radio" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +', null)" class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
+            			output+= '<div class="buttonContainer" onclick="choiceSelected(this, false)"><input type="radio" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +', null)" class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
             		}
             	}
             	else{
-            		output+= '<div class="buttonContainer" onclick="choiceSelected(this)"><input type="radio" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +', null)" class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
+            		output+= '<div class="buttonContainer" onclick="choiceSelected(this, false)"><input type="radio" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +', null)" class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
             	}
             	
             	if(translated == true){
@@ -1039,14 +1065,14 @@
             else{
             	if(resultsArray[resultsIndex][respondentIndex][survey.data[qIndex][2]] != null){
             		if(findExistingAnswer(resultsIndex, respondentIndex, survey.data[qIndex][2], survey.data[cIndex][2]) == true){
-            			output+= '<div class="buttonContainer" onclick="choiceSelected(this)"><input type="checkbox" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +', this.parentElement)" class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'" checked>';
+            			output+= '<div class="buttonContainer" style="background:#4aa24f2b;" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +', this)"><input type="checkbox" class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'" checked>';
             		}
             		else{
-            			output+= '<div class="buttonContainer"><input type="checkbox" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +', this.parentElement), " class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
+            			output+= '<div class="buttonContainer" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +', this)"><input type="checkbox" class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
             		}
             	}
             	else{
-            		output+= '<div class="buttonContainer"><input type="checkbox" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +', this.parentElement)" class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
+            		output+= '<div class="buttonContainer" onclick="setAnswer('+ survey.data[cIndex][2] +', '+ cIndex +', this)"><input type="checkbox" class="form-check-input" id="choice'+ cIndex +'" name="choice1" value="'+ survey.data[cIndex][2] +'">';
             	}
             	
             	if(translated == true){
@@ -1065,11 +1091,18 @@
       function findExistingAnswer(resultsIndex, respondentIndex, qCode, num){
       	var found = false;
 
-      	for(var i = 0; i < resultsArray[resultsIndex][respondentIndex][qCode].length; i++){
-      		if(resultsArray[resultsIndex][respondentIndex][qCode][i] == num){
-      			found = true;
+		if(Array.isArray(resultsArray[resultsIndex][respondentIndex][qCode])){
+			for(var i = 0; i < resultsArray[resultsIndex][respondentIndex][qCode].length; i++){
+				if(resultsArray[resultsIndex][respondentIndex][qCode][i] == num){
+					found = true;
+				}
       		}
-      	}
+		}
+		else{
+			if(resultsArray[resultsIndex][respondentIndex][qCode] == num){
+					found = true;
+			}
+		}
 
       	return found;                                          
       }
@@ -1084,20 +1117,24 @@
       		}
       	}
       	else{
-          //check first if answer exists in array, if it exists, remove
-          var checkbox = document.getElementById("choice"+choiceIndex);
-          if(checkbox.checked == false){
-          	for( var i = 0; i < selectedAnswer.length; i++){ 
-          		if ( selectedAnswer[i] === num) {
-          			selectedAnswer.splice(i, 1); 
-          		}
-          	}
-          	parentDiv.style.backgroundColor = "white";
+		  //check first if answer exists in array, if it exists, remove
+		  var checkbox = document.getElementById("choice"+choiceIndex);
+		  if(!selectedAnswer.includes(num)){
+				selectedAnswer.push(num);
+				checkbox.checked = true;
+				parentDiv.style.backgroundColor = "#4aa24f2b";
+
           }
           else
           {
-          	selectedAnswer.push(num);
-          	parentDiv.style.backgroundColor = "#4aa24f2b";
+			for( var i = 0; i < selectedAnswer.length; i++){ 
+          		if ( selectedAnswer[i] === num) {
+          			selectedAnswer.splice(i, 1); 
+          		}
+			  }
+			checkbox.checked = false;
+          	parentDiv.style.backgroundColor = "white";
+			
           }
 
           if(selectedAnswer.length > 0){
@@ -1105,7 +1142,10 @@
           }
           else{
           	document.getElementById("nextBtn").disabled = true;
-          }
+		  }
+		  
+		  $('#choice'+choiceIndex).click(function(e){e.preventDefault();
+			e.stopPropagation();});
         }
       }
 
@@ -1240,7 +1280,7 @@
 					/(http:|https:)?\/\/(www\.)?(imgur.com)\/?(a\S+)?(\S+)?/gi,
 					function(match, space, url){
 						var imgid = imgur_parser(match);
-						var replaceText = '<div style="margin: 3%"><img src="'+match+'" style="width:100%; height:100%"></div>';
+						var replaceText = '<div id="imgContainer" style="margin: 3%; text-align: center;"><img src="'+match+'"></div>';
 						withMedia = true;
 						return replaceText;
 					}

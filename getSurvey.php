@@ -5,7 +5,7 @@ $surveyCode = $_POST['sCode'];
 //DATABASE CONNECTION VARIABLES
 $host = "remotemysql.com"; // Host name
 $username = "f6XDzBXhjr"; // Mysql username
-$password = "SZclvI5DKB"; // Mysql password
+$password = "Password"; // Mysql password
 $db_name = "f6XDzBXhjr"; // Database name
 
 // Create connection

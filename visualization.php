@@ -425,6 +425,7 @@ left: 50%;
         var stackedTotal = 0;
         var stackedRequestFinished = false;
         var stackedQCodes = [];
+        var qCodeQuestionTexts = [];
 
         <?php $sId = $_POST["survey"]; ?>
 
@@ -523,6 +524,7 @@ left: 50%;
                 if(survey[boxIterate][0] == "^" && survey[boxIterate][1] > 0){
                   qSelectBox.innerHTML += "<option value="+survey[boxIterate][2]+">"+survey[boxIterate][3]+"</option>"
                   sSelectBox.innerHTML += "<option value="+survey[boxIterate][2]+">"+survey[boxIterate][3]+"</option>"
+                  qCodeQuestionTexts.push([survey[boxIterate][2], survey[boxIterate][3]]);
                   boxIterate = boxIterate + 1;
                 }
                 else{
@@ -650,7 +652,7 @@ left: 50%;
                 }
               }
               xhr.open('POST', 'https://content.dropboxapi.com/2/files/download');
-              xhr.setRequestHeader('Authorization', 'Bearer fk7KkPvKLrAAAAAAAAAAVwRxiFVN59RZPK04m1imA0qk22EGjOP_IUEV8bwb9uJk');
+              xhr.setRequestHeader('Authorization', 'Access Code');
               xhr.setRequestHeader('Content-Type', 'application/octet-stream');
               xhr.setRequestHeader('Dropbox-API-Arg', '{"path":"'+path+'"}');
               xhr.send();
@@ -669,21 +671,13 @@ left: 50%;
           }
 
           function getStackedResults(baseQuestion, stackCodes, stackChoices, baseQuestionLength){
-            var params = "surveyID=" + surveyID + "&baseCode=" + baseQuestion + "&stackCodes=" + stackCodes + "&stackChoices=" + stackChoices + "&baseQuestionLength=" + baseQuestionLength;
-          
-            xhr = new XMLHttpRequest();
             
-            xhr.open("POST", "getStackResults.php");
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.onreadystatechange = function() {//Call a function when the state changes.
-              if(xhr.readyState == 4 && xhr.status == 200) {
-                stackedResults = JSON.parse(xhr.responseText);
-                stackBuilder(baseQuestion, stackCodes);
-                //alert(stackedResults);
-              }
-            }
-          
-            xhr.send(params);
+            var posting = $.post( "getStackResults.php", { surveyID : surveyID, baseCode : baseQuestion, stackCodes : stackCodes, stackChoices : stackChoices, baseQuestionLength: baseQuestionLength} );
+            
+            posting.done(function(data) {
+              stackedResults = JSON.parse(data);
+              stackBuilder(baseQuestion, stackCodes);
+            });
           }
 
           function stackedGenerator(baseQuestion, stackCodes){
@@ -720,6 +714,7 @@ left: 50%;
             var maxLabelLength = 0;
             var surveyQuestionTitle;
             var stackLabels = [];
+            var totalValues = [];
 
             for(var z = 0; z < stackCodes.length; z++){
               var stackLabel = [];
@@ -735,16 +730,32 @@ left: 50%;
                 for(var k = 0; k < baseChoicesLength; k++){
                   stackedData[k] = stackedResults[i][j][k].length;
 
-                  if(maxValue < stackedData[k]){
-                    maxValue = stackedData[k];
+                  if(stackCodes.length == 1){
+                    if(totalValues[k] == null){
+                      totalValues[k] = 0;
+                      totalValues[k] += stackedData[k];
+                    }
+                    else{
+                      totalValues[k] += stackedData[k];
+                    }
+                  }
+                  else{
+                    if(maxValue < stackedData[k]){
+                      maxValue = stackedData[k];
+                    }
                   }
                 }
                 stackedBarDataDescription.data = stackedData;
-                stackedBarDataDescription.backgroundColor = '#'+Math.floor(Math.random()*16777215).toString(16);;
+                stackedBarDataDescription.backgroundColor = '#'+Math.floor(Math.random()*16777215).toString(16);
                 stackedBarDataDescription.label = stackLabels[i][j];
                 stackedBarDataset.push(stackedBarDataDescription);
               }
-
+              if(stackCodes.length == 1){
+                if(maxValue < Math.max(...totalValues)){
+                  maxValue = Math.max(...totalValues);
+                  totalValues = [];
+                }
+              }
             }
 
             for (var i = 0; i < surveyData.length; i++){
@@ -816,7 +827,7 @@ left: 50%;
             
             bardata.push({
               barPercentage: 0.5,
-              labels: labels,
+              label: "Respondent/s",
               data: dataset,
               backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9"]
             })
@@ -874,12 +885,17 @@ left: 50%;
           var typeChart = "bar";
           var xOptions = [];
           var yOptions = [];
+          var stackedBar = true;
+
+          if(stackedResults.length > 1){
+            stackedBar = false;
+          }
           
           if(maxLabelLength > 20){
             typeChart = "horizontalBar";
             
             xOptions.push({
-              stacked: true,
+              stacked: stackedBar,
               ticks: {
                 beginAtZero: true,
                 max: maxValue+10,
@@ -893,7 +909,7 @@ left: 50%;
             });
             
             yOptions.push({
-              stacked: true,
+              stacked: stackedBar,
               ticks: {
                 beginAtZero: true
               }
@@ -901,7 +917,7 @@ left: 50%;
           }
           else{
            yOptions.push({
-            stacked: true,
+            stacked: stackedBar,
             ticks: {
               beginAtZero: true,
               max: maxValue+10,
@@ -915,7 +931,7 @@ left: 50%;
           });
            
            xOptions.push({
-            stacked: true,
+            stacked: stackedBar,
             ticks: {
               beginAtZero: true
             }
@@ -1020,41 +1036,66 @@ left: 50%;
           
         }
 
+
         function downloadResults(){
           var csvResults = [];
           var csvData;
-          var firstQCode;
-          var respondentCount = 1;
-          var csvIndex = 0;
+          var downloadData = {};
           var surveyName;
           var fileName;
           var surveyList = [];
-          surveyList = JSON.parse(localStorage.getItem('surveyList'));
-          //List all question codes
+          var surveyData = [];
 
-          for(i = 0; i < surveyList.length; i++){
+
+          surveyList = JSON.parse(localStorage.getItem('surveyList'));
+          surveyData = JSON.parse(localStorage.getItem(surveyID));
+          surveyData = surveyData.data;
+          
+          // Get survey name
+          for(var i = 0; i < surveyList.length; i++){
             if(surveyList[i][0] == surveyID){
               surveyName = surveyList[i][1];
             }
           }
 
-          firstQCode = results[0].questionCode;
+          //Iterate qCodeList
+          for(var k = 0; k < qCodeQuestionTexts.length; k++){
+            csvResults.push([qCodeQuestionTexts[k][1]]);
+            // Get labels for questionCode
+            var labels = getChoices([qCodeQuestionTexts[k][0]]);
 
-          for(var i = 0; i < results.length; i++){
-            if(firstQCode == results[i].questionCode){
-              csvResults[csvIndex] = respondentCount;
-              csvResults.push([results[i].questionCode, results[i].answer]);
-              respondentCount += 1;
-              csvIndex += 1;
-            }
-            else{
-              csvResults.push([results[i].questionCode, results[i].answer]);
-              csvIndex += 1;
+            // Create choices array with labels
+            for(var l = 0; l < labels.length; l++){
+              var choices = [labels[l], 0];
+              for(var m = 0; m < results.length; m++){
+
+                //Find questions with index l answers
+                if(results[m].questionCode == qCodeQuestionTexts[k][0] && results[m].answer == l){
+                  // Add 1 to choices index 1
+                  choices[1] += 1;
+                }
+              }
+              // Push the choices array to csvResults
+              csvResults.push(choices);
             }
           }
 
-          csvData = Papa.unparse(results);
-          fileName = surveyName+"-results.csv"
+          // Add to object
+          downloadData.data = csvResults;
+
+          /* Basic Algo
+          var test = [];
+          var test1 = {};
+          test.push(["question 1"]);
+          test.push(["Choice 1", 2]);
+          test.push(["Choice 2", 5])
+
+          test1.data = test;
+          */
+
+
+          csvData = Papa.unparse(downloadData);
+          fileName = surveyName+"-results.csv";
 
           var blob = new Blob([csvData],{type: "text/csv;charset=utf-8"});
           saveAs(blob, fileName);
