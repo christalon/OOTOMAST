@@ -1,16 +1,8 @@
 <?php
 
+include('dbconfig.php');
+
 $surveyID = $_POST["surveyID"];
-
-
-//DATABASE CONNECTION VARIABLES
-$host = "remotemysql.com"; // Host name
-$username = "f6XDzBXhjr"; // Mysql username
-$password = "Password"; // Mysql password
-$db_name = "f6XDzBXhjr"; // Database name
-
-// Create connection
-$conn = mysqli_connect($host, $username, $password, $db_name);
 
 // Check connection
 if (!$conn) {

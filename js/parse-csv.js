@@ -5,9 +5,10 @@ function getSurveyDB() {
   var surveyList = [];
   var found = false;
 
-  document.getElementById("uploadingScreen").style.display = "block";
+  
 
   if (document.getElementById("surveyCode").validity.valid == true) {
+    document.getElementById("uploadingScreen").style.display = "block";
     xhr = new XMLHttpRequest();
     xhr.open("POST", "getSurvey.php");
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -52,12 +53,12 @@ function getCsvDropbox(path, code) {
       localStorage.setItem(code + "", JSON.stringify(results));
       console.log(results);
       setTimeout(function () {
-        window.location.replace("http://ootomast.000webhostapp.com/index.php");
+        window.location.replace("http://localhost/ootomast/index.php");
       }, 100);
     }
   };
   xhr.open("POST", "https://content.dropboxapi.com/2/files/download");
-  xhr.setRequestHeader("Authorization", "Access Code");
+  xhr.setRequestHeader("Authorization", "ACCESS KEY");
   xhr.setRequestHeader("Content-Type", "application/octet-stream");
   xhr.setRequestHeader("Dropbox-API-Arg", '{"path":"' + path + '"}');
   xhr.send();
@@ -89,7 +90,7 @@ function parseURL() {
             }
         };
         xhr.open("POST", "https://content.dropboxapi.com/2/files/upload");
-        xhr.setRequestHeader("Authorization", "Access Code");
+        xhr.setRequestHeader("Authorization", "ACCESS KEY");
         xhr.setRequestHeader("Content-Type", "application/octet-stream");
         xhr.setRequestHeader(
         "Dropbox-API-Arg",
@@ -127,7 +128,7 @@ function parseUpload() {
       }
     };
     xhr.open("POST", "https://content.dropboxapi.com/2/files/upload");
-    xhr.setRequestHeader("Authorization", "Access Code");
+    xhr.setRequestHeader("Authorization", "ACCESS KEY");
     xhr.setRequestHeader("Content-Type", "application/octet-stream");
     xhr.setRequestHeader(
       "Dropbox-API-Arg",
@@ -164,7 +165,7 @@ function uploadSurveyMeta(surveyCode, surveyID, surveyName) {
   xhr.onreadystatechange = function() {//Call a function when the state changes.
     if(xhr.readyState == 4 && xhr.status == 200) {
       setTimeout(function () {
-        window.location.replace("http://ootomast.000webhostapp.com/index.php");
+        window.location.replace("http://localhost/ootomast/index.php");
       }, 100);
     }
   }
@@ -195,7 +196,7 @@ function deleteSurvey(surveyID) {
     }
 
     setTimeout(function () {
-      window.location.replace("http://ootomast.000webhostapp.com/index.php");
+      window.location.replace("http://localhost/ootomast/index.php");
     }, 100);
   }
 }
