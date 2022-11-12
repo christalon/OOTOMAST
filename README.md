@@ -16,6 +16,7 @@ ootomast.000webhostapp.com
 * Translation support (provided by user)
 * Easy to maintain, mostly built with Javascript and PHP
 * Could be used without using accounts
+* Dropbox Integration for file storage (questions and answers)
 
 # Results Array Structure
 1. surveyID
